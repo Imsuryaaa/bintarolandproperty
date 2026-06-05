@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi KPR BNI – Bintaroland Property</title>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bni-orange: #f37021;
+    --bni-dark: #1a1a2e;
+    --bni-navy: #0f3460;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --surface: #ffffff;
+    --surface-2: #f8f7f5;
+    --surface-3: #f0ede8;
+    --text-1: #1a1a2e;
+    --text-2: #4a4a6a;
+    --text-3: #8a8aaa;
+    --border: #e2ddd6;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--surface-2);
+    color: var(--text-1);
+    min-height: 100vh;
+  }
+
+  /* ── NAV BAR ─────────────────────────── */
+  .nav {
+    background: var(--bni-dark);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-brand-text { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
+  .nav-brand-sub { color: var(--gold); font-size: 11px; font-weight: 500; }
+  .nav-badge { background: var(--bni-orange); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+  /* ── PAGE HEADER ─────────────────────── */
+  .page-header {
+    background: linear-gradient(135deg, var(--bni-dark) 0%, var(--bni-navy) 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.15) 0%, transparent 60%);
+  }
+  .page-header-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .page-header h1 {
+    color: #fff;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .page-header p {
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  /* ── LAYOUT ──────────────────────────── */
+  .main-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .main-wrap { grid-template-columns: 1fr; }
+  }
+
+  /* ── CARD ────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card-head {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-head h2 { font-size: 14px; font-weight: 700; color: var(--text-1); }
+  .card-body { padding: 1.5rem; }
+
+  /* ── FORM ELEMENTS ───────────────────── */
+  .field { margin-bottom: 1.4rem; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .field-label label { font-size: 13px; font-weight: 600; color: var(--text-2); }
+  .field-label .val-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--bni-navy);
+    background: #e8f0f8;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  .input-prefix-wrap {
+    display: flex;
+    align-items: stretch;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color .2s;
+    overflow: hidden;
+  }
+  .input-prefix-wrap:focus-within { border-color: var(--bni-navy); }
+  .input-prefix {
+    background: var(--surface-3);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    border-right: 1.5px solid var(--border);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .input-prefix-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    background: transparent;
+    color: var(--text-1);
+    min-width: 0;
+  }
+
+  /* ── DP ROW ──────────────────────────── */
+  .dp-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .dp-pct-wrap {
+    flex: 0 0 90px;
+    display: flex;
+    align-items: stretch;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color .2s;
+    overflow: hidden;
+  }
+  .dp-pct-wrap:focus-within { border-color: var(--bni-navy); }
+  .dp-pct-wrap input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 11px 8px 11px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--bni-navy);
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+  .dp-pct-wrap input::-webkit-outer-spin-button,
+  .dp-pct-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .dp-pct-sym {
+    padding: 0 10px 0 0;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-2);
+  }
+  .dp-nominal {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-3);
+    padding: 11px 14px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .dp-nominal span:first-child { font-weight: 500; flex-shrink: 0; }
+  .dp-nominal span:last-child { font-weight: 700; color: var(--text-1); flex: 1; text-align: right; font-size: 14px; }
+
+  /* ── RANGE SLIDER ────────────────────── */
+  input[type=range] {
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: linear-gradient(to right, var(--bni-navy) 0%, var(--bni-navy) var(--pct, 20%), var(--border) var(--pct, 20%));
+    cursor: pointer;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bni-navy);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bni-navy);
+    border: 3px solid #fff;
+    cursor: pointer;
+  }
+  .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); margin-top: 6px; }
+
+  /* ── QUICK TENOR PILLS ───────────────── */
+  .quick-pills { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .pill-btn {
+    flex: 1;
+    min-width: 44px;
+    padding: 6px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .pill-btn.active, .pill-btn:hover {
+    background: var(--bni-navy);
+    color: #fff;
+    border-color: var(--bni-navy);
+  }
+
+  /* ── PROMO RADIO CARDS ───────────────── */
+  .promo-list { display: flex; flex-direction: column; gap: 8px; }
+  .promo-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all .15s;
+    background: var(--surface);
+  }
+  .promo-card:hover { border-color: var(--bni-navy); }
+  .promo-card.selected { border-color: var(--bni-navy); background: #f0f4fa; }
+  .promo-card input[type=radio] { margin-top: 3px; accent-color: var(--bni-navy); flex-shrink: 0; }
+  .promo-card .promo-info .promo-name { font-size: 13px; font-weight: 700; color: var(--text-1); }
+  .promo-card .promo-info .promo-detail {
+    font-size: 12px; color: var(--text-2); margin-top: 2px; line-height: 1.4;
+  }
+  .badge-fix { color: var(--bni-navy); font-weight: 700; }
+  .badge-float { color: var(--bni-orange); font-weight: 700; }
+
+  /* ── PLAFON FOOTER ───────────────────── */
+  .plafon-bar {
+    padding: 12px 1.5rem;
+    background: var(--surface-3);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .plafon-bar .lbl { font-size: 12px; color: var(--text-2); font-weight: 500; }
+  .plafon-bar .val { font-size: 15px; font-weight: 800; color: var(--bni-navy); }
+
+  /* ── DIVIDER ─────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
+
+  /* ── RIGHT CARD ──────────────────────── */
+  .result-card { border-top: 4px solid var(--bni-orange); }
+
+  .bank-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--bni-dark);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .bank-info { display: flex; align-items: center; gap: 12px; }
+  .bank-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .bank-logo img { height: 22px; width: auto; object-fit: contain; }
+  .bank-name { color: #fff; font-weight: 700; font-size: 14px; }
+  .bank-sub { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 1px; }
+  .bank-tag { background: #22c55e; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+  /* ── RESULT BODY ─────────────────────── */
+  .result-body { padding: 1.5rem; }
+
+  .cicilan-section { margin-bottom: 1.2rem; }
+  .cicilan-label { font-size: 12px; color: var(--text-3); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+  .cicilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cicilan-item {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+  }
+  .cicilan-item.fix { border-color: #c7d8ef; background: #f0f6ff; }
+  .cicilan-item.float { border-color: #f9d9b8; background: #fff8f2; }
+  .ci-period { font-size: 11px; color: var(--text-2); font-weight: 500; margin-bottom: 3px; line-height: 1.3; }
+  .ci-bunga { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .ci-bunga.fix { color: var(--bni-navy); }
+  .ci-bunga.float { color: var(--bni-orange); }
+  .ci-amount { font-size: 19px; font-weight: 800; }
+  .ci-amount.fix { color: var(--bni-navy); }
+  .ci-amount.float { color: var(--bni-orange); }
+  .ci-unit { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+  /* ── ACTION BUTTONS ──────────────────── */
+  .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.2rem 0; }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+    border: none;
+  }
+  .btn-primary { background: var(--bni-navy); color: #fff; }
+  .btn-primary:hover { background: #0a2a4a; }
+  .btn-outline {
+    background: transparent;
+    color: var(--bni-navy);
+    border: 2px solid var(--bni-navy);
+  }
+  .btn-outline:hover { background: var(--bni-navy); color: #fff; }
+
+  /* ── SUMMARY BREAKDOWN ───────────────── */
+  .summary-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .summary-head h4 { font-size: 13px; font-weight: 700; color: var(--text-1); }
+  .summary-total { font-size: 14px; font-weight: 800; color: var(--bni-navy); }
+  .summary-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .summary-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+  .si-left { display: flex; align-items: center; gap: 8px; color: var(--text-2); }
+  .si-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bni-navy); flex-shrink: 0; }
+  .si-val { font-weight: 700; color: var(--text-1); }
+
+  /* ── DISCLAIMER ──────────────────────── */
+  .disclaimer {
+    margin-top: 1.2rem;
+    padding: 12px 14px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: #92400e;
+    line-height: 1.6;
+  }
+
+  /* ── AMORTIZATION TABLE ──────────────── */
+  .amort-toggle-wrap { margin-top: 1.2rem; text-align: center; }
+  .amort-toggle-btn {
+    background: none;
+    border: 1.5px solid var(--bni-navy);
+    color: var(--bni-navy);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .amort-toggle-btn:hover { background: var(--bni-navy); color: #fff; }
+
+  .amort-section {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .amort-head {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .amort-head h3 { font-size: 14px; font-weight: 700; }
+  .amort-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-3);
+    line-height: 1;
+  }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead tr { background: var(--surface-3); }
+  th { padding: 10px 14px; text-align: left; font-weight: 700; color: var(--text-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-1); font-weight: 500; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface-2); }
+  .bulan-fix td:first-child { border-left: 3px solid var(--bni-navy); }
+  .bulan-float td:first-child { border-left: 3px solid var(--bni-orange); }
+  .legend-row { display: flex; gap: 16px; padding: 12px 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  [x-cloak] { display: none !important; }
+</style>
+</head>
+<body x-data="kprCalculator()" x-cloak>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-brand">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#c9a84c"/><path d="M14 5L6 12V23H11V17H17V23H22V12L14 5Z" fill="#1a1a2e"/></svg>
+    <div>
+      <div class="nav-brand-text">Bintaroland Property</div>
+      <div class="nav-brand-sub">@bintarolandproperty</div>
+    </div>
+  </div>
+  <span class="nav-badge">Simulasi KPR</span>
+</nav>
+
+<!-- ── HEADER ── -->
+<div class="page-header">
+  <div class="page-header-tag">Kalkulator Finansial</div>
+  <h1>Simulasi KPR BNI Griya</h1>
+  <p>Hitung estimasi cicilan KPR untuk properti impian Anda. Hasil berubah otomatis saat Anda mengubah parameter.</p>
+</div>
+
+<!-- ── MAIN GRID ── -->
+<div class="main-wrap">
+
+  <!-- ══ KIRI: FORM ══ -->
+  <div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Isi Rencana KPR</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- 1. Harga Properti -->
+        <div class="field">
+          <div class="field-label">
+            <label>Harga Properti <span style="color:#e53e3e">*</span></label>
+            <span class="val-badge" x-text="formatToText(hargaRaw)"></span>
+          </div>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">Rp</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="15"
+              :value="hargaDisplay"
+              @focus="$event.target.value = formatToNumber(hargaRaw)"
+              @input="
+                let raw = $event.target.value.replace(/[^0-9]/g, '').substring(0, 15);
+                hargaRaw = raw ? parseInt(raw, 10) : 0;
+                hargaDisplay = formatToNumber(hargaRaw);
+                $event.target.value = hargaDisplay;
+              "
+              @blur="hargaDisplay = formatToText(hargaRaw)"
+              placeholder="1.200.000.000"
+            >
+          </div>
+        </div>
+
+        <!-- 2. Uang Muka -->
+        <div class="field">
+          <div class="field-label">
+            <label>Uang Muka (DP)</label>
+          </div>
+          <div class="dp-row">
+            <div class="dp-pct-wrap">
+              <input
+                type="number" step="1" min="0" max="99"
+                x-model.number="dpPersen"
+                @keydown="if(['e','E','+','-','.'].includes($event.key)) $event.preventDefault()"
+                @input="
+                  let v = parseInt($event.target.value) || 0;
+                  dpPersen = Math.min(Math.max(v, 0), 99);
+                "
+              >
+              <span class="dp-pct-sym">%</span>
+            </div>
+            <div class="dp-nominal">
+              <span>Rp</span>
+              <span x-text="Math.round(dpNominal).toLocaleString('id-ID')"></span>
+            </div>
+          </div>
+          <input type="range" x-model.number="dpPersen" min="0" max="99" step="1"
+            :style="`--pct: ${dpPersen}%`"
+            @input="">
+          <div class="range-labels"><span>0%</span><span>99%</span></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- 3. Program Promo -->
+        <div class="field">
+          <div class="field-label" style="margin-bottom: 10px;">
+            <label>Program Promo BNI Griya</label>
+          </div>
+          <div class="promo-list">
+            <template x-for="promo in daftarPromo" :key="promo.id">
+              <label class="promo-card" :class="promoTerpilih === promo.id ? 'selected' : ''">
+                <input type="radio" :value="promo.id" x-model="promoTerpilih">
+                <div class="promo-info">
+                  <div class="promo-name" x-text="promo.nama"></div>
+                  <div class="promo-detail">
+                    Fix <span class="badge-fix" x-text="promo.bungaFix + '%'"></span>
+                    selama <span x-text="promo.masaFix"></span> tahun →
+                    Floating <span class="badge-float" x-text="promo.bungaFloating + '%'"></span>
+                  </div>
+                </div>
+              </label>
+            </template>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- 4. Tenor -->
+        <div class="field">
+          <div class="field-label">
+            <label>Jangka Waktu KPR (Tenor)</label>
+            <span class="val-badge" x-text="tenorTahun + ' Tahun'"></span>
+          </div>
+          <input type="range" x-model.number="tenorTahun" min="1" max="30" step="1"
+            :style="`--pct: ${((tenorTahun - 1) / 29) * 100}%`"
+            @input="">
+          <div class="range-labels"><span>1 Tahun</span><span>30 Tahun</span></div>
+          <div class="quick-pills">
+            <template x-for="t in [5,10,15,20,25,30]" :key="t">
+              <button type="button" class="pill-btn" :class="Number(tenorTahun) === t ? 'active' : ''"
+                @click="tenorTahun = t" x-text="t + 'th'"></button>
+            </template>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Plafon bar -->
+      <div class="plafon-bar">
+        <span class="lbl">Plafon Kredit</span>
+        <span class="val" x-text="formatRp(plafon)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ KANAN: HASIL ══ -->
+  <div>
+    <div class="card result-card">
+
+      <!-- Bank header -->
+      <div class="bank-header">
+        <div class="bank-info">
+          <div class="bank-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png" alt="BNI" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-weight:800;font-size:12px;color:#f37021\'>BNI</span>'">
+          </div>
+          <div>
+            <div class="bank-name">Bank BNI</div>
+            <div class="bank-sub" x-text="promoAktif.nama"></div>
+          </div>
+        </div>
+        <span class="bank-tag">Mudah &amp; Cepat</span>
+      </div>
+
+      <div class="result-body">
+
+        <!-- Cicilan cards -->
+        <div class="cicilan-section">
+          <div class="cicilan-label">Angsuran per Bulan</div>
+          <div class="cicilan-grid">
+
+            <!-- Fix -->
+            <div class="cicilan-item fix">
+              <div class="ci-period">Tahun 1 s.d <span x-text="promoAktif.masaFix"></span></div>
+              <div class="ci-bunga fix">Bunga Fix <span x-text="promoAktif.bungaFix + '%'"></span></div>
+              <div class="ci-amount fix" x-text="formatRp(cicilanFix)"></div>
+              <div class="ci-unit">/bulan</div>
+            </div>
+
+            <!-- Floating -->
+            <div class="cicilan-item float">
+              <div class="ci-period">Tahun <span x-text="Number(promoAktif.masaFix) + 1"></span> s.d <span x-text="tenorTahun"></span></div>
+              <div class="ci-bunga float">Bunga Floating <span x-text="promoAktif.bungaFloating + '%'"></span></div>
+              <div class="ci-amount float"
+                x-text="cicilanFloating > 0 ? formatRp(cicilanFloating) : '—'"></div>
+              <div class="ci-unit" x-show="cicilanFloating > 0">/bulan</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="action-row">
+          <a :href="`https://wa.me/6281234567890?text=Halo+saya+ingin+tanya+KPR+BNI+untuk+properti+senilai+${formatRp(hargaRaw)}`"
+            target="_blank" class="btn btn-primary">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Tanya KPR
+          </a>
+          <a href="https://eform.bni.co.id" target="_blank" class="btn btn-outline">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            eForm BNI
+          </a>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Estimasi Pembayaran Pertama -->
+        <div>
+          <div class="summary-head">
+            <h4>Estimasi Pembayaran Pertama</h4>
+            <span class="summary-total" x-text="formatRp(pembayaranPertama)"></span>
+          </div>
+          <ul class="summary-list">
+            <li class="summary-item">
+              <div class="si-left"><span class="si-dot"></span> Uang Muka (DP)</div>
+              <span class="si-val" x-text="formatRp(dpNominal)"></span>
+            </li>
+            <li class="summary-item">
+              <div class="si-left"><span class="si-dot"></span> Angsuran Pertama</div>
+              <span class="si-val" x-text="formatRp(cicilanFix)"></span>
+            </li>
+            <li class="summary-item">
+              <div class="si-left">
+                <span class="si-dot"></span>
+                <span>Estimasi Biaya Lainnya</span>
+                <span title="Estimasi 5% dari Plafon: Provisi, Administrasi, Asuransi, Notaris"
+                  style="color:var(--text-3);cursor:help;font-size:13px">ⓘ</span>
+              </div>
+              <span class="si-val" x-text="formatRp(estimasiBiayaLain)"></span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Toggle Tabel Amortisasi -->
+        <div class="amort-toggle-wrap">
+          <button class="amort-toggle-btn" @click="showAmort = !showAmort"
+            x-text="showAmort ? '▲ Sembunyikan Tabel Amortisasi' : '▼ Lihat Tabel Amortisasi'">
+          </button>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+          <strong>⚠️ Disclaimer:</strong> Hasil di atas merupakan angka estimasi. Data perhitungan dapat berbeda dengan perhitungan bank. Suku bunga floating bersifat fluktuatif mengikuti kebijakan Bank Indonesia. Hubungi kami untuk konsultasi lebih lanjut.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TABEL AMORTISASI ══ -->
+  <div class="amort-section" x-show="showAmort" x-transition>
+    <div class="amort-head">
+      <h3>Tabel Angsuran Lengkap — <span x-text="tenorTahun * 12"></span> Bulan</h3>
+      <button class="amort-close" @click="showAmort = false">✕</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bln</th>
+            <th>Tahun</th>
+            <th>Tipe</th>
+            <th>Bunga</th>
+            <th>Angsuran</th>
+            <th>Pokok</th>
+            <th>Bunga Bln</th>
+            <th>Sisa Pokok</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="row in tabelAmortisasi" :key="row.bulan">
+            <tr :class="row.tipe === 'fix' ? 'bulan-fix' : 'bulan-float'">
+              <td x-text="row.bulan"></td>
+              <td x-text="row.tahun"></td>
+              <td>
+                <span :style="row.tipe === 'fix' ? 'color:var(--bni-navy);font-weight:700' : 'color:var(--bni-orange);font-weight:700'"
+                  x-text="row.tipe === 'fix' ? 'Fix' : 'Float'"></span>
+              </td>
+              <td x-text="row.bunga + '%'"></td>
+              <td x-text="formatRp(row.angsuran)"></td>
+              <td x-text="formatRp(row.pokok)"></td>
+              <td x-text="formatRp(row.bungaBulan)"></td>
+              <td x-text="formatRp(row.sisaPokok)"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend-row">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--bni-navy)"></span> Periode Fix</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--bni-orange)"></span> Periode Floating</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function kprCalculator() {
+  return {
+    hargaRaw: 1200000000,
+    hargaDisplay: '',
+    dpPersen: 20,
+    tenorTahun: 20,
+    promoTerpilih: 'bni-fix-3',
+    cicilanFix: 0,
+    cicilanFloating: 0,
+    showAmort: false,
+
+    daftarPromo: [
+      { id: 'bni-fix-3',  nama: 'BNI Griya Fixed 3 Tahun',  bungaFix: 4.00, masaFix: 3,  bungaFloating: 13.50 },
+      { id: 'bni-fix-5',  nama: 'BNI Griya Fixed 5 Tahun',  bungaFix: 4.50, masaFix: 5,  bungaFloating: 13.50 },
+      { id: 'bni-fix-10', nama: 'BNI Griya Fixed 10 Tahun', bungaFix: 5.50, masaFix: 10, bungaFloating: 13.50 },
+    ],
+
+    init() {
+      this.hargaDisplay = this.formatToText(this.hargaRaw);
+      this.$watch('hargaRaw',      () => this.hitung());
+      this.$watch('dpPersen',      () => this.hitung());
+      this.$watch('tenorTahun',    () => this.hitung());
+      this.$watch('promoTerpilih', () => this.hitung());
+      this.hitung();
+    },
+
+    get promoAktif() {
+      return this.daftarPromo.find(p => p.id === this.promoTerpilih) || this.daftarPromo[0];
+    },
+
+    get plafon() {
+      let dp = Math.min(Math.max(Number(this.dpPersen) || 0, 0), 99);
+      return Math.max(0, this.hargaRaw - (this.hargaRaw * (dp / 100)));
+    },
+
+    get dpNominal() {
+      let dp = Math.min(Math.max(Number(this.dpPersen) || 0, 0), 99);
+      return this.hargaRaw * (dp / 100);
+    },
+
+    get estimasiBiayaLain() {
+      return this.plafon * 0.05;
+    },
+
+    get pembayaranPertama() {
+      let total = this.dpNominal + this.cicilanFix + this.estimasiBiayaLain;
+      return isFinite(total) ? total : 0;
+    },
+
+    get tabelAmortisasi() {
+      let rows = [];
+      let P = this.plafon;
+      if (P <= 0) return rows;
+      let promo = this.promoAktif;
+      let tenor = Math.min(Math.max(parseInt(this.tenorTahun) || 1, 1), 30);
+      let n = tenor * 12;
+      let bulanFix = Math.min(promo.masaFix * 12, n);
+      let rFix   = (promo.bungaFix / 100) / 12;
+      let rFloat = (promo.bungaFloating / 100) / 12;
+
+      let angsuranFix = this.cicilanFix;
+      let angsuranFloat = this.cicilanFloating;
+      let sisa = P;
+
+      for (let b = 1; b <= n; b++) {
+        let isFix = b <= bulanFix;
+        let r = isFix ? rFix : rFloat;
+        let ang = isFix ? angsuranFix : angsuranFloat;
+        let bungaBulan = sisa * r;
+        let pokok = ang - bungaBulan;
+        sisa = Math.max(0, sisa - pokok);
+        rows.push({
+          bulan: b,
+          tahun: Math.ceil(b / 12),
+          tipe: isFix ? 'fix' : 'float',
+          bunga: isFix ? promo.bungaFix : promo.bungaFloating,
+          angsuran: Math.round(ang),
+          pokok: Math.round(pokok),
+          bungaBulan: Math.round(bungaBulan),
+          sisaPokok: Math.round(sisa),
+        });
+      }
+      return rows;
+    },
+
+    formatToText(value) {
+      let num = parseFloat(value) || 0;
+      if (!isFinite(num)) return 'Rp 0';
+      if (num >= 1000000000) {
+        let val = num / 1000000000;
+        return (Number.isInteger(val) ? val : val.toFixed(2).replace(/\.?0+$/, '')) + ' Miliar';
+      }
+      if (num >= 1000000) {
+        let val = num / 1000000;
+        return (Number.isInteger(val) ? val : val.toFixed(1).replace(/\.?0+$/, '')) + ' Juta';
+      }
+      return num.toLocaleString('id-ID');
+    },
+
+    formatToNumber(value) {
+      let val = value.toString().replace(/[^0-9]/g, '');
+      return val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+
+    formatRp(angka) {
+      let safe = (isFinite(angka) && !isNaN(angka)) ? angka : 0;
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(safe);
+    },
+
+    hitung() {
+      let P = this.plafon;
+      let tenor = Math.min(Math.max(parseInt(this.tenorTahun) || 1, 1), 30);
+      let n = tenor * 12;
+      let promo = this.promoAktif;
+
+      if (P > 0 && n > 0 && promo) {
+        let rFix = (promo.bungaFix / 100) / 12;
+
+        if (rFix > 0) {
+          let denom = 1 - Math.pow(1 + rFix, -n);
+          this.cicilanFix = denom !== 0 ? (P * rFix) / denom : 0;
+        } else {
+          this.cicilanFix = n > 0 ? P / n : 0;
+        }
+        if (!isFinite(this.cicilanFix) || isNaN(this.cicilanFix)) this.cicilanFix = 0;
+
+        let bulanFix = Math.min(promo.masaFix * 12, n);
+        let sisaPokok = 0;
+        if (rFix > 0 && this.cicilanFix > 0) {
+          sisaPokok = P * Math.pow(1 + rFix, bulanFix)
+                    - this.cicilanFix * ((Math.pow(1 + rFix, bulanFix) - 1) / rFix);
+        } else {
+          sisaPokok = P - (this.cicilanFix * bulanFix);
+        }
+        sisaPokok = Math.max(0, isFinite(sisaPokok) ? sisaPokok : 0);
+
+        let rFloat = (promo.bungaFloating / 100) / 12;
+        let sisaBulan = n - bulanFix;
+        if (sisaBulan > 0 && sisaPokok > 0) {
+          if (rFloat > 0) {
+            let denom = 1 - Math.pow(1 + rFloat, -sisaBulan);
+            this.cicilanFloating = denom !== 0 ? (sisaPokok * rFloat) / denom : 0;
+          } else {
+            this.cicilanFloating = sisaPokok / sisaBulan;
+          }
+        } else {
+          this.cicilanFloating = 0;
+        }
+        if (!isFinite(this.cicilanFloating) || isNaN(this.cicilanFloating)) this.cicilanFloating = 0;
+      } else {
+        this.cicilanFix = 0;
+        this.cicilanFloating = 0;
+      }
+    }
+  }
+}
+</script>
+</body>
+</html>

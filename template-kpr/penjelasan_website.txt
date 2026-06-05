@@ -1,0 +1,75 @@
+================================================================================
+DOKUMENTASI & PENJELASAN WEBSITE: BINTARO LAND PROPERTY
+================================================================================
+
+1. DESKRIPSI APLIKASI
+Website "Bintaro Land Property" adalah sebuah platform katalog properti digital (Real Estate Listing Platform) yang dinamis dan modern. Aplikasi ini dirancang untuk menjembatani antara agen properti/developer dengan calon pembeli. 
+Berbasis arsitektur Full-Stack menggunakan Framework Laravel (PHP), Tailwind CSS (untuk styling antarmuka), dan Alpine.js (untuk interaktivitas JavaScript ringan), website ini tidak hanya menampilkan rumah/properti yang dijual, tetapi juga memiliki fitur finansial cerdas berupa Kalkulator Simulasi KPR yang terintegrasi dengan penawaran bunga bank (seperti BNI Griya).
+
+--------------------------------------------------------------------------------
+
+2. DAFTAR FITUR & PENJELASANNYA
+
+A. Sisi Pengunjung (Front-End / Publik)
+   1. Katalog & Pencarian Properti: 
+      - Pengunjung dapat melihat daftar properti yang tersedia.
+      - Fitur filter dan pencarian canggih memungkinkan pencarian berdasarkan kata kunci (nama/kota), kategori, harga, dll.
+   
+   2. Halaman Detail Properti:
+      - Menampilkan informasi komprehensif: Spesifikasi (Kamar Tidur, Luas Tanah/Bangunan), Deskripsi lengkap, dan Galeri Foto yang bisa digeser (slider/carousel).
+   
+   3. Pop-up Promo (Hot Sale):
+      - Sebuah banner interaktif yang muncul tepat saat pengunjung pertama kali membuka website. 
+      - Menggunakan Session Storage agar tidak mengganggu (hanya muncul 1 kali per sesi browser).
+   
+   4. Kalkulator Simulasi KPR (Unggulan):
+      - Kalkulator canggih yang menghitung estimasi angsuran rumah.
+      - Menghitung masa "Bunga Fix" (bunga tetap) dan "Bunga Floating" (bunga berjalan).
+      - Menampilkan Tabel Amortisasi (rincian cicilan per bulan dari pokok dan bunga).
+      - Dilengkapi "Running Text" yang memberitahukan update bunga promo terbaru.
+
+   5. Integrasi Kontak Langsung (Call-to-Action):
+      - Tombol langsung menuju WhatsApp agen yang sudah terformat dengan data properti/harga terkait.
+      - Tautan langsung menuju e-Form Bank terkait.
+
+B. Sisi Admin (Back-End / Dashboard Panel)
+   1. Autentikasi Sistem:
+      - Sistem Login yang aman untuk masuk ke dalam panel admin.
+   
+   2. Kelola Properti (CRUD DataTables):
+      - Admin dapat Menambah, Mengedit, Menghapus, dan Melihat data properti.
+      - Dilengkapi tabel "DataTables" offline (Client-side) untuk fitur pencarian seketika tanpa loading, pagination, dan pengurutan (sorting) data.
+      - Fitur Unggah Foto Multi: Admin bisa mengunggah banyak foto sekaligus, menghapus spesifik foto, dan menyusun ulang urutan fotonya (Drag & Drop).
+
+   3. Kelola Promo Banner (Pop-up):
+      - Modul untuk mengunggah gambar poster promosi.
+      - Tombol "Toggle" untuk mengaktifkan atau mematikan penayangan pop-up di halaman depan. (Hanya 1 promo yang bisa tayang).
+
+   4. Kelola Promo KPR (Suku Bunga Bank):
+      - Admin tidak perlu lagi meminta programmer untuk merubah bunga bank di kalkulator. Admin dapat membuat skema bunga sendiri (Misal: Nama Bank, Bunga Fix 4%, Masa Fix 3 Tahun, Floating 13%).
+      - Promo yang diaktifkan akan langsung muncul secara real-time di Kalkulator Simulasi KPR pengunjung.
+
+--------------------------------------------------------------------------------
+
+3. ALUR PENGGUNAAN (USER FLOW)
+
+A. Alur Kerja Admin (Backend Flow):
+   1. Admin Login ke sistem Dashboard.
+   2. Admin menginput Properti Baru (isi spesifikasi, harga, lalu unggah foto-fotonya).
+   3. Memasuki masa promosi, Admin masuk ke menu "Promo Banner", mengunggah desain poster diskon akhir tahun, dan menekan tombol "Aktifkan".
+   4. Jika ada kebijakan suku bunga baru dari Bank (Misal BNI turun bunga), Admin masuk ke menu "Promo KPR", menyesuaikan data bunga fix dan floating yang berlaku bulan ini.
+   5. Admin mengawasi tabel properti, jika ada rumah yang sudah terjual, Admin bisa menggunakan kolom Search (DataTables) mengetik kode/nama rumah tersebut dan merubah status/menghapusnya dalam hitungan detik.
+
+B. Alur Kerja Calon Pembeli (Frontend Flow):
+   1. Calon pembeli mengunjungi URL website Bintaro Land Property.
+   2. Muncul Pop-up Banner Promo diskon akhir tahun. Pembeli tertarik dan menutup pop-up tersebut.
+   3. Pembeli melakukan pencarian dan menemukan rumah idaman seharga Rp 1,5 Miliar.
+   4. Pembeli mengklik detail rumah tersebut, melihat spesifikasinya.
+   5. Pembeli ingin tahu berapa cicilannya. Ia membuka menu Simulasi KPR.
+   6. Di Simulasi KPR, ia melihat ada teks berjalan (Marquee) berisi info: "Promo BNI Griya Bunga Fix 4%". 
+   7. Ia memilih promo tersebut, memasukkan Harga 1,5M dan DP 20%. Sistem langsung menghitung angsuran bulanannya beserta tabel rinciannya secara instan (tanpa loading berkat Alpine.js).
+   8. Karena merasa cicilannya masuk akal dan terjangkau, ia menekan tombol "Tanya KPR / Hubungi Agen".
+   9. Otomatis aplikasi WhatsApp pembeli terbuka dengan pesan template yang menyebutkan properti dan harganya kepada agen properti. Kesepakatan dilanjutkan via obrolan (Chat).
+
+================================================================================
+(Dokumentasi di-generate secara otomatis untuk Bintaro Land Property)

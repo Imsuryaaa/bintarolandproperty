@@ -1,0 +1,35 @@
+Penjelasan Aplikasi Bintaro Land Property
+=========================================
+
+1. Bahasa dan Framework yang Digunakan:
+---------------------------------------
+- Bahasa Pemrograman:
+  * PHP (Minimal versi 8.2) untuk sisi backend.
+  * HTML, CSS, JavaScript (melalui Blade, TailwindCSS, dan Vite) untuk sisi frontend.
+  
+- Framework & Tools Utama:
+  * Laravel (Versi 11): Sebagai framework utama backend yang mengatur routing, database (ORM), logika bisnis, dan views.
+  * TailwindCSS (Versi 3.4.1): Framework CSS utility-first yang digunakan untuk styling tampilan/UI dari website agar responsif dan modern.
+  * Vite (Versi 5.0): Build tool (bundler) yang digunakan untuk meng-compile aset frontend (CSS, JS) dengan cepat, menggantikan Laravel Mix.
+  * Blade Templating Engine: Bawaan Laravel untuk membangun tampilan UI (HTML) secara dinamis.
+  * Alpine.js / Vanilla JS (Opsional/Berdasarkan standard stack Tailwind UI): Untuk interaktivitas ringan jika ada.
+
+2. Alur Aplikasi (Flow):
+------------------------
+Aplikasi ini terbagi menjadi dua bagian utama: Halaman Publik (User) dan Halaman Admin (CMS).
+
+A. Alur Pengunjung (User Publik)
+   - Beranda (Home): Saat user mengakses halaman utama (`/`), mereka akan melihat daftar properti yang tersedia, banner, dan fitur pencarian/filter.
+   - Detail Properti: Jika user mengklik salah satu properti, mereka akan diarahkan ke halaman detail properti (`/properti/{slug}`) untuk melihat foto lengkap, harga, spesifikasi, dan deskripsi properti tersebut.
+   - Filter Kategori & Area: User bisa memfilter properti berdasarkan kategori (misalnya: rumah, ruko) melalui halaman `/kategori/{slug}` atau berdasarkan area (misalnya: Bintaro Sektor 7) melalui halaman `/area/{area}`.
+   - Pencarian (Search): User dapat melakukan pencarian spesifik (`/cari`) dengan memasukkan keyword, rentang harga, kondisi properti, dan metode pengurutan (sorting) yang nantinya akan memunculkan hasil filter di halaman beranda.
+
+B. Alur Admin (Manajemen Data)
+   - Login: Admin harus login terlebih dahulu melalui `/admin/login`.
+   - Dashboard: Setelah berhasil login, admin akan masuk ke halaman dashboard utama (`/admin`).
+   - Manajemen Properti (CRUD): Admin dapat melihat, menambah, mengubah, atau menghapus data properti melalui rute manajemen (`/admin/properties`).
+   - Manajemen Foto: Admin memiliki fitur khusus untuk mengelola banyak foto dalam satu properti secara dinamis (mengunggah, menghapus, atau mengatur ulang/reorder urutan foto).
+   - Logout: Setelah selesai, admin dapat keluar dari sistem.
+
+Kesimpulan:
+Ini adalah aplikasi web Katalog/Listing Properti yang berjalan dengan arsitektur Monolitik menggunakan Laravel dan dirender dengan Blade + TailwindCSS di sisi frontend.
