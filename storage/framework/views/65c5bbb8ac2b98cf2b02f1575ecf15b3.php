@@ -6,7 +6,11 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <title><?php echo $__env->yieldContent('title', 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro'); ?></title>
-    <meta name="description" content="<?php echo $__env->yieldContent('meta_description', 'Bintaro Land Property – agen properti berpengalaman di Bintaro dan sekitarnya. Temukan rumah, kavling, dan properti investasi terbaik.'); ?>">
+    <meta name="description" content="@yield('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Jual beli rumah, apartemen, dan tanah di kawasan strategis Bintaro, Tangerang Selatan.">
+<meta name="keywords" content="bintaro land, properti bintaro, jual rumah bintaro, perumahan dharmawangsa home">
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="VtsXhjyPKKGZ1q3G9lRxUMKUARZDgZTHqefOjV-lOvY" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="<?php echo e(asset('images/logo.jpg')); ?>">
@@ -23,18 +27,18 @@
         })();
     </script>
 
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-    <?php echo $__env->yieldContent('head'); ?>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('head')
 </head>
 <body class="min-h-screen">
 
-    <?php echo $__env->make('partials.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    @include('partials.navbar')
 
     <main class="flex-1 w-full">
-        <?php echo $__env->yieldContent('content'); ?>
+        @yield('content')
     </main>
 
-    <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    @include('partials.footer')
 
     <!-- WhatsApp floating button -->
     <a href="https://wa.me/<?php echo e(env('WHATSAPP_NUMBER', '6281234567890')); ?>?text=<?php echo e(urlencode('Halo Bintaro Land Property, saya ingin informasi properti.')); ?>"
