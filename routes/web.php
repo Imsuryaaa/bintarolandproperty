@@ -17,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PropertyController::class, 'index'])
     ->name('home');
 
+// Sitemap XML (for Google Search Console & SEO)
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
+    ->name('sitemap');
+
+// Robots.txt
+Route::get('/robots.txt', function () {
+    $content = "User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: " . url('/sitemap.xml');
+    return response($content, 200)->header('Content-Type', 'text/plain');
+})->name('robots');
+
+
 // Property detail page - uses Route Model Binding
 Route::get('/properti/{property:slug}', [PropertyController::class, 'show'])
     ->name('property.show');

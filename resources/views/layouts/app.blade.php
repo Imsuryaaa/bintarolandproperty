@@ -8,6 +8,9 @@
     <title>@yield('title', 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro')</title>
     <meta name="description" content="@yield('meta_description', 'Bintaro Land Property – agen properti berpengalaman di Bintaro dan sekitarnya. Temukan rumah, kavling, dan properti investasi terbaik.')">
 
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="VtsXhjyPKKGZ1q3G9lRxUMKUARZDgZTHqefOjV-lOvY" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.jpg') }}">
 
