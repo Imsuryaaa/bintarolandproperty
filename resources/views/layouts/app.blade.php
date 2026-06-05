@@ -6,7 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro')</title>
-    <meta name="description" content="@yield('meta_description', 'Bintaro Land Property – agen properti berpengalaman di Bintaro dan sekitarnya. Temukan rumah, kavling, dan properti investasi terbaik.')">
+    <meta name="description" content="@yield('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Jual beli rumah, apartemen, dan tanah di kawasan strategis Bintaro, Tangerang Selatan.">
+<meta name="keywords" content="bintaro land, properti bintaro, jual rumah bintaro, perumahan dharmawangsa home">
 
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="VtsXhjyPKKGZ1q3G9lRxUMKUARZDgZTHqefOjV-lOvY" />
