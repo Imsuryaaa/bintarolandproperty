@@ -1,0 +1,22 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-BD8nPwbK.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CNbRKHZH.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-CbJzA3MV.css"
+    ]
+  },
+  "resources/js/dark-mode.js": {
+    "file": "assets/dark-mode-p0OX7IHW.js",
+    "name": "dark-mode",
+    "src": "resources/js/dark-mode.js",
+    "isEntry": true
+  }
+}
