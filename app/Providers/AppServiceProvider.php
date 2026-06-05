@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Set default string length for older MySQL versions
+        // Force HTTPS untuk semua URL yang di-generate Laravel (paginator, route(), dll)
         URL::forceScheme('https');
         // \Illuminate\Support\Facades\Schema::defaultStringLength(191);
     }

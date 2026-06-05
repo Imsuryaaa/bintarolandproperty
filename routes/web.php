@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PropertyController::class, 'index'])
     ->name('home');
 
+// All properties listing page
+Route::get('/properti', [PropertyController::class, 'allProperties'])
+    ->name('properties.all');
+
+// Hotsale properties listing page
+Route::get('/hotsale', [PropertyController::class, 'hotsaleProperties'])
+    ->name('properties.hotsale');
+
+
 // Sitemap XML (for Google Search Console & SEO)
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
     ->name('sitemap');

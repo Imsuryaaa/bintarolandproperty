@@ -45,6 +45,9 @@
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
+            @if(!isset($property))
+            <p class="mt-3 font-bold text-red-800 dark:text-red-300">⚠️ PENTING: Anda harus memilih kembali foto properti karena foto akan ter-reset saat terjadi error validasi.</p>
+            @endif
         </div>
         @endif
 
@@ -994,8 +997,9 @@ document.addEventListener('DOMContentLoaded', function () {
         stagedFiles = files.filter(f => !newFiles.some(nf => nf.name === f.name && nf.size === f.size));
         if (stagedFiles.length === 0) return;
 
-        stagedSelection = [];
-        cbSelectAll.checked = false;
+        // Pre-select all files by default
+        stagedSelection = stagedFiles.map((_, i) => i);
+        cbSelectAll.checked = true;
         
         buildModalGrid();
         updateModalVisuals();

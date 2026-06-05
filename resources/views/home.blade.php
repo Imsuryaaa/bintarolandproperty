@@ -304,6 +304,7 @@
 @if(!isset($category) && !$hasCategory && !request('search') && !request('min_price') && !request('max_price') && $featuredProperties->count() > 0)
 <section class="py-12 lg:py-16 bg-gray-50 dark:bg-charcoal-900/50">
     <div class="container-main">
+        {{-- Header --}}
         <div class="flex items-end justify-between mb-7">
             <div>
                 <div class="flex items-center gap-1.5 mb-2">
@@ -316,18 +317,173 @@
                     Properti <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Hotsale</span>
                 </h2>
             </div>
-            <a href="{{ route('home') }}#properties" class="text-sm text-brand-600 dark:text-brand-400 hover:underline font-medium hidden sm:block">
-                Lihat semua →
-            </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            @foreach($featuredProperties as $property)
-                @include('components.property-card', ['property' => $property])
-            @endforeach
+        @php $allFeatured = $featuredProperties->all(); $featuredChunks = array_chunk($allFeatured, 3); @endphp
+
+        {{-- Hotsale Carousel Wrapper --}}
+        <div id="hotsale-carousel" class="relative">
+            {{-- Slides --}}
+            <div id="hotsale-slides" class="overflow-hidden">
+                <div id="hotsale-track" class="flex transition-none">
+                    @foreach($featuredChunks as $chunkIdx => $chunk)
+                    <div class="hotsale-slide w-full flex-shrink-0">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            @foreach($chunk as $property)
+                                @include('components.property-card', ['property' => $property])
+                            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            @if(count($featuredChunks) > 1)
+            {{-- Navigation Dots --}}
+            <div class="flex items-center justify-center gap-2 mt-6" id="hotsale-dots">
+                @foreach($featuredChunks as $i => $chunk)
+                <button type="button"
+                    class="hotsale-dot {{ $i === 0 ? 'hotsale-dot--active' : '' }}"
+                    data-index="{{ $i }}"
+                    aria-label="Slide {{ $i + 1 }}"></button>
+                @endforeach
+            </div>
+
+            {{-- Prev / Next --}}
+            <button type="button" id="hotsale-prev"
+                class="hotsale-arrow hotsale-arrow--left" aria-label="Sebelumnya">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" id="hotsale-next"
+                class="hotsale-arrow hotsale-arrow--right" aria-label="Selanjutnya">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            @endif
+
+            {{-- Lihat Selengkapnya --}}
+            @if($featuredProperties->count() > 3)
+            <div class="mt-7 text-center">
+                <a href="{{ route('properties.hotsale') }}"
+                   class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-brand-500/40 text-brand-600 dark:text-brand-400 text-sm font-medium hover:bg-brand-500/10 hover:border-brand-500 transition-all duration-200 group">
+                    Lihat Semua Properti Hotsale
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+            @endif
         </div>
     </div>
 </section>
+
+<style>
+.hotsale-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.dark .hotsale-arrow {
+    background: rgba(30,35,45,0.92);
+    border-color: rgba(255,255,255,0.12);
+    color: #e5e7eb;
+}
+.hotsale-arrow:hover {
+    background: #ea951d;
+    border-color: #ea951d;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(234,149,29,0.4);
+    transform: translateY(-50%) scale(1.08);
+}
+.hotsale-arrow--left  { left: -18px; }
+.hotsale-arrow--right { right: -18px; }
+@media(max-width:640px) {
+    .hotsale-arrow--left  { left: 4px; }
+    .hotsale-arrow--right { right: 4px; }
+    .hotsale-arrow { width: 34px; height: 34px; }
+}
+
+.hotsale-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    padding: 0;
+}
+.dark .hotsale-dot { background: #4b5563; }
+.hotsale-dot--active {
+    width: 24px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #ea951d, #c97a10);
+    box-shadow: 0 2px 8px rgba(234,149,29,0.45);
+}
+.hotsale-dot:hover:not(.hotsale-dot--active) {
+    background: #ea951d;
+    transform: scale(1.2);
+}
+</style>
+
+<script>
+(function() {
+    var track = document.getElementById('hotsale-track');
+    var dots  = document.querySelectorAll('.hotsale-dot');
+    var prev  = document.getElementById('hotsale-prev');
+    var next  = document.getElementById('hotsale-next');
+    if (!track) return;
+
+    var total   = dots.length;
+    var current = 0;
+    var animating = false;
+
+    function goTo(idx, instant) {
+        if (idx < 0) idx = total - 1;
+        if (idx >= total) idx = 0;
+        current = idx;
+
+        // Smooth CSS transition
+        if (instant) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+
+        // Update dots
+        dots.forEach(function(d, i) {
+            d.classList.toggle('hotsale-dot--active', i === current);
+        });
+    }
+
+    // Init: set width so flex works
+    var slides = track.querySelectorAll('.hotsale-slide');
+    slides.forEach(function(s) { s.style.minWidth = '100%'; });
+    goTo(0, true);
+
+    if (prev) prev.addEventListener('click', function() { goTo(current - 1); });
+    if (next) next.addEventListener('click', function() { goTo(current + 1); });
+    dots.forEach(function(d) {
+        d.addEventListener('click', function() { goTo(parseInt(d.dataset.index)); });
+    });
+
+    // Auto-advance every 5s
+    if (total > 1) {
+        setInterval(function() { goTo(current + 1); }, 5000);
+    }
+})();
+</script>
 @endif
 
 {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}}
@@ -385,12 +541,25 @@
 
         {{-- Grid --}}
         @if($properties->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div id="props-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 props-grid-anim">
                 @foreach($properties as $property)
                     @include('components.property-card', ['property' => $property])
                 @endforeach
             </div>
-            <div class="mt-10">
+
+            {{-- Lihat Selengkapnya – menuju halaman semua properti --}}
+            <div class="mt-8 text-center">
+                <a href="{{ route('properties.all') }}"
+                   class="inline-flex items-center gap-2.5 px-8 py-3 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-600 dark:text-brand-400 text-sm font-semibold hover:bg-brand-500/20 hover:border-brand-500/60 transition-all duration-200 group shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    Lihat Semua Properti
+                    <span class="text-xs text-gray-400 dark:text-charcoal-500 font-normal">({{ $properties->total() }} listing)</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+
+            <div class="mt-8" id="props-pagination">
                 {{ $properties->links('components.pagination') }}
             </div>
         @else
@@ -402,6 +571,118 @@
                 <a href="{{ route('home') }}" class="btn-primary text-sm">Reset Filter</a>
             </div>
         @endif
+
+<style>
+.props-grid-anim {
+    animation: propsGridIn 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes propsGridIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+(function () {
+    /* ── AJAX Pagination: swap konten tanpa refresh halaman ── */
+
+    function loadPage(url) {
+        var gridEl = document.getElementById('props-grid');
+        var pagEl  = document.getElementById('props-pagination');
+
+        /* Fade out */
+        if (gridEl) {
+            gridEl.style.transition = 'opacity 0.2s ease';
+            gridEl.style.opacity    = '0.2';
+        }
+
+        fetch(url, { credentials: 'same-origin' })
+            .then(function (res) { return res.text(); })
+            .then(function (html) {
+                var parser = new DOMParser();
+                var newDoc = parser.parseFromString(html, 'text/html');
+
+                var ng = newDoc.getElementById('props-grid');
+                var np = newDoc.getElementById('props-pagination');
+                var nm = newDoc.getElementById('load-more-btn');
+
+                /* Swap grid */
+                gridEl = document.getElementById('props-grid');
+                pagEl  = document.getElementById('props-pagination');
+
+                if (ng && gridEl) { gridEl.innerHTML = ng.innerHTML; }
+                if (np && pagEl)  { pagEl.innerHTML  = np.innerHTML;  }
+
+                /* Swap "Lihat Selengkapnya" */
+                var om = document.getElementById('load-more-btn');
+                if (om && nm)         { om.outerHTML = nm.outerHTML; }
+                else if (om && !nm)   { om.remove(); }
+                else if (!om && nm && pagEl) { pagEl.insertAdjacentHTML('beforebegin', nm.outerHTML); }
+
+                /* Fade in */
+                gridEl = document.getElementById('props-grid');
+                if (gridEl) {
+                    gridEl.style.opacity   = '0';
+                    gridEl.style.transform = 'translateY(12px)';
+                    void gridEl.offsetWidth; /* force reflow */
+                    gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                    gridEl.style.opacity    = '1';
+                    gridEl.style.transform  = 'translateY(0)';
+                }
+
+                /* Update URL */
+                history.pushState({ paginationHref: url }, '', url);
+
+                /* Scroll ke section properties */
+                var sec = document.getElementById('properties');
+                if (sec) {
+                    window.scrollTo({ top: sec.offsetTop - 80, behavior: 'smooth' });
+                }
+            })
+            .catch(function (err) {
+                console.warn('Pagination fetch error:', err);
+                /* Restore opacity tanpa redirect */
+                var g = document.getElementById('props-grid');
+                if (g) g.style.opacity = '1';
+            });
+    }
+
+    /* ── Click delegation di document level ── */
+    document.addEventListener('click', function (e) {
+        /* Cari anchor dengan class page-btn terdekat dari target klik */
+        var link = e.target.closest('a.page-btn');
+
+        /* Juga tangkap klik "Lihat Selengkapnya" */
+        if (!link) link = e.target.closest('#load-more-btn[href]');
+        if (!link) return;
+
+        /* Ambil URL absolut dari link */
+        var url = link.href;
+        if (!url || url === '' || url === '#') return;
+
+        /* ── FIX MIXED CONTENT ──
+           Laravel bisa generate URL http:// tapi ngrok/server pakai https://.
+           Paksa pakai origin yang sama dengan halaman saat ini agar fetch tidak diblokir. */
+        try {
+            var u = new URL(url);
+            /* Ganti host dan protocol dengan yang sekarang dipakai browser */
+            url = window.location.origin + u.pathname + u.search;
+        } catch (e2) { return; }
+
+        e.preventDefault();
+        e.stopPropagation();
+        loadPage(url);
+    });
+
+    /* ── Back / Forward browser ── */
+    window.addEventListener('popstate', function (e) {
+        if (e.state && e.state.paginationHref) {
+            loadPage(e.state.paginationHref);
+        }
+    });
+})();
+</script>
+
     </div>
 </section>
 

@@ -67,7 +67,7 @@ class PropertyController extends Controller
             default => $query->latest(),
         };
 
-        $properties = $query->paginate(12)->withQueryString();
+        $properties = $query->paginate(6)->withQueryString();
 
         // Get filter options
         $categories = Category::orderBy('name')->get();
@@ -77,7 +77,7 @@ class PropertyController extends Controller
         // Get featured properties for hero section
         $featuredProperties = Property::featured()
             ->with(['categories'])
-            ->take(6)
+            ->take(9)
             ->get();
 
         $areaStructures = $this->getAreaStructures();
@@ -91,6 +91,106 @@ class PropertyController extends Controller
             'featuredProperties',
             'areaStructures',
             'activePromo'
+        ));
+    }
+
+    /**
+     * Display all properties page (newest to oldest, paginated, with search & filter).
+     */
+    public function allProperties(Request $request): View
+    {
+        $query = Property::query()->with(['categories']);
+
+        // Keyword search
+        if ($request->filled('search')) {
+            $query->search($request->input('search'));
+        }
+
+        // Category filter
+        if ($request->filled('category')) {
+            $catInput = $request->input('category');
+            if (in_array($catInput, ['primary', 'secondary', 'luar_bintaro'])) {
+                $query->whereHas('categories', fn($q) => $q->where('group_type', $catInput));
+            } else {
+                $query->whereHas('categories', function ($q) use ($catInput) {
+                    is_numeric($catInput)
+                        ? $q->where('categories.id', $catInput)
+                        : $q->where('categories.slug', $catInput);
+                });
+            }
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'latest');
+        match ($sort) {
+            'price_low'  => $query->orderBy('price', 'asc'),
+            'price_high' => $query->orderBy('price', 'desc'),
+            default      => $query->latest(),
+        };
+
+        $properties       = $query->paginate(12)->withQueryString();
+        $categories       = Category::orderBy('name')->get();
+        $parentCategories = Category::whereNull('parent_id')->with('children')->get();
+        $totalCount       = Property::count();
+        $isHotsale        = false;
+
+        return view('properties.index', compact(
+            'properties',
+            'categories',
+            'parentCategories',
+            'totalCount',
+            'sort',
+            'isHotsale'
+        ));
+    }
+
+    /**
+     * Display hotsale properties page (featured only).
+     */
+    public function hotsaleProperties(Request $request): View
+    {
+        $query = Property::query()->where('is_featured', true)->with(['categories']);
+
+        // Keyword search
+        if ($request->filled('search')) {
+            $query->search($request->input('search'));
+        }
+
+        // Category filter
+        if ($request->filled('category')) {
+            $catInput = $request->input('category');
+            if (in_array($catInput, ['primary', 'secondary', 'luar_bintaro'])) {
+                $query->whereHas('categories', fn($q) => $q->where('group_type', $catInput));
+            } else {
+                $query->whereHas('categories', function ($q) use ($catInput) {
+                    is_numeric($catInput)
+                        ? $q->where('categories.id', $catInput)
+                        : $q->where('categories.slug', $catInput);
+                });
+            }
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'latest');
+        match ($sort) {
+            'price_low'  => $query->orderBy('price', 'asc'),
+            'price_high' => $query->orderBy('price', 'desc'),
+            default      => $query->latest(),
+        };
+
+        $properties       = $query->paginate(12)->withQueryString();
+        $categories       = Category::orderBy('name')->get();
+        $parentCategories = Category::whereNull('parent_id')->with('children')->get();
+        $totalCount       = Property::where('is_featured', true)->count();
+        $isHotsale        = true;
+
+        return view('properties.index', compact(
+            'properties',
+            'categories',
+            'parentCategories',
+            'totalCount',
+            'sort',
+            'isHotsale'
         ));
     }
 
@@ -123,7 +223,7 @@ class PropertyController extends Controller
         $properties = Property::byCategory($category->slug)
             ->with(['categories', 'conditions'])
             ->latest()
-            ->paginate(12)
+            ->paginate(6)
             ->withQueryString();
 
         $categories = Category::orderBy('name')->get();
