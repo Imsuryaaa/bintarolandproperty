@@ -12,6 +12,7 @@
     <div class="relative overflow-hidden aspect-[4/3]">
         <img src="{{ $property->image_url }}"
              alt="{{ $property->title }}"
+             width="400" height="300"
              loading="lazy"
              class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
              onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=70'">

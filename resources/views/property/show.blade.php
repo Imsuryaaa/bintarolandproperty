@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $property->title . ' – Bintaro Land Property')
-@section('meta_description', Str::limit(strip_tags($property->description), 155))
+@section('title', 'Jual ' . $property->title . ($property->district ? ' di ' . $property->district : ' di Bintaro') . ' | Bintaro Land Property')
+@section('meta_description', 'Dijual ' . $property->title . '. ' . Str::limit(strip_tags($property->description), 120))
 
 @php
     use Illuminate\Support\Str;
@@ -10,6 +10,27 @@
         ? $property->photos->map(fn($p) => $p->url)->values()->toArray()
         : [$property->image_url];
 @endphp
+
+@section('head')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ $property->title }}",
+  "image": [
+    "{{ $allPhotos[0] ?? '' }}"
+  ],
+  "description": "{{ Str::limit(strip_tags($property->description), 150) }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ url()->current() }}",
+    "priceCurrency": "IDR",
+    "price": "{{ $property->price }}",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+@endsection
 
 @section('content')
 

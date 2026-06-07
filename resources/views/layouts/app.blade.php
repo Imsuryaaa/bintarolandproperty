@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro')</title>
-    <meta name="description" content="@yield('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Jual beli rumah, apartemen, dan tanah di kawasan strategis Bintaro, Tangerang Selatan.')">
-<meta name="keywords" content="bintaro land, properti bintaro, jual rumah bintaro, perumahan dharmawangsa home">
+    <title>@yield('title', 'Jual Rumah di Bintaro & Sekitarnya - Harga Terbaik | Bintaro Land Property')</title>
+    <meta name="description" content="@yield('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Spesialis jual beli rumah, kavling, dan investasi properti di kawasan strategis Bintaro Jaya dan sekitarnya.')">
+    <meta name="keywords" content="jual rumah bintaro, rumah dijual bintaro, properti bintaro, rumah murah bintaro, bintaro land property, perumahan bintaro jaya">
+    <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="VtsXhjyPKKGZ1q3G9lRxUMKUARZDgZTHqefOjV-lOvY" />

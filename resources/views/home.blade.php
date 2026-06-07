@@ -1,12 +1,38 @@
 @extends('layouts.app')
 
 @section('title', isset($category)
-    ? "Jual Properti di {$category->name} – Bintaro Land Property"
-    : 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro & Sekitarnya')
+    ? "Jual Properti {$category->name} di Bintaro & Sekitarnya | Bintaro Land Property"
+    : 'Jual Rumah di Bintaro & Sekitarnya - Harga Terbaik | Bintaro Land Property')
 
 @section('meta_description', isset($category)
-    ? "Cari dan temukan rumah, ruko, atau kavling terbaik di {$category->name} bersama Bintaro Land Property. Dapatkan penawaran properti eksklusif hari ini."
-    : 'Bintaro Land Property adalah agen properti terpercaya di Bintaro, Tangerang Selatan. Temukan rumah impian, kavling strategis, dan investasi properti terbaik.')
+    ? "Cari dan temukan rumah, ruko, atau kavling terbaik di {$category->name} bersama Bintaro Land Property. Dapatkan harga dan penawaran properti eksklusif hari ini."
+    : 'Bintaro Land Property adalah spesialis agen properti di Bintaro. Temukan daftar jual rumah di Bintaro, kavling strategis, dan investasi properti terbaik.')
+
+@section('head')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Bintaro Land Property",
+  "image": "{{ asset('images/logo.jpg') }}",
+  "@id": "{{ url('/') }}",
+  "url": "{{ url('/') }}",
+  "telephone": "{{ env('WHATSAPP_NUMBER', '6281234567890') }}",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bintaro",
+    "addressRegion": "Banten",
+    "addressCountry": "ID"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -6.2828,
+    "longitude": 106.7114
+  },
+  "priceRange": "$$$"
+}
+</script>
+@endsection
 
 @section('content')
 
@@ -54,6 +80,7 @@
     <div class="absolute inset-0">
         <img src="{{ asset('unsplash_image/HalamanHome/Properti_Bintaro.jpg') }}"
              alt="Properti Bintaro"
+             width="1920" height="1080" fetchpriority="high" loading="eager"
              class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/90 via-charcoal-950/65 to-charcoal-950/20"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-transparent to-transparent"></div>
@@ -77,10 +104,10 @@
             {{-- Headline --}}
             <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-5" data-aos="fade-up">
                 @if(isset($category))
-                    Properti <span class="text-brand-400">{{ $category->name }}</span><br>
+                    Jual Properti <span class="text-brand-400">{{ $category->name }}</span><br>
                     Pilihan Terbaik
                 @else
-                    Hunian Premium di Bintaro<br>
+                    Jual Rumah & Hunian Premium di Bintaro<br>
                     <span class="text-brand-400">untuk Keluarga Modern</span>
                 @endif
             </h1>

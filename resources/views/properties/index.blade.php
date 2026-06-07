@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', (isset($isHotsale) && $isHotsale ? 'Properti Hotsale Pilihan' : 'Semua Listing Properti') . ' – Bintaro Land Property')
-@section('meta_description', isset($isHotsale) && $isHotsale ? 'Daftar properti hotsale pilihan terbaik dari Bintaro Land Property dengan harga menarik.' : 'Temukan semua properti terbaik di Bintaro dan sekitarnya. Rumah, kavling, ruko – dari terbaru hingga terlama. Bintaro Land Property.')
+@section('title', (isset($isHotsale) && $isHotsale ? 'Jual Properti Hotsale Pilihan di Bintaro' : 'Daftar Jual Rumah & Properti di Bintaro') . ' | Bintaro Land Property')
+@section('meta_description', isset($isHotsale) && $isHotsale ? 'Daftar properti hotsale pilihan terbaik dari Bintaro Land Property dengan harga menarik di kawasan Bintaro.' : 'Temukan daftar lengkap jual rumah, kavling, dan properti komersial di Bintaro dan sekitarnya dengan harga terbaik oleh Bintaro Land Property.')
 
 @section('content')
 
