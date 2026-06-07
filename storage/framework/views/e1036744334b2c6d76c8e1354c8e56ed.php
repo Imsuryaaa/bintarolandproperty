@@ -50,7 +50,7 @@
 
     
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80"
+        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Properti_Bintaro.jpg')); ?>"
              alt="Properti Bintaro"
              class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/90 via-charcoal-950/65 to-charcoal-950/20"></div>
@@ -321,49 +321,37 @@
             </div>
         </div>
 
-        <?php $allFeatured = $featuredProperties->all(); $featuredChunks = array_chunk($allFeatured, 3); ?>
+        <?php $allFeatured = $featuredProperties->all(); ?>
 
         
-        <div id="hotsale-carousel" class="relative">
-            
-            <div id="hotsale-slides" class="overflow-hidden">
-                <div id="hotsale-track" class="flex transition-none">
-                    <?php $__currentLoopData = $featuredChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunkIdx => $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="hotsale-slide w-full flex-shrink-0">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php echo $__env->make('components.property-card', ['property' => $property], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                    </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <div id="hotsale-pool" aria-hidden="true" style="display:none">
+            <?php $__currentLoopData = $allFeatured; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="hotsale-item">
+                    <?php echo $__env->make('components.property-card', ['property' => $property], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 </div>
-            </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
 
-            <?php if(count($featuredChunks) > 1): ?>
+        
+        <div id="hotsale-carousel" class="relative px-2">
             
-            <div class="flex items-center justify-center gap-2 mt-6" id="hotsale-dots">
-                <?php $__currentLoopData = $featuredChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <button type="button"
-                    class="hotsale-dot <?php echo e($i === 0 ? 'hotsale-dot--active' : ''); ?>"
-                    data-index="<?php echo e($i); ?>"
-                    aria-label="Slide <?php echo e($i + 1); ?>"></button>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <div id="hotsale-slides" class="overflow-hidden rounded-lg">
+                <div id="hotsale-track" class="flex"></div>
             </div>
 
             
-            <button type="button" id="hotsale-prev"
-                class="hotsale-arrow hotsale-arrow--left" aria-label="Sebelumnya">
+            <div id="hotsale-dots" class="flex items-center justify-center gap-2 mt-6"></div>
+
+            
+            <button type="button" id="hotsale-prev" class="hotsale-arrow hotsale-arrow--left" aria-label="Sebelumnya" style="display:none">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button type="button" id="hotsale-next"
-                class="hotsale-arrow hotsale-arrow--right" aria-label="Selanjutnya">
+            <button type="button" id="hotsale-next" class="hotsale-arrow hotsale-arrow--right" aria-label="Selanjutnya" style="display:none">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
-            <?php endif; ?>
 
             
-            <?php if($featuredProperties->count() > 3): ?>
+            <?php if($featuredProperties->count() > 1): ?>
             <div class="mt-7 text-center">
                 <a href="<?php echo e(route('properties.hotsale')); ?>"
                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-brand-500/40 text-brand-600 dark:text-brand-400 text-sm font-medium hover:bg-brand-500/10 hover:border-brand-500 transition-all duration-200 group">
@@ -377,23 +365,21 @@
 </section>
 
 <style>
+/* ── Arrows ── */
 .hotsale-arrow {
     position: absolute;
-    top: 50%;
+    top: 42%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.9);
-    border: 1.5px solid rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: rgba(255,255,255,0.92);
+    border: 1.5px solid rgba(0,0,0,0.08);
+    display: flex; align-items: center; justify-content: center;
     color: #374151;
     cursor: pointer;
     z-index: 10;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
 }
 .dark .hotsale-arrow {
     background: rgba(30,35,45,0.92);
@@ -401,89 +387,175 @@
     color: #e5e7eb;
 }
 .hotsale-arrow:hover {
-    background: #ea951d;
-    border-color: #ea951d;
-    color: #fff;
+    background: #ea951d; border-color: #ea951d; color: #fff;
     box-shadow: 0 4px 16px rgba(234,149,29,0.4);
     transform: translateY(-50%) scale(1.08);
 }
-.hotsale-arrow--left  { left: -18px; }
-.hotsale-arrow--right { right: -18px; }
+.hotsale-arrow--left  { left: -6px; }
+.hotsale-arrow--right { right: -6px; }
 @media(max-width:640px) {
-    .hotsale-arrow--left  { left: 4px; }
-    .hotsale-arrow--right { right: 4px; }
-    .hotsale-arrow { width: 34px; height: 34px; }
+    /* Di mobile sembunyikan arrow, cukup swipe */
+    .hotsale-arrow { display: none !important; }
 }
 
+/* ── Dots ── */
 .hotsale-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d1d5db;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    padding: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #d1d5db; border: none; cursor: pointer;
+    transition: all 0.25s ease; padding: 0;
+    flex-shrink: 0;
 }
 .dark .hotsale-dot { background: #4b5563; }
 .hotsale-dot--active {
-    width: 24px;
-    border-radius: 50px;
+    width: 24px; border-radius: 50px;
     background: linear-gradient(90deg, #ea951d, #c97a10);
     box-shadow: 0 2px 8px rgba(234,149,29,0.45);
 }
 .hotsale-dot:hover:not(.hotsale-dot--active) {
-    background: #ea951d;
-    transform: scale(1.2);
+    background: #ea951d; transform: scale(1.2);
+}
+
+/* ── Mobile swipe hint ── */
+@media(max-width:639px) {
+    #hotsale-carousel { padding-left: 0; padding-right: 0; }
+    .hotsale-slide .prop-card {
+        /* sedikit shadow tambahan di mobile agar terasa kartu tunggal */
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
 }
 </style>
 
 <script>
-(function() {
-    var track = document.getElementById('hotsale-track');
-    var dots  = document.querySelectorAll('.hotsale-dot');
-    var prev  = document.getElementById('hotsale-prev');
-    var next  = document.getElementById('hotsale-next');
-    if (!track) return;
+(function () {
+    var pool    = document.getElementById('hotsale-pool');
+    var track   = document.getElementById('hotsale-track');
+    var dotsEl  = document.getElementById('hotsale-dots');
+    var prevBtn = document.getElementById('hotsale-prev');
+    var nextBtn = document.getElementById('hotsale-next');
+    if (!pool || !track) return;
 
-    var total   = dots.length;
-    var current = 0;
-    var animating = false;
+    /* Ambil semua item kartu dari pool */
+    var items = Array.from(pool.querySelectorAll('.hotsale-item'));
+    if (items.length === 0) return;
 
+    var current  = 0;
+    var total    = 0;
+    var autoTimer = null;
+
+    /* ── Tentukan berapa kartu per slide berdasarkan lebar layar ── */
+    function getPerPage() {
+        var w = window.innerWidth;
+        if (w < 640)  return 1;   /* HP       : 1 kartu, swipe */
+        if (w < 1024) return 4;   /* Tablet   : 4 kartu (2×2) */
+        return 3;                  /* Desktop  : 3 kartu */
+    }
+
+    /* ── Bangun grid class sesuai perPage ── */
+    function gridClass(pp) {
+        if (pp === 1) return 'grid-cols-1';
+        if (pp === 4) return 'grid-cols-2';
+        return 'grid-cols-3';
+    }
+
+    /* ── Bangun ulang seluruh carousel ── */
+    function build() {
+        var pp     = getPerPage();
+        var chunks = [];
+        for (var i = 0; i < items.length; i += pp) {
+            chunks.push(items.slice(i, i + pp));
+        }
+        total = chunks.length;
+
+        /* Bersihkan */
+        track.innerHTML  = '';
+        dotsEl.innerHTML = '';
+
+        /* Buat slide per chunk */
+        chunks.forEach(function (chunk, idx) {
+            var slide = document.createElement('div');
+            slide.className = 'hotsale-slide w-full flex-shrink-0';
+            slide.style.minWidth = '100%';
+
+            var grid = document.createElement('div');
+            grid.className = 'grid gap-5 ' + gridClass(pp);
+
+            chunk.forEach(function (item) {
+                grid.appendChild(item.cloneNode(true));
+            });
+
+            slide.appendChild(grid);
+            track.appendChild(slide);
+
+            /* Dot per slide */
+            if (total > 1) {
+                var dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'hotsale-dot' + (idx === 0 ? ' hotsale-dot--active' : '');
+                dot.dataset.index = idx;
+                dot.setAttribute('aria-label', 'Slide ' + (idx + 1));
+                dot.addEventListener('click', function () { goTo(+this.dataset.index); });
+                dotsEl.appendChild(dot);
+            }
+        });
+
+        /* Tampilkan / sembunyikan arrow */
+        if (total > 1) {
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+
+        /* Reset posisi */
+        if (current >= total) current = 0;
+        goTo(current, true);
+        startAuto();
+    }
+
+    /* ── Pindah ke slide idx ── */
     function goTo(idx, instant) {
-        if (idx < 0) idx = total - 1;
+        if (idx < 0)      idx = total - 1;
         if (idx >= total) idx = 0;
         current = idx;
 
-        // Smooth CSS transition
-        if (instant) {
-            track.style.transition = 'none';
-        } else {
-            track.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
-        }
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.4,0,0.2,1)';
+        track.style.transform  = 'translateX(-' + (current * 100) + '%)';
 
-        // Update dots
-        dots.forEach(function(d, i) {
+        dotsEl.querySelectorAll('.hotsale-dot').forEach(function (d, i) {
             d.classList.toggle('hotsale-dot--active', i === current);
         });
     }
 
-    // Init: set width so flex works
-    var slides = track.querySelectorAll('.hotsale-slide');
-    slides.forEach(function(s) { s.style.minWidth = '100%'; });
-    goTo(0, true);
-
-    if (prev) prev.addEventListener('click', function() { goTo(current - 1); });
-    if (next) next.addEventListener('click', function() { goTo(current + 1); });
-    dots.forEach(function(d) {
-        d.addEventListener('click', function() { goTo(parseInt(d.dataset.index)); });
-    });
-
-    // Auto-advance every 5s
-    if (total > 1) {
-        setInterval(function() { goTo(current + 1); }, 5000);
+    /* ── Auto-advance ── */
+    function startAuto() {
+        if (autoTimer) clearInterval(autoTimer);
+        if (total > 1) autoTimer = setInterval(function () { goTo(current + 1); }, 5000);
     }
+
+    /* ── Touch / swipe support (mobile) ── */
+    var tsX = 0;
+    track.addEventListener('touchstart', function (e) {
+        tsX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+        var diff = tsX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    /* ── Arrow buttons ── */
+    prevBtn.addEventListener('click', function () { goTo(current - 1); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+    /* ── Build pertama kali ── */
+    build();
+
+    /* ── Rebuild saat resize (debounced) ── */
+    var rTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(rTimer);
+        rTimer = setTimeout(build, 200);
+    });
 })();
 </script>
 <?php endif; ?>
@@ -742,14 +814,14 @@
             
             <div class="grid grid-cols-2 gap-3" data-aos="fade-left">
                 <div class="rounded-lg overflow-hidden aspect-[3/4]">
-                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&q=80" alt="Interior" class="w-full h-full object-cover">
+                    <img src="<?php echo e(asset('unsplash_image/HalamanHome/Interior.jpg')); ?>" alt="Interior" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="rounded-lg overflow-hidden aspect-video">
-                        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&q=80" alt="Ruang tamu" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Ruang_tamu.jpg')); ?>" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover">
                     </div>
                     <div class="rounded-lg overflow-hidden flex-1">
-                        <img src="https://images.unsplash.com/photo-1560184897-ae75f418493e?w=400&q=80" alt="Eksterior" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Exterior.jpg')); ?>" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -762,7 +834,7 @@
 
 <section id="kontak" class="relative py-16 lg:py-20 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=70" alt="" class="w-full h-full object-cover">
+        <img src="<?php echo e(asset('unsplash_image/HalamanHome/WhatsApp_CTA.jpg')); ?>" alt="" loading="lazy" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-charcoal-950 bg-opacity-75"></div>
     </div>
     <div class="relative z-10 container-main text-center">

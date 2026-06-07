@@ -12,7 +12,7 @@
 
     {{-- Background image with overlay --}}
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80"
+        <img src="{{ asset('unsplash_image/Halaman_Semua_Properti/a.jpg') }}"
              alt="" class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-charcoal-950/80"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/95 via-charcoal-950/85 to-charcoal-950/60"></div>

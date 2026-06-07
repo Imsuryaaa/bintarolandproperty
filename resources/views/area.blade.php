@@ -11,6 +11,7 @@
     <div class="absolute inset-0">
         <img src="{{ $areaData['image'] }}"
              alt="{{ $areaData['title'] }}"
+             fetchpriority="high"
              class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-charcoal-950/80"></div>
     </div>

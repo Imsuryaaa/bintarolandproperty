@@ -72,7 +72,7 @@ class PropertyAdminController extends Controller
             'street_name'  => 'nullable|string|max:255',
             'is_featured'  => 'nullable|boolean',
             'photos'       => 'nullable|array|max:20',
-            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp|max:3072',
+            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
             'category_id'  => 'required|exists:categories,id',
         ]);
 
@@ -163,7 +163,7 @@ class PropertyAdminController extends Controller
             'street_name'  => 'nullable|string|max:255',
             'is_featured'  => 'nullable|boolean',
             'photos'       => 'nullable|array|max:20',
-            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp|max:3072',
+            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
             'delete_photos' => 'nullable|array',
             'delete_photos.*' => 'exists:property_photos,id',
             'photo_order'  => 'nullable|string',   // JSON: "[1,3,2]"
@@ -301,13 +301,43 @@ class PropertyAdminController extends Controller
 
     private function savePhoto($file, string $propertyCode): string
     {
-        $filename = Str::uuid() . '.' . $file->extension();
         $directory = public_path('images/properties/' . $propertyCode);
-        
+
         if (!File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
 
+        $uuid = (string) Str::uuid();
+
+        // ── Attempt WebP conversion via GD ───────────────────────────
+        if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
+            try {
+                $rawData = file_get_contents($file->getRealPath());
+                $srcImage = @imagecreatefromstring($rawData);
+
+                if ($srcImage !== false) {
+                    $filename = $uuid . '.webp';
+                    $destPath = $directory . '/' . $filename;
+
+                    // Preserve transparency for PNG/GIF
+                    if (imageistruecolor($srcImage)) {
+                        imagealphablending($srcImage, true);
+                        imagesavealpha($srcImage, true);
+                    }
+
+                    // Convert & save as WebP at 80% quality
+                    imagewebp($srcImage, $destPath, 80);
+                    imagedestroy($srcImage);
+
+                    return $propertyCode . '/' . $filename;
+                }
+            } catch (\Throwable $e) {
+                // Fall through to original save below
+            }
+        }
+
+        // ── Fallback: save original file if GD not available ─────────
+        $filename = $uuid . '.' . $file->extension();
         $file->move($directory, $filename);
         return $propertyCode . '/' . $filename;
     }

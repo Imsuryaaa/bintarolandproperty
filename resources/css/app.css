@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* Google Fonts are loaded via <link> in layouts/app.blade.php for better performance */
 
 @import 'datatables.net-dt/css/dataTables.dataTables.css';
 @tailwind base;

@@ -1,11 +1,9 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'Kelola Properti'); ?>
+<?php $__env->startSection('page-title', 'Kelola Properti'); ?>
 
-@section('title', 'Kelola Properti')
-@section('page-title', 'Kelola Properti')
+<?php $__env->startSection('content'); ?>
 
-@section('content')
-
-@section('head')
+<?php $__env->startSection('head'); ?>
 <style>
 /* DataTables Overrides to match Dashboard Theme */
 div.dt-container { font-size: 0.875rem; color: inherit; }
@@ -38,10 +36,10 @@ div.dt-container .dt-layout-row { display: flex; justify-content: space-between;
 div.dt-container .dt-layout-row:last-child { margin-top: 1rem; margin-bottom: 0; }
 @media (max-width: 640px) { div.dt-container .dt-layout-row { flex-direction: column; gap: 1rem; align-items: stretch; text-align: left; } }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
 <div class="flex flex-col md:flex-row md:items-center justify-end gap-4 mb-6">
-    <a href="{{ route('admin.properties.create') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap w-full sm:w-auto">
+    <a href="<?php echo e(route('admin.properties.create')); ?>" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap w-full sm:w-auto">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -64,62 +62,62 @@ div.dt-container .dt-layout-row:last-child { margin-top: 1rem; margin-bottom: 0;
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                @forelse($properties as $property)
+                <?php $__empty_1 = true; $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/40 group">
                     <td class="px-5 py-4">
-                        <span class="inline-block px-2 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded">{{ $property->property_code }}</span>
+                        <span class="inline-block px-2 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded"><?php echo e($property->property_code); ?></span>
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex items-center gap-3">
-                            <img src="{{ $property->image_url }}" alt="{{ $property->title }}"
+                            <img src="<?php echo e($property->image_url); ?>" alt="<?php echo e($property->title); ?>"
                                  class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-200 dark:border-gray-700"
                                  onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=80&q=60'">
                             <div>
-                                <p class="font-medium text-gray-900 dark:text-white">{{ Str::limit($property->title, 40) }}</p>
-                                <p class="text-xs text-gray-400 mt-0.5">{{ $property->location ?? 'Lokasi tidak diisi' }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white"><?php echo e(Str::limit($property->title, 40)); ?></p>
+                                <p class="text-xs text-gray-400 mt-0.5"><?php echo e($property->location ?? 'Lokasi tidak diisi'); ?></p>
                             </div>
                         </div>
                     </td>
                     <td class="px-5 py-4 whitespace-nowrap">
-                        <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm">{{ $property->formatted_price }}</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm"><?php echo e($property->formatted_price); ?></span>
                     </td>
                     <td class="px-5 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs space-y-0.5">
-                        <div>{{ $property->bedrooms }} KT · {{ $property->bathrooms }} KM</div>
-                        <div>LT {{ $property->formatted_land_area }}</div>
+                        <div><?php echo e($property->bedrooms); ?> KT · <?php echo e($property->bathrooms); ?> KM</div>
+                        <div>LT <?php echo e($property->formatted_land_area); ?></div>
                     </td>
                     <td class="px-5 py-4 min-w-[150px]">
                         <div class="flex flex-wrap gap-1">
-                            @foreach($property->categories as $cat)
-                                <span class="inline-block px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-md">{{ $cat->name }}</span>
-                            @endforeach
+                            <?php $__currentLoopData = $property->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <span class="inline-block px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-md"><?php echo e($cat->name); ?></span>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </td>
                     <td class="px-5 py-4">
-                        @if($property->is_featured)
+                        <?php if($property->is_featured): ?>
                             <span class="inline-block px-2 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-md font-medium">Hotsale</span>
-                        @else
+                        <?php else: ?>
                             <span class="inline-block px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500 rounded-md">Biasa</span>
-                        @endif
+                        <?php endif; ?>
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('property.show', $property) }}" target="_blank"
+                            <a href="<?php echo e(route('property.show', $property)); ?>" target="_blank"
                                class="p-2 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40 transition-all shadow-sm"
                                title="Lihat di website">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                 </svg>
                             </a>
-                            <a href="{{ route('admin.properties.edit', $property) }}"
+                            <a href="<?php echo e(route('admin.properties.edit', $property)); ?>"
                                class="p-2 rounded-md bg-amber-50 text-amber-600 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/40 transition-all shadow-sm"
                                title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>
                             </a>
-                            <form method="POST" action="{{ route('admin.properties.destroy', $property) }}" onsubmit="return confirm('Hapus properti ini?')">
-                                @csrf
-                                @method('DELETE')
+                            <form method="POST" action="<?php echo e(route('admin.properties.destroy', $property)); ?>" onsubmit="return confirm('Hapus properti ini?')">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
                                 <button type="submit"
                                         class="p-2 rounded-md bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-all shadow-sm"
                                         title="Hapus">
@@ -131,17 +129,17 @@ div.dt-container .dt-layout-row:last-child { margin-top: 1rem; margin-bottom: 0;
                         </div>
                     </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="7" class="px-5 py-16 text-center">
                         <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
                         <p class="text-gray-400 text-sm">Belum ada properti</p>
-                        <a href="{{ route('admin.properties.create') }}" class="mt-3 inline-block text-sm text-amber-600 hover:underline">Tambah properti pertama</a>
+                        <a href="<?php echo e(route('admin.properties.create')); ?>" class="mt-3 inline-block text-sm text-amber-600 hover:underline">Tambah properti pertama</a>
                     </td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -176,4 +174,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Gawe\website landing page\bintaro-propertyv2\resources\views/admin/properties/index.blade.php ENDPATH**/ ?>

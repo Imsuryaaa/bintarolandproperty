@@ -16,7 +16,7 @@ class PropertyController extends Controller
     public function index(Request $request): View
     {
         $query = Property::query()
-            ->with(['categories']);
+            ->with(['categories', 'photos']);
 
         // Apply category filter (can be group_type or specific category slug/id)
         if ($request->filled('category')) {
@@ -76,7 +76,8 @@ class PropertyController extends Controller
 
         // Get featured properties for hero section
         $featuredProperties = Property::featured()
-            ->with(['categories'])
+            ->latest()
+            ->with(['categories', 'photos'])
             ->take(9)
             ->get();
 
@@ -99,7 +100,7 @@ class PropertyController extends Controller
      */
     public function allProperties(Request $request): View
     {
-        $query = Property::query()->with(['categories']);
+        $query = Property::query()->with(['categories', 'photos']);
 
         // Keyword search
         if ($request->filled('search')) {
@@ -149,7 +150,7 @@ class PropertyController extends Controller
      */
     public function hotsaleProperties(Request $request): View
     {
-        $query = Property::query()->where('is_featured', true)->with(['categories']);
+        $query = Property::query()->where('is_featured', true)->with(['categories', 'photos']);
 
         // Keyword search
         if ($request->filled('search')) {
@@ -200,7 +201,7 @@ class PropertyController extends Controller
      */
     public function show(Property $property): View
     {
-        $property->load(['categories', 'conditions']);
+        $property->load(['categories', 'conditions', 'photos']);
 
         // Get related properties from same category
         $relatedProperties = Property::where('id', '!=', $property->id)
@@ -208,7 +209,7 @@ class PropertyController extends Controller
                 $categoryIds = $property->categories->pluck('id');
                 $query->whereIn('categories.id', $categoryIds);
             })
-            ->with(['categories', 'conditions'])
+            ->with(['categories', 'conditions', 'photos'])
             ->take(4)
             ->get();
 
@@ -221,7 +222,7 @@ class PropertyController extends Controller
     public function byCategory(Request $request, Category $category): View
     {
         $properties = Property::byCategory($category->slug)
-            ->with(['categories', 'conditions'])
+            ->with(['categories', 'conditions', 'photos'])
             ->latest()
             ->paginate(6)
             ->withQueryString();
@@ -249,7 +250,7 @@ class PropertyController extends Controller
             'rumah-primary-bintaro-jaya' => [
                 'title' => 'Rumah Primary Bintaro Jaya (Developer)',
                 'description' => 'Pilihan rumah baru dan eksklusif langsung dari Developer Bintaro Jaya.',
-                'image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80',
+                'image' => asset('unsplash_image/HalamanArea/HerobannerRumahPrimaryBintaroJaya.jpg'),
                 'districts' => [
                     'Kebayoran' => [
                         ['name' => 'Dharmawangsa', 'slug' => 'dharmawangsa-home'],
@@ -271,7 +272,7 @@ class PropertyController extends Controller
             'rumah-bintaro' => [
                 'title' => 'Rumah Bintaro Secondary',
                 'description' => 'Pilihan properti secondary terbaik di kawasan Bintaro.',
-                'image' => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80',
+                'image' => asset('unsplash_image/HalamanArea/HerobannerRumahBintaroSecondary.jpg'),
                 'districts' => [
                     'Area Favorit' => [
                         ['name' => 'Menteng Bintaro', 'slug' => 'menteng'],
@@ -284,7 +285,7 @@ class PropertyController extends Controller
             'rumah-diluar-bintaro' => [
                 'title' => 'Rumah di Luar Bintaro',
                 'description' => 'Pilihan properti strategis di luar kawasan Bintaro Jaya.',
-                'image' => 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80',
+                'image' => asset('unsplash_image/HalamanArea/HerobannerRumahLuarBintaroJaya.jpg'),
                 'districts' => [
                     'Wilayah Populer' => [
                         ['name' => 'Pondok Aren (Sekitar Graha Raya & Parigi)', 'slug' => 'pondok-aren'],
@@ -334,7 +335,7 @@ class PropertyController extends Controller
                 
                 $properties = Property::whereHas('categories', function ($q) use ($slugs) {
                     $q->whereIn('slug', $slugs);
-                })->with(['categories', 'conditions'])
+                })->with(['categories', 'conditions', 'photos'])
                   ->latest()
                   ->take(6)
                   ->get();
