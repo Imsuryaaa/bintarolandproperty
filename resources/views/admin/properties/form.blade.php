@@ -1408,6 +1408,32 @@ document.addEventListener('DOMContentLoaded', function () {
         locInput.value = `${districtInput.value}, ${cityInput.value}, ${provInput.value}`;
         locClearBtn.classList.remove('hidden');
     }
+
+    // Antisipasi submit tanpa foto setelah error validasi
+    const propertyForm = document.getElementById('property-form');
+    const hasErrors = {{ $errors->any() ? 'true' : 'false' }};
+    const isEdit = {{ isset($property) ? 'true' : 'false' }};
+    const photoInputCheck = document.getElementById('photos');
+
+    if (propertyForm && photoInputCheck) {
+        propertyForm.addEventListener('submit', function(e) {
+            // Hanya berlaku untuk form tambah baru (create)
+            if (!isEdit && photoInputCheck.files.length === 0) {
+                if (hasErrors) {
+                    if (!confirm("⚠️ Peringatan: Anda belum memasukkan ulang foto setelah terjadi error. Data akan tersimpan tanpa foto.\n\nApakah Anda yakin ingin melanjutkan tanpa foto?")) {
+                        e.preventDefault(); // Batalkan submit agar user bisa pilih foto
+                        // Scroll ke area foto
+                        document.getElementById('drop-zone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    if (!confirm("Anda belum memilih foto satupun. Properti akan disimpan menggunakan foto default.\n\nLanjutkan menyimpan?")) {
+                        e.preventDefault();
+                        document.getElementById('drop-zone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            }
+        });
+    }
 });
 </script>
 

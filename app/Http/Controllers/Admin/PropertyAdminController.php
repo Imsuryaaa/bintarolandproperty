@@ -81,7 +81,7 @@ class PropertyAdminController extends Controller
             'property_type'      => $validated['property_type'],
             'property_condition' => $validated['property_condition'],
             'title'              => $validated['title'],
-            'slug'        => Str::slug($validated['title']),
+            'slug'               => $this->generateUniqueSlug($validated['title']),
             'description' => $validated['description'],
             'price'       => $validated['price'],
             'bedrooms'    => $validated['bedrooms'] ?? 0,
@@ -214,7 +214,7 @@ class PropertyAdminController extends Controller
         }
 
         $slug = $property->title !== $validated['title']
-            ? Str::slug($validated['title'])
+            ? $this->generateUniqueSlug($validated['title'], $property->id)
             : $property->slug;
 
         $property->update([
@@ -360,5 +360,19 @@ class PropertyAdminController extends Controller
         if (File::exists($fullPath)) {
             File::delete($fullPath);
         }
+    }
+
+    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Property::where('slug', $slug)->where('id', '!=', $ignoreId)->exists()) {
+            $slug = "{$originalSlug}-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 }
