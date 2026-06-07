@@ -86,7 +86,7 @@
 {{-- ══════════════════════════════════════════════════════════
      FILTER / SEARCH BAR — sticky
 ══════════════════════════════════════════════════════════ --}}
-<div class="bg-white/95 dark:bg-charcoal-900/95 backdrop-blur-md border-b border-gray-200 dark:border-charcoal-800 sticky top-[68px] z-30 shadow-sm">
+<div class="bg-white/90 dark:bg-charcoal-950/90 backdrop-blur-md border-b border-gray-200 dark:border-charcoal-800 sticky top-[68px] z-30 shadow-sm">
     <div class="container-main py-3">
         @php
             $actionRoute = (isset($isHotsale) && $isHotsale) ? route('properties.hotsale') : route('properties.all');
