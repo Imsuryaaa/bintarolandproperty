@@ -180,6 +180,24 @@ class Property extends Model
     }
 
     /**
+     * Get the full location with all details.
+     * Used for admin dashboard display.
+     */
+    public function getFullLocationAttribute(): string
+    {
+        $parts = [];
+        if ($this->street_name) $parts[] = $this->street_name;
+        if ($this->complex_name) $parts[] = $this->complex_name;
+        if ($this->district) $parts[] = $this->district;
+        if ($this->city) $parts[] = $this->city;
+        if ($this->province) $parts[] = $this->province;
+        
+        $parts = array_unique(array_filter($parts));
+        
+        return empty($parts) ? 'Lokasi tidak diisi' : implode(', ', $parts);
+    }
+
+    /**
      * Get WhatsApp share URL with pre-filled message.
      */
     public function getWhatsappUrlAttribute(): string

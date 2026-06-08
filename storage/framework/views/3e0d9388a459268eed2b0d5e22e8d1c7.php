@@ -48,7 +48,7 @@ div.dt-container .dt-layout-row:last-child { margin-top: 1rem; margin-bottom: 0;
 </div>
 
 <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm">
-    <div class="w-full">
+    <div class="overflow-x-auto w-full">
         <table id="propertiesTable" class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
@@ -74,7 +74,7 @@ div.dt-container .dt-layout-row:last-child { margin-top: 1rem; margin-bottom: 0;
                                  onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=80&q=60'">
                             <div>
                                 <p class="font-medium text-gray-900 dark:text-white"><?php echo e(Str::limit($property->title, 40)); ?></p>
-                                <p class="text-xs text-gray-400 mt-0.5"><?php echo e($property->location ?? 'Lokasi tidak diisi'); ?></p>
+                                <p class="text-xs text-gray-400 mt-0.5"><?php echo e($property->full_location); ?></p>
                             </div>
                         </div>
                     </td>

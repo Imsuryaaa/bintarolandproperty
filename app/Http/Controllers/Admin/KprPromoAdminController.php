@@ -27,7 +27,9 @@ class KprPromoAdminController extends Controller
             'bunga_fix' => 'required|numeric|min:0',
             'masa_fix' => 'required|integer|min:0',
             'bunga_floating' => 'required|numeric|min:0',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $promo = new KprPromo();
@@ -35,6 +37,8 @@ class KprPromoAdminController extends Controller
         $promo->bunga_fix = $validated['bunga_fix'];
         $promo->masa_fix = $validated['masa_fix'];
         $promo->bunga_floating = $validated['bunga_floating'];
+        $promo->start_date = $validated['start_date'] ?? null;
+        $promo->end_date = $validated['end_date'] ?? null;
         $promo->is_active = $request->has('is_active');
         $promo->save();
 

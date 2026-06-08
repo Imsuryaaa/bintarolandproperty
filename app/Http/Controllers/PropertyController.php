@@ -82,7 +82,7 @@ class PropertyController extends Controller
             ->get();
 
         $areaStructures = $this->getAreaStructures();
-        $activePromo = \App\Models\Promo::where('is_active', true)->first();
+        $activePromo = \App\Models\Promo::activeScheduled()->first();
 
         return view('home', compact(
             'properties',

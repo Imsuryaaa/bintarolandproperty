@@ -59,7 +59,7 @@ Route::post('/cari', function (\Illuminate\Http\Request $request) {
 // KPR Simulation
 Route::get('/simulasi-kpr', function () {
     $defaultRate = env('KPR_DEFAULT_RATE', 5);
-    $kprPromos = \App\Models\KprPromo::where('is_active', true)->get();
+    $kprPromos = \App\Models\KprPromo::activeScheduled()->get();
     return view('kpr.simulasi', compact('defaultRate', 'kprPromos'));
 })->name('simulasi-kpr');
 

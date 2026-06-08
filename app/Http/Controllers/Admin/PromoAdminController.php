@@ -29,13 +29,17 @@ class PromoAdminController extends Controller
             'description' => 'nullable|string',
             'link_url' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $promo = new Promo();
         $promo->title = $validated['title'];
         $promo->description = $validated['description'] ?? null;
         $promo->link_url = $validated['link_url'] ?? null;
+        $promo->start_date = $validated['start_date'] ?? null;
+        $promo->end_date = $validated['end_date'] ?? null;
         $promo->is_active = $request->has('is_active');
 
         // Handle Image Upload

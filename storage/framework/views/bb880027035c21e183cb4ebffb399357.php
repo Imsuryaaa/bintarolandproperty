@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title><?php echo $__env->yieldContent('title', 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro'); ?></title>
-    <meta name="description" content="<?php echo $__env->yieldContent('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Jual beli rumah, apartemen, dan tanah di kawasan strategis Bintaro, Tangerang Selatan.'); ?>">
-<meta name="keywords" content="bintaro land, properti bintaro, jual rumah bintaro, perumahan dharmawangsa home">
+    <title><?php echo $__env->yieldContent('title', 'Jual Rumah di Bintaro & Sekitarnya - Harga Terbaik | Bintaro Land Property'); ?></title>
+    <meta name="description" content="<?php echo $__env->yieldContent('meta_description', 'Temukan hunian impian Anda bersama Bintaro Land Property. Spesialis jual beli rumah, kavling, dan investasi properti di kawasan strategis Bintaro Jaya dan sekitarnya.'); ?>">
+    <meta name="keywords" content="jual rumah bintaro, rumah dijual bintaro, properti bintaro, rumah murah bintaro, bintaro land property, perumahan bintaro jaya">
+    <link rel="canonical" href="<?php echo e(url()->current()); ?>">
 
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="VtsXhjyPKKGZ1q3G9lRxUMKUARZDgZTHqefOjV-lOvY" />
@@ -28,6 +29,11 @@
             if (s === 'dark') document.documentElement.classList.add('dark');
         })();
     </script>
+    <style>
+        /* Fade in effect to prevent flashing */
+        body { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo $__env->yieldContent('head'); ?>

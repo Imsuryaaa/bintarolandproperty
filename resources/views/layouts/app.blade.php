@@ -29,6 +29,11 @@
             if (s === 'dark') document.documentElement.classList.add('dark');
         })();
     </script>
+    <style>
+        /* Fade in effect to prevent flashing */
+        body { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')

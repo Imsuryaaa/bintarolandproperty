@@ -43,6 +43,19 @@
                     @error('bunga_floating') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mulai Tayang (Opsional)</label>
+                        <input type="datetime-local" name="start_date" 
+                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:border-amber-500 focus:ring-amber-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Berakhir Tayang (Opsional)</label>
+                        <input type="datetime-local" name="end_date" 
+                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:border-amber-500 focus:ring-amber-500 text-sm">
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-3 py-2">
                     <input type="checkbox" id="is_active" name="is_active" value="1" checked 
                            class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500 dark:bg-gray-800 dark:border-gray-700">
@@ -69,7 +82,7 @@
                 </div>
             @endif
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto w-full">
                 <table class="w-full text-left text-sm whitespace-nowrap">
                     <thead class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
                         <tr>
@@ -84,7 +97,10 @@
                         @forelse($kprPromos as $promo)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <span class="font-medium text-gray-900 dark:text-white">{{ $promo->nama }}</span>
+                                    <p class="font-medium text-gray-900 dark:text-white">{{ $promo->nama }}</p>
+                                    @if($promo->start_date || $promo->end_date)
+                                        <p class="text-[10px] text-amber-600 dark:text-amber-400 mt-1">Jadwal: {{ $promo->start_date ? $promo->start_date->format('d M Y H:i') : 'Sekarang' }} - {{ $promo->end_date ? $promo->end_date->format('d M Y H:i') : 'Seterusnya' }}</p>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $promo->bunga_fix }}% untuk {{ $promo->masa_fix }} Tahun

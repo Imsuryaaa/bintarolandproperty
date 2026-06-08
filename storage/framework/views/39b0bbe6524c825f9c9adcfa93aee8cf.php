@@ -14,7 +14,19 @@
         .sortable-ghost   { opacity: .35; outline: 2px solid #f59e0b; outline-offset: 2px; }
         .sortable-chosen  { outline: 2px solid #f59e0b; outline-offset: 2px; }
         .sortable-drag    { box-shadow: 0 20px 40px rgba(0,0,0,.35); transform: rotate(1.5deg) scale(1.04); opacity: .95; }
+        
+        /* Fade in effect to prevent flashing */
+        body { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
+
+    <!-- Dark mode: must run BEFORE stylesheets to prevent flash -->
+    <script>
+        (function () {
+            var s = localStorage.getItem('theme');
+            if (s === 'dark') document.documentElement.classList.add('dark');
+        })();
+    </script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
 
@@ -91,7 +103,7 @@
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
         <!-- Main Content Area -->
-        <div class="flex-1 lg:pl-60 flex flex-col min-h-screen">
+        <div class="flex-1 min-w-0 lg:pl-60 flex flex-col min-h-screen">
 
             <!-- Top Bar -->
             <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 lg:px-6 py-3 flex items-center justify-between sticky top-0 z-30">
@@ -144,7 +156,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 p-4 lg:p-6">
+            <main class="flex-1 min-w-0 p-4 lg:p-6">
 
                 
                 <?php if(session('success')): ?>

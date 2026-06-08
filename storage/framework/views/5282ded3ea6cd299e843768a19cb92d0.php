@@ -33,7 +33,7 @@
             Tambah Properti
         </a>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto w-full">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-100 dark:border-gray-800">
@@ -58,7 +58,7 @@
                         </div>
                     </td>
                     <td class="px-5 py-3.5 whitespace-nowrap text-gray-700 dark:text-gray-300 font-medium"><?php echo e($property->formatted_price); ?></td>
-                    <td class="px-5 py-3.5 text-gray-500 dark:text-gray-400 text-sm truncate max-w-[200px]"><?php echo e($property->location ?? '-'); ?></td>
+                    <td class="px-5 py-3.5 text-gray-500 dark:text-gray-400 text-sm truncate max-w-[200px]"><?php echo e($property->full_location); ?></td>
                     <td class="px-5 py-3.5 whitespace-nowrap">
                         <div class="flex items-center gap-2">
                             <a href="<?php echo e(route('admin.properties.edit', $property)); ?>" class="inline-flex p-1.5 rounded-md bg-amber-50 text-amber-600 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/40 transition-all shadow-sm" title="Edit">
