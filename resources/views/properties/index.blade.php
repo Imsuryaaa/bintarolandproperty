@@ -261,16 +261,13 @@
                     // Replace the entire content block (info + grid + pagination)
                     contentEl.innerHTML = newContent.innerHTML;
 
-                    // Animate the grid in
-                    var gridEl = document.getElementById('all-props-grid');
-                    if (gridEl) {
-                        gridEl.style.opacity   = '0';
-                        gridEl.style.transform = 'translateY(12px)';
-                        void gridEl.offsetWidth;
-                        gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                        gridEl.style.opacity    = '1';
-                        gridEl.style.transform  = 'translateY(0)';
-                    }
+                    // Make new cards visible — directly add 'card-visible' class
+                    // since IntersectionObserver may not fire for elements already in viewport
+                    contentEl.querySelectorAll('.prop-card').forEach(function(card, i) {
+                        setTimeout(function() {
+                            card.classList.add('card-visible');
+                        }, i * 50); // stagger each card by 50ms
+                    });
 
                     contentEl.style.opacity = '1';
                     history.pushState({ paginationHref: url }, '', url);
