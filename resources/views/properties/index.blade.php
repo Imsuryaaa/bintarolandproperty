@@ -158,10 +158,12 @@
 <section class="py-10 lg:py-14 bg-white dark:bg-charcoal-950">
     <div class="container-main">
 
+        {{-- Wrap everything AJAX needs to swap in a single container --}}
+        <div id="all-props-content">
         @if($properties->count() > 0)
 
             {{-- Top bar: result count + active filters --}}
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-7">
+            <div id="all-props-info" class="flex flex-wrap items-center justify-between gap-3 mb-7">
                 <div class="flex flex-wrap items-center gap-2">
                     <p class="text-sm text-gray-500 dark:text-charcoal-400">
                         Menampilkan
@@ -214,6 +216,7 @@
                 <a href="{{ $actionRoute }}" class="btn-primary text-sm">Reset Filter</a>
             </div>
         @endif
+        </div>{{-- /#all-props-content --}}
 
     </div>
 </section>
@@ -235,49 +238,56 @@
 (function () {
     /* ── AJAX Pagination ── */
     function loadPage(url) {
-        var gridEl = document.getElementById('all-props-grid');
-        var pagEl  = document.getElementById('all-props-pag');
+        var contentEl = document.getElementById('all-props-content');
 
-        if (gridEl) {
-            gridEl.style.transition = 'opacity 0.18s ease';
-            gridEl.style.opacity    = '0.2';
+        if (contentEl) {
+            contentEl.style.transition = 'opacity 0.18s ease';
+            contentEl.style.opacity    = '0.35';
         }
 
         fetch(url, { credentials: 'same-origin' })
-            .then(function (res) { return res.text(); })
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text();
+            })
             .then(function (html) {
                 var parser = new DOMParser();
                 var newDoc = parser.parseFromString(html, 'text/html');
 
-                var ng = newDoc.getElementById('all-props-grid');
-                var np = newDoc.getElementById('all-props-pag');
+                var newContent = newDoc.getElementById('all-props-content');
+                contentEl = document.getElementById('all-props-content');
 
-                gridEl = document.getElementById('all-props-grid');
-                pagEl  = document.getElementById('all-props-pag');
+                if (newContent && contentEl) {
+                    // Replace the entire content block (info + grid + pagination)
+                    contentEl.innerHTML = newContent.innerHTML;
 
-                if (ng && gridEl) { gridEl.innerHTML = ng.innerHTML; }
-                if (np && pagEl)  { pagEl.innerHTML  = np.innerHTML; }
+                    // Animate the grid in
+                    var gridEl = document.getElementById('all-props-grid');
+                    if (gridEl) {
+                        gridEl.style.opacity   = '0';
+                        gridEl.style.transform = 'translateY(12px)';
+                        void gridEl.offsetWidth;
+                        gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                        gridEl.style.opacity    = '1';
+                        gridEl.style.transform  = 'translateY(0)';
+                    }
 
-                gridEl = document.getElementById('all-props-grid');
-                if (gridEl) {
-                    gridEl.style.opacity   = '0';
-                    gridEl.style.transform = 'translateY(12px)';
-                    void gridEl.offsetWidth;
-                    gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                    gridEl.style.opacity    = '1';
-                    gridEl.style.transform  = 'translateY(0)';
-                }
+                    contentEl.style.opacity = '1';
+                    history.pushState({ paginationHref: url }, '', url);
 
-                history.pushState({ paginationHref: url }, '', url);
-
-                if (gridEl) {
-                    window.scrollTo({ top: gridEl.offsetTop - 140, behavior: 'smooth' });
+                    // Scroll to content area
+                    if (contentEl) {
+                        window.scrollTo({ top: contentEl.offsetTop - 140, behavior: 'smooth' });
+                    }
+                } else {
+                    // Fallback: if parsing failed, do a regular navigation
+                    window.location.href = url;
                 }
             })
             .catch(function (err) {
                 console.warn('Pagination fetch error:', err);
-                var g = document.getElementById('all-props-grid');
-                if (g) g.style.opacity = '1';
+                // Fallback: navigate normally so the user still gets the page
+                window.location.href = url;
             });
     }
 
