@@ -1,7 +1,7 @@
 @props(['property'])
 
 {{-- Entire card is a link. The inner "Lihat Detail" button is redundant but kept for accessibility. --}}
-<article class="prop-card group relative" data-aos="fade-up">
+<article class="prop-card group relative">
 
     {{-- Full-card link overlay --}}
     <a href="{{ route('property.show', $property->slug) }}"

@@ -15,32 +15,109 @@
 
 // ── Imports ──────────────────────────────────────────────────────────────────
 import Alpine from 'alpinejs';
-import $ from 'jquery';
-import DataTable from 'datatables.net-dt';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 import './bootstrap';
 import '../css/app.css';
 
-window.$ = window.jQuery = $;
-window.DataTable = DataTable;
-
-// ── Expose Alpine globally so inline scripts (simulasi-alpine.blade.php)
-//    can call Alpine.data() BEFORE Alpine.start() ──────────────────────────
+// ── Expose Alpine globally ────────────────────────────────────────────────────
 window.Alpine = Alpine;
 
-// ── Start Alpine and AOS after DOM is ready ──────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    Alpine.start();
-    AOS.init({
-        duration: 800,
-        easing: 'ease-out-cubic',
-        once: true, // whether animation should happen only once - while scrolling down
-        offset: 50, // offset (in px) from the original trigger point
-    });
-});
+// ── Detect mobile sekali saja ─────────────────────────────────────────────────
+const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
 
+// ═══════════════════════════════════════════════════════════════════════════════
+//  SISTEM ANIMASI NATIVE — Intersection Observer
+//  Jauh lebih ringan dari AOS: tidak ada forced reflow, tidak ada 3rd-party
+//  observer overhead, semua animasi di CSS transition (GPU compositor).
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * initRevealObserver — observasi elemen [data-reveal]
+ * Ketika masuk viewport, tambahkan class "is-visible" → CSS transition berjalan.
+ */
+function initRevealObserver() {
+    if (!('IntersectionObserver' in window)) {
+        // Fallback: langsung tampilkan semua elemen
+        document.querySelectorAll('[data-reveal]').forEach(el => {
+            el.classList.add('is-visible');
+        });
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Hanya 1x, tidak repeat
+                }
+            });
+        },
+        {
+            threshold:  0.1,   // Trigger saat 10% elemen terlihat
+            rootMargin: '0px 0px -40px 0px', // Trigger sedikit sebelum masuk viewport
+        }
+    );
+
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+}
+
+/**
+ * initCardRevealObserver — observasi .prop-card
+ * Lebih agresif: threshold 0.05 agar kartu langsung reveal saat hampir masuk.
+ * Stagger delay ditangani via CSS nth-child.
+ */
+function initCardRevealObserver() {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.prop-card').forEach(el => {
+            el.classList.add('card-visible');
+        });
+        return;
+    }
+
+    const cardObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // requestAnimationFrame memastikan class toggle di frame yang tepat
+                    requestAnimationFrame(() => {
+                        entry.target.classList.add('card-visible');
+                    });
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold:  0.05,
+            rootMargin: '0px 0px -20px 0px',
+        }
+    );
+
+    document.querySelectorAll('.prop-card').forEach(el => cardObserver.observe(el));
+
+    // Expose untuk dipanggil ulang setelah AJAX pagination swap
+    window._cardObserver = cardObserver;
+}
+
+/**
+ * Re-observe cards baru setelah AJAX pagination.
+ * Dipanggil dari handler AJAX di home.blade.php.
+ */
+window.reObserveCards = function () {
+    if (!window._cardObserver) return;
+    document.querySelectorAll('.prop-card:not(.card-visible)').forEach(el => {
+        window._cardObserver.observe(el);
+    });
+};
+
+// ── Single DOMContentLoaded listener ─────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+
+    // ── Alpine ────────────────────────────────────────────────────────────────
+    Alpine.start();
+
+    // ── Inisialisasi sistem animasi ───────────────────────────────────────────
+    initRevealObserver();
+    initCardRevealObserver();
 
     /* ── Dark mode toggle ─────────────────────────── */
     const toggleBtn        = document.getElementById('theme-toggle');
@@ -97,15 +174,32 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(!document.documentElement.classList.contains('dark'));
     });
 
-    /* ── Navbar scroll shadow ─────────────────────── */
+    /* ── Navbar scroll shadow — rAF throttled ────────────── */
     const navbar = document.getElementById('main-navbar');
+    let scrollRafPending = false;
+
     function handleScroll() {
         if (!navbar) return;
-        navbar.classList.toggle('navbar-scrolled', window.scrollY > 20);
-        navbar.classList.toggle('bg-white/95', window.scrollY > 20);
-        navbar.classList.toggle('dark:bg-charcoal-950/95', window.scrollY > 20);
+        const scrolled = window.scrollY > 20;
+        navbar.classList.toggle('navbar-scrolled', scrolled);
+        navbar.classList.toggle('bg-white/95', scrolled);
+        navbar.classList.toggle('dark:bg-charcoal-950/95', scrolled);
+        if (IS_MOBILE) {
+            navbar.classList.toggle('bg-white', !scrolled);
+            navbar.classList.toggle('dark:bg-charcoal-950', !scrolled);
+        }
     }
-    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    window.addEventListener('scroll', () => {
+        if (!scrollRafPending) {
+            scrollRafPending = true;
+            requestAnimationFrame(() => {
+                handleScroll();
+                scrollRafPending = false;
+            });
+        }
+    }, { passive: true });
+
     handleScroll();
 
     /* ── Mobile menu ──────────────────────────────── */

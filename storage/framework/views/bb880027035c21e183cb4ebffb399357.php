@@ -29,11 +29,12 @@
             if (s === 'dark') document.documentElement.classList.add('dark');
         })();
     </script>
-    <style>
-        /* Fade in effect to prevent flashing */
-        body { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
+
+    <!-- Preload hero image so LCP starts as early as possible -->
+    <link rel="preload" as="image"
+          href="<?php echo e(asset('unsplash_image/HalamanHome/Properti_Bintaro.webp')); ?>"
+          type="image/webp"
+          fetchpriority="high">
 
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo $__env->yieldContent('head'); ?>

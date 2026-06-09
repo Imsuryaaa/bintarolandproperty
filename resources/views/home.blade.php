@@ -76,12 +76,21 @@
 {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}}
 <section class="relative pt-16 lg:pt-[68px] overflow-hidden min-h-[72vh] flex items-end">
 
-    {{-- Background image --}}
+    {{-- Background image — WebP with JPEG fallback, sized for viewport --}}
     <div class="absolute inset-0">
-        <img src="{{ asset('unsplash_image/HalamanHome/Properti_Bintaro.jpg') }}"
-             alt="Properti Bintaro"
-             width="1920" height="1080" fetchpriority="high" loading="eager"
-             class="w-full h-full object-cover object-center">
+        <picture>
+            <source
+                srcset="{{ asset('unsplash_image/HalamanHome/Properti_Bintaro.webp') }}"
+                type="image/webp">
+            <img src="{{ asset('unsplash_image/HalamanHome/Properti_Bintaro.webp') }}"
+                 alt="Properti Bintaro"
+                 width="1920" height="1080"
+                 fetchpriority="high"
+                 loading="eager"
+                 decoding="async"
+                 sizes="100vw"
+                 class="w-full h-full object-cover object-center">
+        </picture>
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/90 via-charcoal-950/65 to-charcoal-950/20"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-transparent to-transparent"></div>
     </div>
@@ -102,7 +111,7 @@
             </div>
 
             {{-- Headline --}}
-            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-5" data-aos="fade-up">
+            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-5" data-reveal>
                 @if(isset($category))
                     Jual Properti <span class="text-brand-400">{{ $category->name }}</span><br>
                     Pilihan Terbaik
@@ -112,7 +121,7 @@
                 @endif
             </h1>
 
-            <p class="text-gray-300 text-base leading-relaxed mb-6 max-w-xl" data-aos="fade-up" data-aos-delay="100">
+            <p class="text-gray-300 text-base leading-relaxed mb-6 max-w-xl" data-reveal data-reveal-delay="1">
                 @if(isset($category))
                     Temukan pilihan properti terbaik kategori {{ $category->name }} yang sesuai kebutuhan dan anggaran Anda.
                 @else
@@ -120,7 +129,7 @@
                 @endif
             </p>
 
-            <div class="mb-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="mb-8" data-reveal data-reveal-delay="2">
                 <a href="{{ route('about') }}" class="inline-block px-8 py-3 border border-white/30 hover:border-white/60 text-white text-base font-medium rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-white/10">
                     Tentang Kami
                 </a>
@@ -128,7 +137,7 @@
 
             {{-- Quick stats row --}}
             @if(!isset($category))
-            <div class="hidden md:flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-aos="fade-up" data-aos-delay="300">
+            <div class="hidden md:flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-reveal data-reveal-delay="3">
                 <div>
                     <span class="text-white font-bold text-xl">1.200+</span>
                     <span class="block text-xs text-gray-400 mt-0.5">Properti Tersedia</span>
@@ -364,10 +373,10 @@
                     <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                     </svg>
-                    <p class="section-label !mb-0 text-red-500">Pilihan Editor</p>
+                    <p class="section-label !mb-0 text-red-500">Rumah Pilihan</p>
                 </div>
                 <h2 class="text-xl sm:text-2xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white uppercase leading-tight">
-                    Pilihan Editor:<br class="sm:hidden"> <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Properti Hotsale</span>
+                    Rumah Pilihan:<br class="sm:hidden"> <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Properti Hotsale</span>
                 </h2>
             </div>
         </div>
@@ -522,7 +531,9 @@
         track.innerHTML  = '';
         dotsEl.innerHTML = '';
 
-        /* Buat slide per chunk */
+        /* Buat slide per chunk
+         * PERF: Gunakan innerHTML (string) bukan cloneNode(true) pada elemen kompleks.
+         * cloneNode(true) pada elemen dengan banyak SVG dan child nodes = mahal di main thread. */
         chunks.forEach(function (chunk, idx) {
             var slide = document.createElement('div');
             slide.className = 'hotsale-slide w-full flex-shrink-0';
@@ -532,7 +543,10 @@
             grid.className = 'grid ' + gridClass(pp);
 
             chunk.forEach(function (item) {
-                grid.appendChild(item.cloneNode(true));
+                /* innerHTML jauh lebih cepat daripada deep DOM clone */
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = item.innerHTML;
+                grid.appendChild(wrapper);
             });
 
             slide.appendChild(grid);
@@ -548,6 +562,13 @@
                 dot.addEventListener('click', function () { goTo(+this.dataset.index); });
                 dotsEl.appendChild(dot);
             }
+        });
+
+        /* Tambahkan card-visible ke SEMUA kartu di carousel.
+         * Kartu carousel sudah ada di viewport saat build() — tidak perlu
+         * menunggu IntersectionObserver, langsung tampilkan. */
+        track.querySelectorAll('.prop-card').forEach(function(card) {
+            card.classList.add('card-visible');
         });
 
         /* Tampilkan / sembunyikan arrow */
@@ -745,7 +766,7 @@
                 else if (om && !nm)   { om.remove(); }
                 else if (!om && nm && pagEl) { pagEl.insertAdjacentHTML('beforebegin', nm.outerHTML); }
 
-                /* Fade in */
+                /* Fade in + re-observe kartu baru untuk animasi reveal */
                 gridEl = document.getElementById('props-grid');
                 if (gridEl) {
                     gridEl.style.opacity   = '0';
@@ -754,6 +775,10 @@
                     gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
                     gridEl.style.opacity    = '1';
                     gridEl.style.transform  = 'translateY(0)';
+                    /* Trigger IntersectionObserver untuk kartu baru */
+                    if (typeof window.reObserveCards === 'function') {
+                        setTimeout(window.reObserveCards, 50);
+                    }
                 }
 
                 /* Update URL */
@@ -827,9 +852,9 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @php
                 $areas = [
-                    ['name' => 'Area Favorit Primary Bintaro', 'slug' => 'rumah-primary-bintaro-jaya', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahPrimaryBintaroJaya.jpg')],
-                    ['name' => 'Area Favorit Bintaro', 'slug' => 'rumah-bintaro', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahBintaroSecondary.jpg')],
-                    ['name' => 'Area Favorit Luar Bintaro', 'slug' => 'rumah-diluar-bintaro', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahLuarBintaroJaya.jpg')],
+                    ['name' => 'Area Favorit Primary Bintaro', 'slug' => 'rumah-primary-bintaro-jaya', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahPrimaryBintaroJaya.webp')],
+                    ['name' => 'Area Favorit Bintaro', 'slug' => 'rumah-bintaro', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahBintaroSecondary.webp')],
+                    ['name' => 'Area Favorit Luar Bintaro', 'slug' => 'rumah-diluar-bintaro', 'img' => asset('unsplash_image/HalamanArea/HerobannerRumahLuarBintaroJaya.webp')],
                 ];
             @endphp
             @foreach($areas as $area)
@@ -862,7 +887,7 @@
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             {{-- Left text --}}
-            <div data-aos="fade-right">
+            <div data-reveal="left">
                 <p class="section-label mb-2">Keunggulan Kami</p>
                 <h2 class="text-2xl lg:text-3xl font-serif font-bold text-gray-900 dark:text-white mb-4 leading-snug">
                     Mengapa Memilih<br>Bintaro Land Property?
@@ -881,7 +906,7 @@
                         ];
                     @endphp
                     @foreach($reasons as $i => $r)
-                        <li class="flex gap-4" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
+                        <li class="flex gap-4" data-reveal data-reveal-delay="{{ $loop->iteration }}">
                             <div class="flex-shrink-0 w-9 h-9 rounded-md bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center mt-0.5">
                                 <svg class="w-4.5 h-4.5 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="{{ $r['icon'] }}"/>
@@ -897,16 +922,16 @@
             </div>
 
             {{-- Right image collage --}}
-            <div class="grid grid-cols-2 gap-3" data-aos="fade-left">
+            <div class="grid grid-cols-2 gap-3" data-reveal="right">
                 <div class="rounded-lg overflow-hidden aspect-[3/4]">
-                    <img src="{{ asset('unsplash_image/HalamanHome/Interior.jpg') }}" alt="Interior" loading="lazy" class="w-full h-full object-cover">
+                    <img src="{{ asset('unsplash_image/HalamanHome/Interior.webp') }}" alt="Interior" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="rounded-lg overflow-hidden aspect-video">
-                        <img src="{{ asset('unsplash_image/HalamanHome/Ruang_tamu.jpg') }}" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover">
+                        <img src="{{ asset('unsplash_image/HalamanHome/Ruang_tamu.webp') }}" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover">
                     </div>
                     <div class="rounded-lg overflow-hidden flex-1">
-                        <img src="{{ asset('unsplash_image/HalamanHome/Exterior.jpg') }}" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
+                        <img src="{{ asset('unsplash_image/HalamanHome/Exterior.webp') }}" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -919,18 +944,29 @@
 {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}}
 <section id="kontak" class="relative py-16 lg:py-20 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="{{ asset('unsplash_image/HalamanHome/WhatsApp_CTA.jpg') }}" alt="" loading="lazy" class="w-full h-full object-cover">
+        {{-- WebP with JPEG fallback untuk CTA background --}}
+        <picture>
+            <source
+                srcset="{{ asset('unsplash_image/HalamanHome/WhatsApp_CTA.webp') }}"
+                type="image/webp">
+            <img src="{{ asset('unsplash_image/HalamanHome/WhatsApp_CTA.webp') }}"
+                 alt=""
+                 loading="lazy"
+                 decoding="async"
+                 sizes="100vw"
+                 class="w-full h-full object-cover">
+        </picture>
         <div class="absolute inset-0 bg-charcoal-950 bg-opacity-75"></div>
     </div>
     <div class="relative z-10 container-main text-center">
-        <p class="section-label text-brand-400 mb-3" data-aos="fade-up">Mulai Hari Ini</p>
-        <h2 class="font-serif text-3xl lg:text-4xl font-bold text-white mb-4 max-w-xl mx-auto leading-snug" data-aos="fade-up" data-aos-delay="100">
+        <p class="section-label text-brand-400 mb-3" data-reveal>Mulai Hari Ini</p>
+        <h2 class="font-serif text-3xl lg:text-4xl font-bold text-white mb-4 max-w-xl mx-auto leading-snug" data-reveal data-reveal-delay="1">
             Siap Temukan Properti Ideal Anda?
         </h2>
-        <p class="text-gray-400 text-sm max-w-md mx-auto mb-8 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+        <p class="text-gray-400 text-sm max-w-md mx-auto mb-8 leading-relaxed" data-reveal data-reveal-delay="2">
             Konsultasi langsung dengan agen kami via WhatsApp.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3" data-reveal data-reveal-delay="3">
             <a href="https://wa.me/{{ env('WHATSAPP_NUMBER', '6281234567890') }}?text={{ urlencode('Halo Bintaro Land Property, saya ingin konsultasi properti.') }}"
                target="_blank" rel="noopener noreferrer"
                class="btn-wa px-8 py-3 text-base">

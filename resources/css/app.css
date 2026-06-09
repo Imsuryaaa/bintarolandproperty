@@ -121,3 +121,163 @@
 
 /* ── Prevent dark-mode flash ────────────────────────── */
 html.dark { background-color: #18181f; }
+
+/* ═══════════════════════════════════════════════════════
+   SISTEM ANIMASI — Optimal & Kaya
+   Menggunakan CSS native + IntersectionObserver di JS.
+   Tidak ada AOS overhead, tidak ada forced reflow.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── 1. Reveal base state ───────────────────────────────
+   Semua elemen [data-reveal] mulai dari state tersembunyi.
+   State "visible" ditambahkan oleh IntersectionObserver di JS. */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity  0.55s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Pastikan elemen di GPU layer sebelum animasi */
+    will-change: opacity, transform;
+}
+
+[data-reveal="left"] {
+    transform: translateX(-28px);
+}
+
+[data-reveal="right"] {
+    transform: translateX(28px);
+}
+
+[data-reveal="scale"] {
+    transform: scale(0.94);
+}
+
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* ── 2. Stagger delay untuk children dengan [data-reveal-delay] ── */
+[data-reveal-delay="1"] { transition-delay: 60ms;  }
+[data-reveal-delay="2"] { transition-delay: 120ms; }
+[data-reveal-delay="3"] { transition-delay: 180ms; }
+[data-reveal-delay="4"] { transition-delay: 240ms; }
+[data-reveal-delay="5"] { transition-delay: 300ms; }
+
+/* ── 3. Property card reveal — stagger di dalam grid ─── */
+/* Kartu langsung terlihat, lalu reveal satu per satu dengan stagger.
+   Di mobile durasi lebih pendek (350ms) untuk feel yang snappier. */
+.prop-card {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+        opacity 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease-out,
+        translate 0.3s ease-out;
+    will-change: opacity, transform;
+}
+
+.prop-card.card-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger per posisi kartu */
+#props-grid .prop-card:nth-child(1),
+#hotsale-track .prop-card:nth-child(1)  { transition-delay: 0ms; }
+#props-grid .prop-card:nth-child(2),
+#hotsale-track .prop-card:nth-child(2)  { transition-delay: 55ms; }
+#props-grid .prop-card:nth-child(3),
+#hotsale-track .prop-card:nth-child(3)  { transition-delay: 110ms; }
+#props-grid .prop-card:nth-child(4),
+#hotsale-track .prop-card:nth-child(4)  { transition-delay: 165ms; }
+#props-grid .prop-card:nth-child(5)     { transition-delay: 55ms; }
+#props-grid .prop-card:nth-child(6)     { transition-delay: 110ms; }
+#props-grid .prop-card:nth-child(n+7)   { transition-delay: 140ms; }
+
+/* ── 4. Hover efek kartu (GPU-only, tidak trigger layout) ── */
+.prop-card:hover {
+    /* Gunakan translate3d bukan transform agar compositor handle ini */
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,.08), 0 12px 30px -5px rgba(0,0,0,.12);
+}
+
+/* ── 5. Gambar kartu — promote ke GPU layer ─────────── */
+.prop-card img {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* ── 6. Navbar — mobile: solid background, tanpa backdrop-blur
+   backdrop-filter: blur() sangat berat di GPU mobile ─── */
+@media (max-width: 1279px) {
+    #main-navbar {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background-color: rgba(255, 255, 255, 0.98) !important;
+    }
+    html.dark #main-navbar {
+        background-color: rgba(24, 24, 31, 0.98) !important;
+    }
+}
+
+/* ── 7. Accordion submenu — GPU-promote ──────────────── */
+#submenu-primary,
+#submenu-secondary,
+#submenu-luar {
+    will-change: grid-template-rows;
+    transform: translateZ(0);
+}
+
+/* ── 8. Mobile bottom sheet modal ───────────────────── */
+#mobile-kategori-content {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* ── 9. Hotsale carousel ────────────────────────────── */
+#hotsale-track {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* ── 10. Touch scroll optimizations ─────────────────── */
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+}
+
+/* ── 11. Section entry animation (hero, CTA, dsb) ───── */
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideRightFade {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── 12. Animasi khusus: propsGrid setelah AJAX swap ── */
+@keyframes propsGridIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.props-grid-anim {
+    animation: propsGridIn 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── 13. Reduce motion: hormati preferensi aksesibilitas ── */
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    .prop-card,
+    .prop-card img {
+        transition: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

@@ -29,7 +29,7 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars); ?>
 
 
-<article class="prop-card group relative" data-aos="fade-up">
+<article class="prop-card group relative">
 
     
     <a href="<?php echo e(route('property.show', $property->slug)); ?>"

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Spatie\Image\Image;
 
 class PropertyAdminController extends Controller
 {
@@ -72,7 +73,7 @@ class PropertyAdminController extends Controller
             'street_name'  => 'nullable|string|max:255',
             'is_featured'  => 'nullable|boolean',
             'photos'       => 'nullable|array|max:20',
-            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:10240',
             'category_id'  => 'required|exists:categories,id',
         ]);
 
@@ -163,7 +164,7 @@ class PropertyAdminController extends Controller
             'street_name'  => 'nullable|string|max:255',
             'is_featured'  => 'nullable|boolean',
             'photos'       => 'nullable|array|max:20',
-            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'photos.*'     => 'image|mimes:jpg,jpeg,png,webp,gif|max:10240',
             'delete_photos' => 'nullable|array',
             'delete_photos.*' => 'exists:property_photos,id',
             'photo_order'  => 'nullable|string',   // JSON: "[1,3,2]"
@@ -299,6 +300,15 @@ class PropertyAdminController extends Controller
 
     /* ─── Helpers ─────────────────────────────────────────────── */
 
+    /**
+     * Simpan foto properti dengan konversi ke WebP.
+     *
+     * Hierarki driver:
+     * 1. Spatie Image (Imagick atau GD — auto-detect)
+     *    → Lebih akurat, handle EXIF, color profile, dan resize berkualitas tinggi.
+     * 2. GD native fallback — jika Spatie tidak tersedia.
+     * 3. File original — last resort.
+     */
     private function savePhoto($file, string $propertyCode): string
     {
         $directory = public_path('images/properties/' . $propertyCode);
@@ -307,39 +317,87 @@ class PropertyAdminController extends Controller
             File::makeDirectory($directory, 0755, true);
         }
 
-        $uuid = (string) Str::uuid();
+        $uuid     = (string) Str::uuid();
+        $filename = $uuid . '.webp';
+        $destPath = $directory . '/' . $filename;
 
-        // ── Attempt WebP conversion via GD ───────────────────────────
+        // ── Driver 1: Spatie Image ─────────────────────────────────────────────
+        // Spatie Image v3 menggunakan GD atau Imagick secara otomatis.
+        // Lebih unggul dari GD raw: handle EXIF orientasi, ICC profile,
+        // dan kualitas resize (Lanczos resampling via Imagick jika tersedia).
+        if (class_exists('\\Spatie\\Image\\Image')) {
+            try {
+                Image::load($file->getRealPath())
+                    ->width(1600)       // Auto-resize: maks 1600px lebar, height proporsional
+                    ->quality(82)       // WebP quality 82 — sweet spot kualitas vs ukuran
+                    ->save($destPath);  // Spatie auto-detect format WebP dari ekstensi .webp
+
+                return $propertyCode . '/' . $filename;
+            } catch (\Throwable $e) {
+                // Spatie gagal → coba GD fallback di bawah
+                // (file mungkin partial, hapus dulu jika ada)
+                if (File::exists($destPath)) {
+                    File::delete($destPath);
+                }
+            }
+        }
+
+        // ── Driver 2: GD native ────────────────────────────────────────────────
+        // Dipakai jika Spatie tidak tersedia atau gagal.
         if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
             try {
-                $rawData = file_get_contents($file->getRealPath());
+                $rawData  = file_get_contents($file->getRealPath());
                 $srcImage = @imagecreatefromstring($rawData);
 
                 if ($srcImage !== false) {
-                    $filename = $uuid . '.webp';
-                    $destPath = $directory . '/' . $filename;
-
-                    // Preserve transparency for PNG/GIF
-                    if (imageistruecolor($srcImage)) {
-                        imagealphablending($srcImage, true);
-                        imagesavealpha($srcImage, true);
+                    // Koreksi orientasi EXIF (penting untuk foto dari HP)
+                    $mime = $file->getMimeType();
+                    if (in_array($mime, ['image/jpeg', 'image/jpg']) && function_exists('exif_read_data')) {
+                        $exif = @exif_read_data($file->getRealPath());
+                        if (!empty($exif['Orientation'])) {
+                            switch ($exif['Orientation']) {
+                                case 3: $srcImage = imagerotate($srcImage, 180, 0); break;
+                                case 6: $srcImage = imagerotate($srcImage, -90, 0); break;
+                                case 8: $srcImage = imagerotate($srcImage, 90, 0);  break;
+                            }
+                        }
                     }
 
-                    // Convert & save as WebP at 80% quality
-                    imagewebp($srcImage, $destPath, 80);
+                    // Auto-resize: maks 1600px lebar
+                    $origW = imagesx($srcImage);
+                    $origH = imagesy($srcImage);
+                    $maxW  = 1600;
+
+                    if ($origW > $maxW) {
+                        $newW    = $maxW;
+                        $newH    = (int) round($origH * ($maxW / $origW));
+                        $resized = imagecreatetruecolor($newW, $newH);
+
+                        imagealphablending($resized, false);
+                        imagesavealpha($resized, true);
+                        $transparent = imagecolorallocatealpha($resized, 255, 255, 255, 127);
+                        imagefilledrectangle($resized, 0, 0, $newW, $newH, $transparent);
+                        imagealphablending($resized, true);
+
+                        imagecopyresampled($resized, $srcImage, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+                        imagedestroy($srcImage);
+                        $srcImage = $resized;
+                    }
+
+                    imagewebp($srcImage, $destPath, 82);
                     imagedestroy($srcImage);
 
                     return $propertyCode . '/' . $filename;
                 }
             } catch (\Throwable $e) {
-                // Fall through to original save below
+                // Fall through ke simpan original
             }
         }
 
-        // ── Fallback: save original file if GD not available ─────────
-        $filename = $uuid . '.' . $file->extension();
-        $file->move($directory, $filename);
-        return $propertyCode . '/' . $filename;
+        // ── Driver 3: Simpan file original ────────────────────────────────────
+        $origFilename = $uuid . '.' . $file->extension();
+        $file->move($directory, $origFilename);
+        return $propertyCode . '/' . $origFilename;
     }
 
     private function storePhotos(Property $property, array $files, int $startOrder = 0): void

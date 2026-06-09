@@ -74,14 +74,28 @@
   .kpr-main-wrap {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
+    padding: 2rem 1rem 4rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+    /* Proteksi overflow dari semua child */
+    overflow-x: hidden;
   }
   @media (max-width: 860px) {
     .kpr-main-wrap { grid-template-columns: 1fr; }
+  }
+  /* Pastikan semua child tidak overflow viewport */
+  .kpr-main-wrap > * {
+    min-width: 0;
+    overflow: hidden;
+  }
+  .kpr-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   /* ── CARD ────────────────────────────── */
@@ -157,9 +171,18 @@
   }
 
   /* ── DP ROW ──────────────────────────── */
-  .kpr-dp-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .kpr-dp-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    /* Kunci: cegah row overflow karena fixed-width child */
+    min-width: 0;
+    overflow: hidden;
+  }
   .kpr-dp-pct-wrap {
-    flex: 0 0 90px;
+    /* Fixed width 80px di mobile, tidak terlalu lebar */
+    flex: 0 0 80px;
+    max-width: 80px;
     display: flex;
     align-items: stretch;
     border: 1.5px solid var(--border);
@@ -167,13 +190,17 @@
     background: var(--surface);
     transition: border-color .2s;
     overflow: hidden;
+    min-width: 0;
+    box-sizing: border-box;
   }
   .kpr-dp-pct-wrap:focus-within { border-color: var(--bni-navy); }
   .kpr-dp-pct-wrap input {
+    /* min-width:0 penting agar flex child tidak overflow */
+    min-width: 0;
     width: 100%;
     border: none;
     outline: none;
-    padding: 11px 8px 11px 12px;
+    padding: 11px 4px 11px 10px;
     font-size: 14px;
     font-weight: 700;
     font-family: inherit;
@@ -184,27 +211,42 @@
   .kpr-dp-pct-wrap input::-webkit-outer-spin-button,
   .kpr-dp-pct-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .kpr-dp-pct-sym {
-    padding: 0 10px 0 0;
+    padding: 0 8px 0 0;
     display: flex;
     align-items: center;
     font-size: 13px;
     font-weight: 700;
     color: var(--text-2);
+    flex-shrink: 0;
   }
   .kpr-dp-nominal {
+    /* flex:1 + min-width:0 adalah kombinasi wajib agar flex child bisa menyusut */
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--surface-3);
-    padding: 11px 14px;
+    padding: 11px 10px;
     font-size: 13px;
     color: var(--text-2);
+    box-sizing: border-box;
   }
   .kpr-dp-nominal span:first-child { font-weight: 500; flex-shrink: 0; }
-  .kpr-dp-nominal span:last-child { font-weight: 700; color: var(--text-1); flex: 1; text-align: right; font-size: 14px; }
+  .kpr-dp-nominal span:last-child {
+    font-weight: 700;
+    color: var(--text-1);
+    flex: 1;
+    min-width: 0;          /* Wajib: cegah teks angka overflow */
+    text-align: right;
+    font-size: 13px;       /* Sedikit lebih kecil di mobile agar muat */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   /* ── RANGE SLIDER ────────────────────── */
   .kpr-range {
@@ -325,35 +367,71 @@
   .kpr-bank-tag { background: #22c55e; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
 
   /* ── RESULT BODY ─────────────────────── */
-  .kpr-result-body { padding: 1.5rem; }
+  .kpr-result-body {
+    padding: 1rem;
+    /* Penting: cegah konten dalam card overflow card itu sendiri */
+    overflow: hidden;
+    min-width: 0;
+  }
 
   .kpr-cicilan-section { margin-bottom: 1.2rem; }
   .kpr-cicilan-label { font-size: 12px; color: var(--text-3); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
-  .kpr-cicilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .kpr-cicilan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  /* Stack ke 1 kolom di layar sangat sempit (<360px) */
+  @media (max-width: 360px) {
+    .kpr-cicilan-grid { grid-template-columns: 1fr; }
+  }
+
   .kpr-cicilan-item {
-    padding: 14px 16px;
+    padding: 12px;
     border-radius: var(--radius-sm);
     border: 1.5px solid var(--border);
+    /* Wajib: cegah child overflow keluar dari grid cell */
+    min-width: 0;
+    overflow: hidden;
   }
   .kpr-cicilan-item.fix { border-color: #c7d8ef; background: #f0f6ff; }
   .kpr-cicilan-item.float { border-color: #f9d9b8; background: #fff8f2; }
-  .kpr-ci-period { font-size: 11px; color: var(--text-2); font-weight: 500; margin-bottom: 3px; line-height: 1.3; }
-  .kpr-ci-bunga { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .kpr-ci-period { font-size: 10px; color: var(--text-2); font-weight: 500; margin-bottom: 3px; line-height: 1.3; }
+  .kpr-ci-bunga { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
   .kpr-ci-bunga.fix { color: var(--bni-navy); }
   .kpr-ci-bunga.float { color: var(--bni-orange); }
-  .kpr-ci-amount { font-size: 19px; font-weight: 800; }
+
+  /* Amount: responsif dengan clamp agar tidak overflow di HP sempit */
+  .kpr-ci-amount {
+    font-size: clamp(13px, 3.5vw, 19px);
+    font-weight: 800;
+    /* Penting: biarkan teks wrap jika terlalu panjang */
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+  }
   .kpr-ci-amount.fix { color: var(--bni-navy); }
   .kpr-ci-amount.float { color: var(--bni-orange); }
-  .kpr-ci-unit { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .kpr-ci-unit { font-size: 10px; color: var(--text-3); margin-top: 2px; }
 
   /* ── ACTION BUTTONS ──────────────────── */
-  .kpr-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.2rem 0; }
+  .kpr-action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 1.2rem 0;
+  }
+  @media (max-width: 480px) {
+    /* Di HP sangat kecil: stack vertikal agar tombol tidak terpotong */
+    .kpr-action-row { grid-template-columns: 1fr; }
+  }
   .kpr-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
-    padding: 12px 16px;
+    padding: 12px 12px;
     border-radius: var(--radius-sm);
     font-size: 13px;
     font-weight: 700;
@@ -362,6 +440,9 @@
     text-decoration: none;
     transition: all .15s;
     border: none;
+    min-width: 0;    /* flex/grid child tidak overflow */
+    overflow: hidden;
+    white-space: nowrap;
   }
   .kpr-btn-primary { background: var(--bni-navy); color: #fff; }
   .kpr-btn-primary:hover { background: #0a2a4a; color: #fff; }
@@ -423,6 +504,9 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
+    /* Cegah tabel overflow viewport di mobile */
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .kpr-amort-head {
     padding: 1rem 1.5rem;

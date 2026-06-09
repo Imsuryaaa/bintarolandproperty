@@ -16,7 +16,7 @@ class AdminController extends Controller
             'featuredCount'    => Property::where('is_featured', true)->count(),
             'totalCategories'  => Category::count(),
             'totalConditions'  => Condition::count(),
-            'recentProperties' => Property::with(['categories'])->latest()->take(5)->get(),
+            'recentProperties' => Property::with(['categories'])->latest()->get(),
         ]);
     }
 }

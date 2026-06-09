@@ -8,16 +8,182 @@
     <link rel="icon" type="image/svg+xml" href="<?php echo e(asset('favicon.svg')); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <?php if(isset($useDataTables) && $useDataTables): ?>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.css">
+    <?php endif; ?>
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <style>
         /* SortableJS drag-and-drop visual states */
         .sortable-ghost   { opacity: .35; outline: 2px solid #f59e0b; outline-offset: 2px; }
         .sortable-chosen  { outline: 2px solid #f59e0b; outline-offset: 2px; }
         .sortable-drag    { box-shadow: 0 20px 40px rgba(0,0,0,.35); transform: rotate(1.5deg) scale(1.04); opacity: .95; }
+
+        /* DataTables: batasi ukuran thumbnail agar baris tidak terlalu tinggi */
+        table.dataTable td img { max-width: 48px !important; max-height: 48px !important; object-fit: cover; border-radius: 6px; }
+
+        /* Responsive: sembunyikan kolom kurang penting di mobile */
+        @media (max-width: 640px) {
+            .dt-hide-mobile { display: none !important; }
+        }
+
+        /* ── DataTables Theme & Mobile Fixes ── */
+        .dt-container { font-size: 0.875rem; }
         
-        /* Fade in effect to prevent flashing */
-        body { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Modern Search Input (Pill shape + Icon) */
+        .dt-container input[type="search"] {
+            border: 1px solid #e5e7eb;
+            border-radius: 9999px; /* Pill shape */
+            padding: 0.5rem 1rem 0.5rem 2.5rem; /* Room for icon */
+            background-color: #f9fafb;
+            color: #111827;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 0.75rem center;
+            background-size: 1.125rem;
+            width: 220px;
+        }
+        .dt-container input[type="search"]:focus {
+            background-color: #ffffff;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1) !important;
+            width: 280px;
+        }
+        .dark .dt-container input[type="search"] {
+            background-color: #1f2937;
+            border-color: #374151;
+            color: #f3f4f6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+        }
+        .dark .dt-container input[type="search"]:focus {
+            background-color: #111827;
+            border-color: #f59e0b !important;
+        }
+
+        /* Modern Select Dropdown */
+        .dt-container select {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.375rem 2rem 0.375rem 0.75rem;
+            background-color: #f9fafb;
+            color: #111827;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1rem;
+        }
+        .dt-container select:focus {
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
+        }
+        .dark .dt-container select {
+            background-color: #1f2937;
+            border-color: #374151;
+            color: #f3f4f6;
+        }
+        .dark .dt-container select:focus {
+            border-color: #f59e0b !important;
+        }
+
+        /* Pagination Theme (Amber) */
+        .dt-paging nav, .dt-paging .pagination { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .dt-paging .page-link, .dt-paging-button {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            color: #374151;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .dt-paging .page-item.active .page-link, .dt-paging-button.current {
+            background: #f59e0b !important;
+            border-color: #f59e0b !important;
+            color: #ffffff !important;
+        }
+        .dt-paging .page-item:not(.active):not(.disabled) .page-link:hover, .dt-paging-button:not(.current):not(.disabled):hover {
+            background: #fffbeb;
+            color: #d97706;
+            border-color: #fcd34d;
+        }
+        .dark .dt-paging .page-link, .dark .dt-paging-button {
+            background: #1f2937;
+            border-color: #374151;
+            color: #d1d5db;
+        }
+        .dark .dt-paging .page-item:not(.active):not(.disabled) .page-link:hover, .dark .dt-paging-button:not(.current):not(.disabled):hover {
+            background: #374151;
+            color: #fcd34d;
+            border-color: #4b5563;
+        }
+
+        /* Desktop Alignment Fixes for Controls */
+        .dt-container .dt-length label,
+        .dt-container .dt-search label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+            white-space: nowrap;
+        }
+        .dt-container > .dt-layout-row:first-child,
+        .dt-container > .dt-layout-row:last-child {
+            display: flex !important;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .dt-container > .dt-layout-row:last-child {
+            margin-bottom: 0;
+            margin-top: 1rem;
+        }
+        .dt-container > .dt-layout-row:not(:first-child):not(:last-child) {
+            display: block !important;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y !important;
+            overscroll-behavior-x: contain;
+        }
+        
+        /* Mobile Layout Stack */
+        @media (max-width: 640px) {
+            .dt-container > .dt-layout-row:first-child,
+            .dt-container > .dt-layout-row:last-child {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+            .dt-container > .dt-layout-row:last-child {
+                align-items: center !important;
+            }
+            .dt-container .dt-search, 
+            .dt-container .dt-length {
+                width: 100%;
+                text-align: left !important;
+            }
+            .dt-container input[type="search"] {
+                width: 100%;
+                display: block;
+                margin-left: 0 !important;
+                margin-top: 0.375rem;
+            }
+            .dt-container input[type="search"]:focus {
+                width: 100%;
+            }
+            .dt-container select {
+                width: 100%;
+                display: block;
+                margin-left: 0 !important;
+                margin-top: 0.375rem;
+            }
+        }
     </style>
 
     <!-- Dark mode: must run BEFORE stylesheets to prevent flash -->
@@ -191,6 +357,83 @@
             overlay.classList.toggle('hidden');
         }
     </script>
+
+    
+    <?php if(isset($useDataTables) && $useDataTables): ?>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ambil semua tabel yang ditandai data-datatable
+        document.querySelectorAll('[data-datatable]').forEach(function (table) {
+            if (!window.jQuery || !$.fn.DataTable) return;
+
+            var opts = {
+                /* ── Performance ── */
+                deferRender:   true,    // Render DOM baris hanya saat dibutuhkan
+                autoWidth:     false,   // Matikan auto-width: eliminasi layout thrashing
+                processing:    false,   // Tidak perlu spinner; data sudah di DOM
+
+                /* ── UX ── */
+                pageLength:    15,      // Baris per halaman: lebih sedikit = lebih ringan
+                lengthMenu:    [[10, 15, 25, 50, -1], [10, 15, 25, 50, 'Semua']],
+                language: {
+                    search:      '',
+                    searchPlaceholder: 'Cari properti...',
+                    lengthMenu:  'Tampilkan _MENU_ baris',
+                    info:        'Menampilkan _START_–_END_ dari _TOTAL_ baris',
+                    infoEmpty:   'Tidak ada data',
+                    paginate: { first:'«', previous:'‹', next:'›', last:'»' },
+                    zeroRecords: 'Data tidak ditemukan',
+                    emptyTable:  'Tidak ada data tersedia'
+                },
+
+                /* ── Native scroll wrapper will handle overflow, disable DataTables split-table scrollX to fix header misalignment ── */
+                scrollX:       false,
+                scrollCollapse: false,
+
+                /* ── Column ordering bawaan: kolom pertama descending ── */
+                order: [[0, 'desc']],
+
+                /* ── Sembunyikan kolom yang ditandai dt-hide-mobile di mobile ── */
+                columnDefs: [
+                    {
+                        targets:   table.querySelectorAll('th.dt-hide-mobile').length > 0
+                                       ? Array.from(table.querySelectorAll('th')).reduce(function(acc,th,i){
+                                           if(th.classList.contains('dt-hide-mobile')) acc.push(i);
+                                           return acc;
+                                       },[])
+                                       : [],
+                        className: 'dt-hide-mobile'
+                    },
+                    /* Jangan sort kolom aksi (kolom terakhir biasanya) */
+                    { targets: -1, orderable: false }
+                ],
+
+                /* ── Gambar/thumbnail: set max-height via initComplete ── */
+                initComplete: function () {
+                    /* Batasi ukuran semua img di dalam tabel */
+                    this.api().rows().nodes().to$().find('img').css({
+                        'max-width':  '48px',
+                        'max-height': '48px',
+                        'object-fit': 'cover',
+                        'border-radius': '6px'
+                    });
+                }
+            };
+
+            // Merge opsi custom dari data attribute jika ada
+            try {
+                var custom = JSON.parse(table.dataset.datatableOpts || '{}');
+                Object.assign(opts, custom);
+            } catch(e) {}
+
+            $(table).DataTable(opts);
+        });
+    });
+    </script>
+    <?php endif; ?>
 </body>
 </html>
 <?php /**PATH D:\Gawe\website landing page\bintaro-propertyv2\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

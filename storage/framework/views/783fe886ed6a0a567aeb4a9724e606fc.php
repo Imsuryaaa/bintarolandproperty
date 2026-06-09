@@ -613,15 +613,138 @@
 
         <!-- ── Submit ──────────────────────────────────────────────── -->
         <div class="flex items-center gap-3">
-            <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200">
-                <?php echo e(isset($property) ? 'Simpan Perubahan' : 'Tambah Properti'); ?>
-
+            <button type="submit" id="btn-submit-property" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2">
+                <span id="btn-submit-text"><?php echo e(isset($property) ? 'Simpan Perubahan' : 'Tambah Properti'); ?></span>
             </button>
             <a href="<?php echo e(route('admin.properties.index')); ?>" class="px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
                 Batal
             </a>
         </div>
     </form>
+
+    
+    <div id="upload-overlay" class="fixed inset-0 z-[9999] hidden items-center justify-center" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
+        <div class="flex flex-col items-center gap-6 p-8">
+            
+            <div class="relative w-28 h-28">
+                
+                <svg class="w-28 h-28 transform -rotate-90" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+                    <circle id="progress-ring" cx="60" cy="60" r="52" fill="none" stroke="#f59e0b" stroke-width="8"
+                            stroke-linecap="round"
+                            stroke-dasharray="326.73"
+                            stroke-dashoffset="326.73"
+                            style="transition: stroke-dashoffset 0.4s ease;"/>
+                </svg>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span id="progress-percent" class="text-2xl font-bold text-white">0%</span>
+                </div>
+            </div>
+
+            
+            <div class="text-center">
+                <p id="progress-status" class="text-white font-semibold text-sm mb-1">Mengunggah foto...</p>
+                <p class="text-white/50 text-xs">Mohon tunggu, jangan tutup halaman ini</p>
+            </div>
+
+            
+            <div class="flex gap-1.5">
+                <span class="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style="animation-delay:0s"></span>
+                <span class="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style="animation-delay:0.15s"></span>
+                <span class="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style="animation-delay:0.3s"></span>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form      = document.getElementById('property-form');
+        var overlay   = document.getElementById('upload-overlay');
+        var ring      = document.getElementById('progress-ring');
+        var pctText   = document.getElementById('progress-percent');
+        var statusEl  = document.getElementById('progress-status');
+        var btnSubmit = document.getElementById('btn-submit-property');
+        var circumference = 2 * Math.PI * 52; // 326.73
+
+        if (!form || !overlay) return;
+
+        function setProgress(pct) {
+            var offset = circumference - (pct / 100) * circumference;
+            ring.style.strokeDashoffset = offset;
+            pctText.textContent = Math.round(pct) + '%';
+        }
+
+        function setStatus(text) {
+            statusEl.textContent = text;
+        }
+
+        form.addEventListener('submit', function(e) {
+            // Check if form has photos
+            var photoInputs = form.querySelectorAll('input[type="file"]');
+            var hasFiles = false;
+            photoInputs.forEach(function(inp) {
+                if (inp.files && inp.files.length > 0) hasFiles = true;
+            });
+
+            // Show overlay
+            overlay.style.display = 'flex';
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Simulate progress for traditional form submit
+            var progress = 0;
+            var messages = [
+                { at: 0,  text: 'Memvalidasi data...' },
+                { at: 15, text: 'Mengunggah foto...' },
+                { at: 40, text: 'Mengkonversi ke WebP...' },
+                { at: 65, text: 'Menyimpan ke database...' },
+                { at: 85, text: 'Hampir selesai...' },
+            ];
+
+            if (!hasFiles) {
+                messages = [
+                    { at: 0,  text: 'Memvalidasi data...' },
+                    { at: 30, text: 'Menyimpan ke database...' },
+                    { at: 70, text: 'Hampir selesai...' },
+                ];
+            }
+
+            var interval = setInterval(function() {
+                // Slow down as we approach 90%
+                if (progress < 30) {
+                    progress += Math.random() * 4 + 1;
+                } else if (progress < 60) {
+                    progress += Math.random() * 2 + 0.5;
+                } else if (progress < 85) {
+                    progress += Math.random() * 1.5 + 0.3;
+                } else if (progress < 95) {
+                    progress += Math.random() * 0.5 + 0.1;
+                }
+
+                if (progress > 95) progress = 95; // Never reach 100 until page navigates
+
+                setProgress(progress);
+
+                // Update status message
+                for (var i = messages.length - 1; i >= 0; i--) {
+                    if (progress >= messages[i].at) {
+                        setStatus(messages[i].text);
+                        break;
+                    }
+                }
+            }, 300);
+
+            // When page starts unloading (redirect), jump to 100%
+            window.addEventListener('beforeunload', function() {
+                clearInterval(interval);
+                setProgress(100);
+                setStatus('Selesai! Mengalihkan...');
+            });
+        });
+    });
+    </script>
     </div>
 
     <!-- ── Panduan & SEO Tips (Right Sidebar) ── -->

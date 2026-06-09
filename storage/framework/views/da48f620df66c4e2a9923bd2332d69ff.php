@@ -1,4 +1,4 @@
-<header id="main-navbar" data-aos="fade-down"
+<header id="main-navbar"
         class="fixed inset-x-0 top-0 z-50 bg-white/90 dark:bg-charcoal-950/90 backdrop-blur-md border-b border-gray-200/60 dark:border-charcoal-800/60 transition-all duration-300">
     <div class="container-main">
         <div class="flex items-center justify-between h-16 lg:h-[68px]">
@@ -184,9 +184,9 @@
     
     <!-- Modal Content -->
     <div id="mobile-kategori-content" class="absolute bottom-0 left-0 right-0 w-full max-h-[85vh] bg-white dark:bg-charcoal-950 rounded-t-3xl shadow-2xl flex flex-col translate-y-full transition-transform duration-300 ease-out">
-        <!-- Drag Handle (Aesthetic) -->
-        <div class="flex justify-center pt-3 pb-2 w-full" onclick="closeKategoriModal()">
-            <div class="w-12 h-1.5 bg-gray-300 dark:bg-charcoal-700 rounded-full"></div>
+        <!-- Drag Handle — swipeable to close -->
+        <div id="modal-drag-handle" class="flex justify-center pt-3 pb-2 w-full cursor-grab active:cursor-grabbing select-none" style="touch-action: none;">
+            <div class="w-12 h-1.5 bg-gray-300 dark:bg-charcoal-700 rounded-full transition-colors duration-200" id="modal-handle-bar"></div>
         </div>
 
         <div class="flex items-center justify-between px-6 py-3 border-b border-gray-100 dark:border-charcoal-800">
@@ -291,54 +291,154 @@
 </div>
 
 <script>
+    // ── rAF-batched accordion toggle — eliminasi UI snap ──────────────────────
+    // Semua mutasi DOM di-wrap dalam requestAnimationFrame agar browser
+    // dapat batch perubahan ke frame berikutnya, bukan saat ini juga.
     function openKategoriModal() {
-        const modal = document.getElementById('mobile-kategori-modal');
+        const modal   = document.getElementById('mobile-kategori-modal');
         const overlay = document.getElementById('mobile-kategori-overlay');
         const content = document.getElementById('mobile-kategori-content');
-        
-        // Remove display:none
+
+        // Tampilkan elemen dulu (tidak ada paint cost di sini)
         modal.classList.remove('hidden');
-        
-        // Force browser to recalculate layout synchronously
-        // This guarantees the display:block is fully registered BEFORE starting the animation
-        void modal.offsetWidth;
-        
-        overlay.classList.remove('opacity-0');
-        overlay.classList.add('opacity-100');
-        content.classList.remove('translate-y-full');
-        content.classList.add('translate-y-0');
+
+        // Gunakan rAF untuk memulai animasi SETELAH display:block terdaftar di render tree
+        // Ini lebih reliable daripada void offsetWidth (forced reflow = jank)
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                content.classList.remove('translate-y-full');
+                content.classList.add('translate-y-0');
+            });
+        });
     }
 
     function closeKategoriModal() {
-        const modal = document.getElementById('mobile-kategori-modal');
+        const modal   = document.getElementById('mobile-kategori-modal');
         const overlay = document.getElementById('mobile-kategori-overlay');
         const content = document.getElementById('mobile-kategori-content');
-        
-        // Start CSS exit animations
-        overlay.classList.remove('opacity-100');
-        overlay.classList.add('opacity-0');
-        content.classList.remove('translate-y-0');
-        content.classList.add('translate-y-full');
-        
-        // Hide completely after transition finishes (300ms)
+
+        // Reset swipe transform jika ada
+        content.style.transform = '';
+        content.style.transition = '';
+
+        // Batch exit animation ke frame berikutnya
+        requestAnimationFrame(() => {
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            content.classList.remove('translate-y-0');
+            content.classList.add('translate-y-full');
+        });
+
+        // Sembunyikan setelah transisi selesai (durasi 300ms)
         setTimeout(() => {
             modal.classList.add('hidden');
-        }, 300);
+        }, 320);
     }
 
     function toggleMobileSubmenu(id, arrowId) {
         const submenu = document.getElementById(id);
         const arrow   = document.getElementById(arrowId);
-        if (submenu && arrow) {
-            const isClosed = submenu.style.gridTemplateRows === '0fr' || submenu.style.gridTemplateRows === '';
-            if (isClosed) {
-                submenu.style.gridTemplateRows = '1fr';
+        if (!submenu || !arrow) return;
+
+        const isClosed = submenu.style.gridTemplateRows === '0fr'
+                         || submenu.style.gridTemplateRows === '';
+
+        // Baca state (read) SEBELUM masuk rAF untuk hindari forced reflow di dalam rAF
+        const nextState = isClosed ? '1fr' : '0fr';
+        const addRotate = isClosed;
+
+        // Write DOM hanya di dalam rAF — browser batches semua perubahan ke 1 frame
+        requestAnimationFrame(() => {
+            submenu.style.gridTemplateRows = nextState;
+            if (addRotate) {
                 arrow.classList.add('rotate-180');
             } else {
-                submenu.style.gridTemplateRows = '0fr';
                 arrow.classList.remove('rotate-180');
             }
-        }
+        });
     }
+
+    // ── Swipe-to-close Bottom Sheet ────────────────────────────────────────────
+    // Gesture: drag handle ke bawah > SWIPE_THRESHOLD px → tutup modal.
+    // Feedback real-time: sheet ikut jari saat di-drag, snap back jika tidak cukup.
+    (function initSwipeToClose() {
+        const SWIPE_THRESHOLD = 80;   // px — jarak minimum untuk menutup
+        const VELOCITY_THRESHOLD = 0.4; // px/ms — kecepatan minimum (flick gesture)
+
+        const handle  = document.getElementById('modal-drag-handle');
+        const content = document.getElementById('mobile-kategori-content');
+        if (!handle || !content) return;
+
+        let startY    = 0;
+        let currentY  = 0;
+        let startTime = 0;
+        let isDragging = false;
+
+        function onTouchStart(e) {
+            // Hanya handle sentuhan pertama
+            startY    = e.touches[0].clientY;
+            currentY  = startY;
+            startTime = Date.now();
+            isDragging = true;
+
+            // Matikan CSS transition saat drag agar tidak lag
+            content.style.transition = 'none';
+        }
+
+        function onTouchMove(e) {
+            if (!isDragging) return;
+            currentY = e.touches[0].clientY;
+            const deltaY = currentY - startY;
+
+            // Hanya izinkan drag ke bawah (deltaY > 0)
+            if (deltaY <= 0) {
+                content.style.transform = '';
+                return;
+            }
+
+            // Live feedback: ikuti jari dengan resistansi ringan di awal
+            const resistance = deltaY < 40 ? 1 : 0.85;
+            const visualDelta = deltaY * resistance;
+            content.style.transform = 'translateY(' + visualDelta + 'px)';
+
+            // Redup overlay seiring drag (UX premium)
+            const progress = Math.min(deltaY / SWIPE_THRESHOLD, 1);
+            const overlay  = document.getElementById('mobile-kategori-overlay');
+            if (overlay) {
+                overlay.style.opacity = String(Math.max(0.1, 0.6 - progress * 0.5));
+            }
+        }
+
+        function onTouchEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const deltaY   = currentY - startY;
+            const elapsed  = Date.now() - startTime;
+            const velocity = elapsed > 0 ? deltaY / elapsed : 0;
+
+            // Restore CSS transition
+            content.style.transition = '';
+
+            // Tutup jika: jarak cukup ATAU kecepatan flick cukup
+            if (deltaY > SWIPE_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
+                closeKategoriModal();
+            } else {
+                // Snap back ke posisi awal
+                requestAnimationFrame(() => {
+                    content.style.transform = '';
+                    const overlay = document.getElementById('mobile-kategori-overlay');
+                    if (overlay) overlay.style.opacity = '';
+                });
+            }
+        }
+
+        handle.addEventListener('touchstart', onTouchStart, { passive: true });
+        handle.addEventListener('touchmove',  onTouchMove,  { passive: true });
+        handle.addEventListener('touchend',   onTouchEnd,   { passive: true });
+        handle.addEventListener('touchcancel',onTouchEnd,   { passive: true });
+    })();
 </script>
 <?php /**PATH D:\Gawe\website landing page\bintaro-propertyv2\resources\views/partials/navbar.blade.php ENDPATH**/ ?>
