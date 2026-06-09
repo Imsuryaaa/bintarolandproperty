@@ -128,7 +128,7 @@
 
             {{-- Quick stats row --}}
             @if(!isset($category))
-            <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-aos="fade-up" data-aos-delay="300">
+            <div class="hidden md:flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-aos="fade-up" data-aos-delay="300">
                 <div>
                     <span class="text-white font-bold text-xl">1.200+</span>
                     <span class="block text-xs text-gray-400 mt-0.5">Properti Tersedia</span>
@@ -156,9 +156,10 @@
          class="bg-white dark:bg-charcoal-950 border-b border-gray-200 dark:border-charcoal-800 sticky top-16 lg:top-[68px] z-30">
     <div class="container-main">
 
-        {{-- ── Collapsed trigger row (always visible) ── --}}
-        <button type="button" id="search-toggle"
-                class="flex items-center gap-2.5 w-full py-2.5 text-left group">
+        {{-- ── Desktop Search / Filter (lg:block) ── --}}
+        <div class="hidden lg:block">
+            <button type="button" id="search-toggle"
+                    class="flex items-center gap-2.5 w-full py-2.5 text-left group">
             <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -247,6 +248,31 @@
                         <span class="text-xs text-gray-400 dark:text-gray-500 font-medium">Pilih "Semua Lokasi" untuk mencari di seluruh area Bintaro.</span>
                         <a href="#" onclick="selectCategory('', 'Semua Lokasi / Tipe'); return false;" class="text-brand-600 dark:text-brand-400 hover:underline text-sm font-semibold">Clear / Semua Lokasi</a>
                     </div>
+                </div>
+            </form>
+            </form>
+        </div>
+
+        {{-- ── Mobile Search / Filter (lg:hidden) ── --}}
+        <div class="lg:hidden py-3">
+            <form action="{{ route('search') }}" method="POST" id="mobile-search-form" class="relative">
+                @csrf
+                <div class="relative flex items-center">
+                    <input type="text" name="search"
+                           value="{{ request('search') }}"
+                           placeholder="Cari nama, lokasi..."
+                           class="w-full bg-gray-50 dark:bg-charcoal-900 border border-gray-200 dark:border-charcoal-800 rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-brand-500 transition-all dark:text-white">
+                    <button type="submit" class="absolute right-1.5 p-2 bg-brand-500 hover:bg-brand-600 text-white rounded-full transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                    </button>
+                </div>
+                
+                {{-- Quick Filter Tabs --}}
+                <div class="flex overflow-x-auto no-scrollbar gap-2 mt-3 pb-1">
+                    <a href="{{ route('home') }}" class="whitespace-nowrap px-4 py-1.5 rounded-full {{ !$hasCategory ? 'bg-brand-500 text-white border-brand-500' : 'bg-white dark:bg-charcoal-950 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-charcoal-700' }} text-xs font-medium border">Semua</a>
+                    @foreach($parentCategories ?? [] as $parent)
+                        <a href="{{ route('home', ['category' => $parent->group_type]) }}" class="whitespace-nowrap px-4 py-1.5 rounded-full {{ $categorySlug === $parent->group_type ? 'bg-brand-500 text-white border-brand-500' : 'bg-white dark:bg-charcoal-950 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-charcoal-700' }} text-xs font-medium border">{{ $parent->name }}</a>
+                    @endforeach
                 </div>
             </form>
         </div>
@@ -340,8 +366,8 @@
                     </svg>
                     <p class="section-label !mb-0 text-red-500">Pilihan Editor</p>
                 </div>
-                <h2 class="text-3xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white">
-                    Properti <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Hotsale</span>
+                <h2 class="text-xl sm:text-2xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white uppercase leading-tight">
+                    Pilihan Editor:<br class="sm:hidden"> <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Properti Hotsale</span>
                 </h2>
             </div>
         </div>
@@ -470,7 +496,7 @@
     /* ── Tentukan berapa kartu per slide berdasarkan lebar layar ── */
     function getPerPage() {
         var w = window.innerWidth;
-        if (w < 640)  return 1;   /* HP       : 1 kartu, swipe */
+        if (w < 640)  return 2;   /* HP       : 2 kartu, swipe */
         if (w < 1024) return 4;   /* Tablet   : 4 kartu (2×2) */
         return 3;                  /* Desktop  : 3 kartu */
     }
@@ -478,8 +504,9 @@
     /* ── Bangun grid class sesuai perPage ── */
     function gridClass(pp) {
         if (pp === 1) return 'grid-cols-1';
-        if (pp === 4) return 'grid-cols-2';
-        return 'grid-cols-3';
+        if (pp === 2) return 'grid-cols-2 gap-3 sm:gap-5';
+        if (pp === 4) return 'grid-cols-2 gap-3 sm:gap-5';
+        return 'grid-cols-3 gap-5';
     }
 
     /* ── Bangun ulang seluruh carousel ── */
@@ -502,7 +529,7 @@
             slide.style.minWidth = '100%';
 
             var grid = document.createElement('div');
-            grid.className = 'grid gap-5 ' + gridClass(pp);
+            grid.className = 'grid ' + gridClass(pp);
 
             chunk.forEach(function (item) {
                 grid.appendChild(item.cloneNode(true));
@@ -640,7 +667,7 @@
 
         {{-- Grid --}}
         @if($properties->count() > 0)
-            <div id="props-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 props-grid-anim">
+            <div id="props-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 props-grid-anim">
                 @foreach($properties as $property)
                     @include('components.property-card', ['property' => $property])
                 @endforeach

@@ -2608,3 +2608,7 @@ Harga 6.315M *NEGO*
 #65 D:/Gawe/website landing page/bintaro-property/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('D://Gawe//website...')
 #66 {main}
 "} 
+[2026-06-09 11:41:18] local.ERROR: Maximum execution time of 60 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at D:/Gawe/website landing page/bintaro-propertyv2/vendor/laravel/framework/src/Illuminate/Routing/Matching/UriValidator.php:8)
+[stacktrace]
+#0 {main}
+"} 
