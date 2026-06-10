@@ -8,7 +8,7 @@
 
     
     <div class="absolute inset-0">
-        <img src="<?php echo e(asset('unsplash_image/Halaman_Semua_Properti/a.jpg')); ?>"
+        <img src="<?php echo e(asset('unsplash_image/Halaman_Semua_Properti/a.webp')); ?>"
              alt="" class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-charcoal-950/80"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/95 via-charcoal-950/85 to-charcoal-950/60"></div>
@@ -33,7 +33,7 @@
                     <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                     </svg>
-                    <p class="text-red-500 text-xs font-semibold tracking-[0.18em] uppercase">Pilihan Editor</p>
+                    <p class="text-red-500 text-xs font-semibold tracking-[0.18em] uppercase">Rumah Pilihan</p>
                 <?php else: ?>
                     <span class="inline-block w-8 h-px bg-brand-400"></span>
                     <p class="text-brand-300 text-xs font-semibold tracking-[0.18em] uppercase">Semua Listing</p>
@@ -44,7 +44,7 @@
                     Properti <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Hotsale</span>
                 </h1>
                 <p class="text-gray-300 text-base leading-relaxed mb-6 max-w-lg">
-                    Daftar properti pilihan editor terbaik kami dengan harga menarik — 
+                    Daftar properti rumah pilihan terbaik kami dengan harga menarik — 
                     <span class="text-brand-300 font-semibold"><?php echo e(number_format($totalCount)); ?> properti hotsale</span>
                     tersedia untuk Anda.
                 </p>
@@ -151,10 +151,12 @@
 <section class="py-10 lg:py-14 bg-white dark:bg-charcoal-950">
     <div class="container-main">
 
+        
+        <div id="all-props-content">
         <?php if($properties->count() > 0): ?>
 
             
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-7">
+            <div id="all-props-info" class="flex flex-wrap items-center justify-between gap-3 mb-7">
                 <div class="flex flex-wrap items-center gap-2">
                     <p class="text-sm text-gray-500 dark:text-charcoal-400">
                         Menampilkan
@@ -209,6 +211,7 @@
                 <a href="<?php echo e($actionRoute); ?>" class="btn-primary text-sm">Reset Filter</a>
             </div>
         <?php endif; ?>
+        </div>
 
     </div>
 </section>
@@ -228,49 +231,53 @@
 (function () {
     /* ── AJAX Pagination ── */
     function loadPage(url) {
-        var gridEl = document.getElementById('all-props-grid');
-        var pagEl  = document.getElementById('all-props-pag');
+        var contentEl = document.getElementById('all-props-content');
 
-        if (gridEl) {
-            gridEl.style.transition = 'opacity 0.18s ease';
-            gridEl.style.opacity    = '0.2';
+        if (contentEl) {
+            contentEl.style.transition = 'opacity 0.18s ease';
+            contentEl.style.opacity    = '0.35';
         }
 
         fetch(url, { credentials: 'same-origin' })
-            .then(function (res) { return res.text(); })
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text();
+            })
             .then(function (html) {
                 var parser = new DOMParser();
                 var newDoc = parser.parseFromString(html, 'text/html');
 
-                var ng = newDoc.getElementById('all-props-grid');
-                var np = newDoc.getElementById('all-props-pag');
+                var newContent = newDoc.getElementById('all-props-content');
+                contentEl = document.getElementById('all-props-content');
 
-                gridEl = document.getElementById('all-props-grid');
-                pagEl  = document.getElementById('all-props-pag');
+                if (newContent && contentEl) {
+                    // Replace the entire content block (info + grid + pagination)
+                    contentEl.innerHTML = newContent.innerHTML;
 
-                if (ng && gridEl) { gridEl.innerHTML = ng.innerHTML; }
-                if (np && pagEl)  { pagEl.innerHTML  = np.innerHTML; }
+                    // Make new cards visible — directly add 'card-visible' class
+                    // since IntersectionObserver may not fire for elements already in viewport
+                    contentEl.querySelectorAll('.prop-card').forEach(function(card, i) {
+                        setTimeout(function() {
+                            card.classList.add('card-visible');
+                        }, i * 50); // stagger each card by 50ms
+                    });
 
-                gridEl = document.getElementById('all-props-grid');
-                if (gridEl) {
-                    gridEl.style.opacity   = '0';
-                    gridEl.style.transform = 'translateY(12px)';
-                    void gridEl.offsetWidth;
-                    gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                    gridEl.style.opacity    = '1';
-                    gridEl.style.transform  = 'translateY(0)';
-                }
+                    contentEl.style.opacity = '1';
+                    history.pushState({ paginationHref: url }, '', url);
 
-                history.pushState({ paginationHref: url }, '', url);
-
-                if (gridEl) {
-                    window.scrollTo({ top: gridEl.offsetTop - 140, behavior: 'smooth' });
+                    // Scroll to content area
+                    if (contentEl) {
+                        window.scrollTo({ top: contentEl.offsetTop - 140, behavior: 'smooth' });
+                    }
+                } else {
+                    // Fallback: if parsing failed, do a regular navigation
+                    window.location.href = url;
                 }
             })
             .catch(function (err) {
                 console.warn('Pagination fetch error:', err);
-                var g = document.getElementById('all-props-grid');
-                if (g) g.style.opacity = '1';
+                // Fallback: navigate normally so the user still gets the page
+                window.location.href = url;
             });
     }
 

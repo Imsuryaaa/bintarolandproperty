@@ -6,7 +6,7 @@
 
 <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex items-center justify-center min-h-[40vh]">
     <div class="absolute inset-0">
-        <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/TentangBintaroLandProperty.jpg')); ?>" alt="Tentang Bintaro Land Property" width="1920" height="1080" fetchpriority="high" loading="eager" class="w-full h-full object-cover">
+        <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/TentangBintaroLandProperty.webp')); ?>" alt="Tentang Bintaro Land Property" width="1920" height="1080" fetchpriority="high" loading="eager" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-charcoal-950/80"></div>
     </div>
     <div class="relative z-10 container-main text-center">
@@ -28,7 +28,7 @@
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
             <div class="relative" data-aos="fade-right">
                 <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-                    <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/TimBintaroLandProperty.jpg')); ?>" alt="Tim Bintaro Land Property" width="800" height="600" loading="lazy" class="w-full h-full object-cover">
+                    <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/TimBintaroLandProperty.webp')); ?>" alt="Tim Bintaro Land Property" width="800" height="600" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <!-- Decorative element -->
                 <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-100 dark:bg-brand-900/30 rounded-full blur-2xl -z-10"></div>
@@ -51,7 +51,7 @@
         
         <div class="relative rounded-3xl overflow-hidden bg-brand-600 mb-24 shadow-xl" data-aos="zoom-in">
             <div class="absolute inset-0">
-                <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/InteriorMewah.jpg')); ?>" alt="Interior Mewah" width="1200" height="600" loading="lazy" class="w-full h-full object-cover mix-blend-overlay opacity-40">
+                <img src="<?php echo e(asset('unsplash_image/Halaman_Tentang_Kami/InteriorMewah.webp')); ?>" alt="Interior Mewah" width="1200" height="600" loading="lazy" class="w-full h-full object-cover mix-blend-overlay opacity-40">
                 <div class="absolute inset-0 bg-gradient-to-r from-brand-700/90 to-brand-500/80"></div>
             </div>
             <div class="relative z-10 p-10 md:p-16 text-center max-w-4xl mx-auto">

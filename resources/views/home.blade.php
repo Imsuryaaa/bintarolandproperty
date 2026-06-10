@@ -130,10 +130,64 @@
             </p>
 
             <div class="mb-8" data-reveal data-reveal-delay="2">
-                <a href="{{ route('about') }}" class="inline-block px-8 py-3 border border-white/30 hover:border-white/60 text-white text-base font-medium rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-white/10">
-                    Tentang Kami
+                <a href="{{ route('about') }}" class="animated-btn-wrapper group">
+                    <span class="animated-btn-content">
+                        Tentang Kami
+                    </span>
                 </a>
             </div>
+
+            <style>
+            @keyframes rotateBorder {
+                0% { transform: translate(-50%, -50%) rotate(0deg); }
+                100% { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+            .animated-btn-wrapper {
+                position: relative;
+                display: inline-flex;
+                padding: 3px; /* Ketebalan border yang diminta lebih tebal */
+                border-radius: 0.5rem;
+                overflow: hidden;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .animated-btn-wrapper::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 250%;
+                height: 250%;
+                background: conic-gradient(from 0deg, transparent 0%, transparent 60%, #ea951d 80%, #fcd34d 100%);
+                animation: rotateBorder 3s linear infinite;
+                z-index: 0;
+            }
+            .animated-btn-wrapper:hover::before {
+                animation: rotateBorder 1.5s linear infinite;
+            }
+            .animated-btn-content {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(15, 17, 21, 0.7); /* Background transparan gelap */
+                backdrop-filter: blur(8px);
+                border-radius: 0.35rem; /* radius dalam sedikit lebih kecil dari radius luar */
+                padding: 0.75rem 2rem;
+                color: white;
+                font-weight: 500;
+                font-size: 1rem;
+                z-index: 1;
+                transition: all 0.3s ease;
+            }
+            .animated-btn-wrapper:hover .animated-btn-content {
+                background-color: rgba(15, 17, 21, 0.9);
+                box-shadow: inset 0 0 20px rgba(234, 149, 29, 0.2);
+            }
+            .animated-btn-wrapper:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px -5px rgba(234, 149, 29, 0.4);
+            }
+            </style>
 
             {{-- Quick stats row --}}
             @if(!isset($category))
@@ -369,14 +423,15 @@
         {{-- Header --}}
         <div class="flex items-end justify-between mb-7">
             <div>
-                <div class="flex items-center gap-1.5 mb-2">
-                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <p class="section-label mb-2 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                     </svg>
-                    <p class="section-label !mb-0 text-red-500">Rumah Pilihan</p>
-                </div>
-                <h2 class="text-xl sm:text-2xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white uppercase leading-tight">
-                    Rumah Pilihan:<br class="sm:hidden"> <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Properti Hotsale</span>
+                    Rumah Pilihan
+                </p>
+                <h2 class="text-3xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white relative inline-block">
+                    Properti Hotsale
+                    <span class="absolute -bottom-2 left-0 w-1/3 h-1.5 bg-brand-500 rounded-full"></span>
                 </h2>
             </div>
         </div>
