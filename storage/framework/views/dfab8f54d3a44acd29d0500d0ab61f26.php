@@ -175,7 +175,7 @@
 
                 
                 <?php if($properties->lastPage() > 1): ?>
-                    <span class="text-xs text-gray-400 dark:text-charcoal-600 bg-gray-100 dark:bg-charcoal-800 px-3 py-1 rounded-full">
+                    <span class="text-xs text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-charcoal-800 border border-gray-200 dark:border-charcoal-700 px-3 py-1 rounded-full">
                         Halaman <?php echo e($properties->currentPage()); ?> / <?php echo e($properties->lastPage()); ?>
 
                     </span>

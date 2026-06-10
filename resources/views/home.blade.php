@@ -130,64 +130,10 @@
             </p>
 
             <div class="mb-8" data-reveal data-reveal-delay="2">
-                <a href="{{ route('about') }}" class="animated-btn-wrapper group">
-                    <span class="animated-btn-content">
-                        Tentang Kami
-                    </span>
+                <a href="{{ route('about') }}" class="inline-block px-8 py-3 border-2 border-white/50 hover:border-white/80 text-white text-base font-medium rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-white/10">
+                    Tentang Kami
                 </a>
             </div>
-
-            <style>
-            @keyframes rotateBorder {
-                0% { transform: translate(-50%, -50%) rotate(0deg); }
-                100% { transform: translate(-50%, -50%) rotate(360deg); }
-            }
-            .animated-btn-wrapper {
-                position: relative;
-                display: inline-flex;
-                padding: 3px; /* Ketebalan border yang diminta lebih tebal */
-                border-radius: 0.5rem;
-                overflow: hidden;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            .animated-btn-wrapper::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 250%;
-                height: 250%;
-                background: conic-gradient(from 0deg, transparent 0%, transparent 60%, #ea951d 80%, #fcd34d 100%);
-                animation: rotateBorder 3s linear infinite;
-                z-index: 0;
-            }
-            .animated-btn-wrapper:hover::before {
-                animation: rotateBorder 1.5s linear infinite;
-            }
-            .animated-btn-content {
-                position: relative;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                background-color: rgba(15, 17, 21, 0.7); /* Background transparan gelap */
-                backdrop-filter: blur(8px);
-                border-radius: 0.35rem; /* radius dalam sedikit lebih kecil dari radius luar */
-                padding: 0.75rem 2rem;
-                color: white;
-                font-weight: 500;
-                font-size: 1rem;
-                z-index: 1;
-                transition: all 0.3s ease;
-            }
-            .animated-btn-wrapper:hover .animated-btn-content {
-                background-color: rgba(15, 17, 21, 0.9);
-                box-shadow: inset 0 0 20px rgba(234, 149, 29, 0.2);
-            }
-            .animated-btn-wrapper:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px -5px rgba(234, 149, 29, 0.4);
-            }
-            </style>
 
             {{-- Quick stats row --}}
             @if(!isset($category))

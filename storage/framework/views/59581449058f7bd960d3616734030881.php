@@ -1,4 +1,4 @@
-<footer class="bg-charcoal-950 dark:bg-black border-t border-charcoal-800 text-gray-300" data-aos="fade-up" data-aos-offset="0">
+<footer class="bg-charcoal-950 dark:bg-black border-t border-charcoal-800 text-gray-300" data-reveal>
     <div class="container-main py-12 lg:py-14">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-10">
 
