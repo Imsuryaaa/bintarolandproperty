@@ -84,71 +84,99 @@
 </section>
 
 {{-- ══════════════════════════════════════════════════════════
-     FILTER / SEARCH BAR — sticky
+     FILTER / SEARCH BAR — mobile bottom collapsible, desktop sticky top
 ══════════════════════════════════════════════════════════ --}}
-<div class="bg-white/90 dark:bg-charcoal-950/90 backdrop-blur-md border-b border-gray-200 dark:border-charcoal-800 sticky top-[68px] z-30 shadow-sm">
-    <div class="container-main py-3">
-        @php
-            $actionRoute = (isset($isHotsale) && $isHotsale) ? route('properties.hotsale') : route('properties.all');
-        @endphp
-        <form action="{{ $actionRoute }}" method="GET"
-              class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+<style>
+@media (max-width: 639px) {
+    .mobile-search-wrapper {
+        position: fixed;
+        bottom: calc(56px + env(safe-area-inset-bottom));
+        left: 0;
+        right: 0;
+        z-index: 40;
+    }
+}
+</style>
 
-            {{-- Preserve sort when searching --}}
-            @if(request('sort') && request('sort') !== 'latest')
-                <input type="hidden" name="sort" value="{{ request('sort') }}">
+<div x-data="{ open: false }" @click.outside="if (window.innerWidth < 640) open = false" class="mobile-search-wrapper sm:sticky sm:top-[68px] sm:z-30 bg-white/95 dark:bg-charcoal-950/95 sm:bg-white/90 sm:dark:bg-charcoal-950/90 sm:backdrop-blur-md border-t sm:border-t-0 sm:border-b border-gray-200 dark:border-charcoal-800 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.08)] sm:shadow-sm">
+    
+    <!-- Mobile toggle button -->
+    <button @click="open = !open" type="button" class="sm:hidden w-full flex items-center justify-between px-5 py-3.5 bg-white dark:bg-charcoal-950 focus:outline-none active:bg-gray-50 dark:active:bg-charcoal-900 transition-colors">
+        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <span class="text-sm font-semibold">Cari & Filter Properti</span>
+            @if(request('search') || request('category') || (request('sort') && request('sort') !== 'latest'))
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
             @endif
+        </div>
+        <svg :class="{'rotate-180': open}" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    
+    <!-- Form container -->
+    <div x-show="open" x-collapse.duration.300ms class="sm:!block sm:!h-auto absolute sm:static bottom-full left-0 w-full bg-white dark:bg-charcoal-950 sm:bg-transparent sm:dark:bg-transparent border-t border-gray-100 dark:border-charcoal-800 sm:border-0 shadow-[0_-15px_25px_-5px_rgba(0,0,0,0.1)] sm:shadow-none transition-all">
+        <div class="container-main p-5 sm:p-0 sm:py-3">
+            @php
+                $actionRoute = (isset($isHotsale) && $isHotsale) ? route('properties.hotsale') : route('properties.all');
+            @endphp
+            <form action="{{ $actionRoute }}" method="GET"
+                  class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2.5">
 
-            {{-- Search input --}}
-            <div class="relative flex-1">
-                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-charcoal-500 pointer-events-none"
-                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" name="search"
-                       id="all-search-input"
-                       value="{{ request('search') }}"
-                       placeholder="Cari nama properti, lokasi, tipe…"
-                       class="field pl-10 w-full text-sm">
-            </div>
+                {{-- Preserve sort when searching --}}
+                @if(request('sort') && request('sort') !== 'latest')
+                    <input type="hidden" name="sort" value="{{ request('sort') }}">
+                @endif
 
-            {{-- Category --}}
-            <div class="sm:w-52">
-                <select name="category" class="field-select w-full text-sm cursor-pointer">
-                    <option value="">Semua Lokasi / Tipe</option>
-                    @foreach($parentCategories as $parent)
-                        <optgroup label="{{ $parent->name }}">
-                            @foreach($parent->children as $child)
-                                <option value="{{ $child->id }}" {{ request('category') == $child->id ? 'selected' : '' }}>
-                                    {{ $child->name }}
-                                </option>
-                            @endforeach
-                        </optgroup>
-                    @endforeach
-                </select>
-            </div>
+                {{-- Search input --}}
+                <div class="relative flex-1">
+                    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-charcoal-500 pointer-events-none"
+                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" name="search"
+                           id="all-search-input"
+                           value="{{ request('search') }}"
+                           placeholder="Cari nama properti, lokasi, tipe…"
+                           class="field pl-10 w-full text-sm">
+                </div>
 
-            {{-- Sort --}}
-            <div class="sm:w-44">
-                <select name="sort" class="field-select w-full text-sm cursor-pointer">
-                    <option value="latest"     {{ $sort === 'latest'     ? 'selected' : '' }}>📅 Terbaru</option>
-                    <option value="price_low"  {{ $sort === 'price_low'  ? 'selected' : '' }}>💰 Harga Terendah</option>
-                    <option value="price_high" {{ $sort === 'price_high' ? 'selected' : '' }}>💎 Harga Tertinggi</option>
-                </select>
-            </div>
+                {{-- Category --}}
+                <div class="sm:w-52">
+                    <select name="category" class="field-select w-full text-sm cursor-pointer">
+                        <option value="">Semua Lokasi / Tipe</option>
+                        @foreach($parentCategories as $parent)
+                            <optgroup label="{{ $parent->name }}">
+                                @foreach($parent->children as $child)
+                                    <option value="{{ $child->id }}" {{ request('category') == $child->id ? 'selected' : '' }}>
+                                        {{ $child->name }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
 
-            {{-- Search button --}}
-            <button type="submit" class="btn-primary px-5 text-sm shrink-0">Cari</button>
+                {{-- Sort --}}
+                <div class="sm:w-44">
+                    <select name="sort" class="field-select w-full text-sm cursor-pointer">
+                        <option value="latest"     {{ $sort === 'latest'     ? 'selected' : '' }}>📅 Terbaru</option>
+                        <option value="price_low"  {{ $sort === 'price_low'  ? 'selected' : '' }}>💰 Harga Terendah</option>
+                        <option value="price_high" {{ $sort === 'price_high' ? 'selected' : '' }}>💎 Harga Tertinggi</option>
+                    </select>
+                </div>
 
-            {{-- Reset --}}
-            @if(request('search') || request('category'))
-                <a href="{{ $actionRoute . '?' . http_build_query(request('sort') !== 'latest' ? ['sort' => request('sort')] : []) }}"
-                   class="flex items-center justify-center gap-1 text-sm text-gray-400 dark:text-charcoal-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                    <span class="hidden sm:inline">Reset</span>
-                </a>
-            @endif
-        </form>
+                {{-- Search button --}}
+                <button type="submit" class="btn-primary px-5 py-3 sm:py-2.5 text-sm shrink-0">Cari</button>
+
+                {{-- Reset --}}
+                @if(request('search') || request('category'))
+                    <a href="{{ $actionRoute . '?' . http_build_query(request('sort') !== 'latest' ? ['sort' => request('sort')] : []) }}"
+                       class="flex items-center justify-center gap-1 text-sm text-gray-400 dark:text-charcoal-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 py-2 sm:py-0 shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        <span class="inline">Reset</span>
+                    </a>
+                @endif
+            </form>
+        </div>
     </div>
 </div>
 
