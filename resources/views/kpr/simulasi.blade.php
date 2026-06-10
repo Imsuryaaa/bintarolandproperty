@@ -839,7 +839,7 @@
             </tr>
           </thead>
           <tbody>
-            <template x-for="row in tabelAmortisasi" :key="row.bulan">
+            <template x-for="row in tabelAmortisasiData" :key="row.bulan">
               <tr :class="row.tipe === 'fix' ? 'bulan-fix' : 'bulan-float'">
                 <td x-text="row.bulan"></td>
                 <td x-text="row.tahun"></td>
