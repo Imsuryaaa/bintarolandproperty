@@ -30,6 +30,18 @@
                     <input type="url" name="link_url" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-amber-500 focus:border-amber-500 p-2" placeholder="https://wa.me/...">
                 </div>
 
+                <!-- Jadwal Mulai & Berakhir -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Mulai Tayang (Opsional)</label>
+                        <input type="datetime-local" name="start_date" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-amber-500 focus:border-amber-500 p-2">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Berakhir Tayang (Opsional)</label>
+                        <input type="datetime-local" name="end_date" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-amber-500 focus:border-amber-500 p-2">
+                    </div>
+                </div>
+
                 <!-- Gambar -->
                 <div>
                     <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Gambar Banner</label>
@@ -59,12 +71,12 @@
                 <h2 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Daftar Promo Tersimpan</h2>
             </div>
             
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto w-full">
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/20">
                             <th class="text-left px-5 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 w-16">Banner</th>
-                            <th class="text-left px-5 py-3 text-xs font-medium text-gray-500 dark:text-gray-400">Informasi Promo</th>
+                            <th class="text-left px-5 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 min-w-[200px]">Informasi Promo</th>
                             <th class="text-center px-5 py-3 text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
                             <th class="text-right px-5 py-3 text-xs font-medium text-gray-500 dark:text-gray-400">Aksi</th>
                         </tr>
@@ -86,7 +98,12 @@
                                 <?php if($promo->description): ?>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1"><?php echo e($promo->description); ?></p>
                                 <?php endif; ?>
-                                <p class="text-[10px] text-gray-400 mt-1">Dibuat: <?php echo e($promo->created_at->format('d M Y')); ?></p>
+                                <p class="text-[10px] text-gray-400 mt-1 flex flex-col gap-0.5">
+                                    <span>Dibuat: <?php echo e($promo->created_at->format('d M Y')); ?></span>
+                                    <?php if($promo->start_date || $promo->end_date): ?>
+                                        <span class="text-amber-600 dark:text-amber-400 font-medium">Jadwal: <?php echo e($promo->start_date ? $promo->start_date->format('d M Y H:i') : 'Sekarang'); ?> - <?php echo e($promo->end_date ? $promo->end_date->format('d M Y H:i') : 'Seterusnya'); ?></span>
+                                    <?php endif; ?>
+                                </p>
                             </td>
                             <td class="px-5 py-3.5 text-center">
                                 <form action="<?php echo e(route('admin.promos.toggle-status', $promo)); ?>" method="POST">

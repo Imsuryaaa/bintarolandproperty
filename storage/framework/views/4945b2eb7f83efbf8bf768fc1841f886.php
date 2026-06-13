@@ -1,5 +1,5 @@
-<?php $__env->startSection('title', $property->title . ' – Bintaro Land Property'); ?>
-<?php $__env->startSection('meta_description', Str::limit(strip_tags($property->description), 155)); ?>
+<?php $__env->startSection('title', 'Jual ' . $property->title . ($property->district ? ' di ' . $property->district : ' di Bintaro') . ' | Bintaro Land Property'); ?>
+<?php $__env->startSection('meta_description', 'Dijual ' . $property->title . '. ' . Str::limit(strip_tags($property->description), 120)); ?>
 
 <?php
     use Illuminate\Support\Str;
@@ -8,6 +8,27 @@
         ? $property->photos->map(fn($p) => $p->url)->values()->toArray()
         : [$property->image_url];
 ?>
+
+<?php $__env->startSection('head'); ?>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "<?php echo e($property->title); ?>",
+  "image": [
+    "<?php echo e($allPhotos[0] ?? ''); ?>"
+  ],
+  "description": "<?php echo e(Str::limit(strip_tags($property->description), 150)); ?>",
+  "offers": {
+    "@type": "Offer",
+    "url": "<?php echo e(url()->current()); ?>",
+    "priceCurrency": "IDR",
+    "price": "<?php echo e($property->price); ?>",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 

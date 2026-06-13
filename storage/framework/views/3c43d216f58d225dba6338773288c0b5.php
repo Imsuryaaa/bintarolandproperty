@@ -20,6 +20,7 @@ document.addEventListener('alpine:init', () => {
         cicilanFix:      0,
         cicilanFloating: 0,
         showAmort:       false,
+        tabelAmortisasiData: [],
 
         daftarPromo: <?php echo json_encode($kprPromos ?? [], 15, 512) ?>,
 
@@ -33,6 +34,7 @@ document.addEventListener('alpine:init', () => {
             this.$watch('dpPersen',      () => this.hitung());
             this.$watch('tenorTahun',    () => this.hitung());
             this.$watch('promoTerpilih', () => this.hitung());
+            this.$watch('showAmort',     (val) => { if(val) this.generateTable(); });
             this.hitung();
         },
 
@@ -60,10 +62,14 @@ document.addEventListener('alpine:init', () => {
             return isFinite(total) ? total : 0;
         },
 
-        get tabelAmortisasi() {
+        /* ── GENERATE TABEL (DEBOUNCED) ────── */
+        generateTable() {
             let rows = [];
             let P = this.plafon;
-            if (P <= 0) return rows;
+            if (P <= 0 || !this.showAmort) {
+                this.tabelAmortisasiData = rows;
+                return;
+            }
 
             let promo    = this.promoAktif;
             let tenor    = Math.min(Math.max(parseInt(this.tenorTahun) || 1, 1), 30);
@@ -95,7 +101,8 @@ document.addEventListener('alpine:init', () => {
                     sisaPokok:  Math.round(sisa),
                 });
             }
-            return rows;
+            // Freeze array to prevent Vue/Alpine from creating deep reactive proxies for all 360 rows, drastically improving render speed
+            this.tabelAmortisasiData = Object.freeze(rows);
         },
 
         /* ── HELPERS ───────────────────────── */
@@ -175,6 +182,12 @@ document.addEventListener('alpine:init', () => {
                 this.cicilanFloating = 0;
             }
             if (!isFinite(this.cicilanFloating) || isNaN(this.cicilanFloating)) this.cicilanFloating = 0;
+
+            // Debounce the table generation to prevent slider stutter
+            clearTimeout(this._amortTimeout);
+            this._amortTimeout = setTimeout(() => {
+                if (this.showAmort) this.generateTable();
+            }, 100);
         }
     }));
 });

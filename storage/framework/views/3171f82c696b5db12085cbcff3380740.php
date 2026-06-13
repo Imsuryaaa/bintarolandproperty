@@ -1,10 +1,36 @@
 <?php $__env->startSection('title', isset($category)
-    ? "Jual Properti di {$category->name} – Bintaro Land Property"
-    : 'Bintaro Land Property – Agen Properti Terpercaya di Bintaro & Sekitarnya'); ?>
+    ? "Jual Properti {$category->name} di Bintaro & Sekitarnya | Bintaro Land Property"
+    : 'Jual Rumah di Bintaro & Sekitarnya - Harga Terbaik | Bintaro Land Property'); ?>
 
 <?php $__env->startSection('meta_description', isset($category)
-    ? "Cari dan temukan rumah, ruko, atau kavling terbaik di {$category->name} bersama Bintaro Land Property. Dapatkan penawaran properti eksklusif hari ini."
-    : 'Bintaro Land Property adalah agen properti terpercaya di Bintaro, Tangerang Selatan. Temukan rumah impian, kavling strategis, dan investasi properti terbaik.'); ?>
+    ? "Cari dan temukan rumah, ruko, atau kavling terbaik di {$category->name} bersama Bintaro Land Property. Dapatkan harga dan penawaran properti eksklusif hari ini."
+    : 'Bintaro Land Property adalah spesialis agen properti di Bintaro. Temukan daftar jual rumah di Bintaro, kavling strategis, dan investasi properti terbaik.'); ?>
+
+<?php $__env->startSection('head'); ?>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Bintaro Land Property",
+  "image": "<?php echo e(asset('images/logo.jpg')); ?>",
+  "@id": "<?php echo e(url('/')); ?>",
+  "url": "<?php echo e(url('/')); ?>",
+  "telephone": "<?php echo e(env('WHATSAPP_NUMBER', '6281234567890')); ?>",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bintaro",
+    "addressRegion": "Banten",
+    "addressCountry": "ID"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -6.2828,
+    "longitude": 106.7114
+  },
+  "priceRange": "$$$"
+}
+</script>
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 
@@ -50,9 +76,19 @@
 
     
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80"
-             alt="Properti Bintaro"
-             class="w-full h-full object-cover object-center">
+        <picture>
+            <source
+                srcset="<?php echo e(asset('unsplash_image/HalamanHome/Properti_Bintaro.webp')); ?>"
+                type="image/webp">
+            <img src="<?php echo e(asset('unsplash_image/HalamanHome/Properti_Bintaro.webp')); ?>"
+                 alt="Properti Bintaro"
+                 width="1920" height="1080"
+                 fetchpriority="high"
+                 loading="eager"
+                 decoding="async"
+                 sizes="100vw"
+                 class="w-full h-full object-cover object-center">
+        </picture>
         <div class="absolute inset-0 bg-gradient-to-r from-charcoal-950/90 via-charcoal-950/65 to-charcoal-950/20"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-transparent to-transparent"></div>
     </div>
@@ -74,17 +110,17 @@
             </div>
 
             
-            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-5" data-aos="fade-up">
+            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-5" data-reveal>
                 <?php if(isset($category)): ?>
-                    Properti <span class="text-brand-400"><?php echo e($category->name); ?></span><br>
+                    Jual Properti <span class="text-brand-400"><?php echo e($category->name); ?></span><br>
                     Pilihan Terbaik
                 <?php else: ?>
-                    Hunian Premium di Bintaro<br>
+                    Jual Rumah & Hunian Premium di Bintaro<br>
                     <span class="text-brand-400">untuk Keluarga Modern</span>
                 <?php endif; ?>
             </h1>
 
-            <p class="text-gray-300 text-base leading-relaxed mb-6 max-w-xl" data-aos="fade-up" data-aos-delay="100">
+            <p class="text-gray-300 text-base leading-relaxed mb-6 max-w-xl" data-reveal data-reveal-delay="1">
                 <?php if(isset($category)): ?>
                     Temukan pilihan properti terbaik kategori <?php echo e($category->name); ?> yang sesuai kebutuhan dan anggaran Anda.
                 <?php else: ?>
@@ -92,15 +128,15 @@
                 <?php endif; ?>
             </p>
 
-            <div class="mb-8" data-aos="fade-up" data-aos-delay="200">
-                <a href="<?php echo e(route('about')); ?>" class="inline-block px-8 py-3 border border-white/30 hover:border-white/60 text-white text-base font-medium rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-white/10">
+            <div class="mb-8" data-reveal data-reveal-delay="2">
+                <a href="<?php echo e(route('about')); ?>" class="inline-block px-8 py-3 border-2 border-white/50 hover:border-white/80 text-white text-base font-medium rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-white/10">
                     Tentang Kami
                 </a>
             </div>
 
             
             <?php if(!isset($category)): ?>
-            <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-aos="fade-up" data-aos-delay="300">
+            <div class="hidden md:flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300" data-reveal data-reveal-delay="3">
                 <div>
                     <span class="text-white font-bold text-xl">1.200+</span>
                     <span class="block text-xs text-gray-400 mt-0.5">Properti Tersedia</span>
@@ -129,8 +165,9 @@
     <div class="container-main">
 
         
-        <button type="button" id="search-toggle"
-                class="flex items-center gap-2.5 w-full py-2.5 text-left group">
+        <div class="hidden lg:block">
+            <button type="button" id="search-toggle"
+                    class="flex items-center gap-2.5 w-full py-2.5 text-left group">
             <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -224,6 +261,31 @@
                     </div>
                 </div>
             </form>
+            </form>
+        </div>
+
+        
+        <div class="lg:hidden py-3">
+            <form action="<?php echo e(route('search')); ?>" method="POST" id="mobile-search-form" class="relative">
+                <?php echo csrf_field(); ?>
+                <div class="relative flex items-center">
+                    <input type="text" name="search"
+                           value="<?php echo e(request('search')); ?>"
+                           placeholder="Cari nama, lokasi..."
+                           class="w-full bg-gray-50 dark:bg-charcoal-900 border border-gray-200 dark:border-charcoal-800 rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-brand-500 transition-all dark:text-white">
+                    <button type="submit" class="absolute right-1.5 p-2 bg-brand-500 hover:bg-brand-600 text-white rounded-full transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                    </button>
+                </div>
+                
+                
+                <div class="flex overflow-x-auto no-scrollbar gap-2 mt-3 pb-1">
+                    <a href="<?php echo e(route('home')); ?>" class="whitespace-nowrap px-4 py-1.5 rounded-full <?php echo e(!$hasCategory ? 'bg-brand-500 text-white border-brand-500' : 'bg-white dark:bg-charcoal-950 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-charcoal-700'); ?> text-xs font-medium border">Semua</a>
+                    <?php $__currentLoopData = $parentCategories ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parent): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('home', ['category' => $parent->group_type])); ?>" class="whitespace-nowrap px-4 py-1.5 rounded-full <?php echo e($categorySlug === $parent->group_type ? 'bg-brand-500 text-white border-brand-500' : 'bg-white dark:bg-charcoal-950 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-charcoal-700'); ?> text-xs font-medium border"><?php echo e($parent->name); ?></a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </form>
         </div>
 
     </div>
@@ -309,61 +371,50 @@
         
         <div class="flex items-end justify-between mb-7">
             <div>
-                <div class="flex items-center gap-1.5 mb-2">
-                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <p class="section-label mb-2 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                     </svg>
-                    <p class="section-label !mb-0 text-red-500">Pilihan Editor</p>
-                </div>
-                <h2 class="text-3xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white">
-                    Properti <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-500">Hotsale</span>
+                    Rumah Pilihan
+                </p>
+                <h2 class="text-3xl lg:text-4xl font-serif font-extrabold text-gray-900 dark:text-white relative inline-block">
+                    Properti Hotsale
+                    <span class="absolute -bottom-2 left-0 w-1/3 h-1.5 bg-brand-500 rounded-full"></span>
                 </h2>
             </div>
         </div>
 
-        <?php $allFeatured = $featuredProperties->all(); $featuredChunks = array_chunk($allFeatured, 3); ?>
+        <?php $allFeatured = $featuredProperties->all(); ?>
 
         
-        <div id="hotsale-carousel" class="relative">
-            
-            <div id="hotsale-slides" class="overflow-hidden">
-                <div id="hotsale-track" class="flex transition-none">
-                    <?php $__currentLoopData = $featuredChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunkIdx => $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="hotsale-slide w-full flex-shrink-0">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php echo $__env->make('components.property-card', ['property' => $property], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                    </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <div id="hotsale-pool" aria-hidden="true" style="display:none">
+            <?php $__currentLoopData = $allFeatured; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="hotsale-item">
+                    <?php echo $__env->make('components.property-card', ['property' => $property], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 </div>
-            </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
 
-            <?php if(count($featuredChunks) > 1): ?>
+        
+        <div id="hotsale-carousel" class="relative px-2">
             
-            <div class="flex items-center justify-center gap-2 mt-6" id="hotsale-dots">
-                <?php $__currentLoopData = $featuredChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <button type="button"
-                    class="hotsale-dot <?php echo e($i === 0 ? 'hotsale-dot--active' : ''); ?>"
-                    data-index="<?php echo e($i); ?>"
-                    aria-label="Slide <?php echo e($i + 1); ?>"></button>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <div id="hotsale-slides" class="overflow-hidden rounded-lg">
+                <div id="hotsale-track" class="flex"></div>
             </div>
 
             
-            <button type="button" id="hotsale-prev"
-                class="hotsale-arrow hotsale-arrow--left" aria-label="Sebelumnya">
+            <div id="hotsale-dots" class="flex items-center justify-center gap-2 mt-6"></div>
+
+            
+            <button type="button" id="hotsale-prev" class="hotsale-arrow hotsale-arrow--left" aria-label="Sebelumnya" style="display:none">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button type="button" id="hotsale-next"
-                class="hotsale-arrow hotsale-arrow--right" aria-label="Selanjutnya">
+            <button type="button" id="hotsale-next" class="hotsale-arrow hotsale-arrow--right" aria-label="Selanjutnya" style="display:none">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
-            <?php endif; ?>
 
             
-            <?php if($featuredProperties->count() > 3): ?>
+            <?php if($featuredProperties->count() > 1): ?>
             <div class="mt-7 text-center">
                 <a href="<?php echo e(route('properties.hotsale')); ?>"
                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-brand-500/40 text-brand-600 dark:text-brand-400 text-sm font-medium hover:bg-brand-500/10 hover:border-brand-500 transition-all duration-200 group">
@@ -377,23 +428,21 @@
 </section>
 
 <style>
+/* ── Arrows ── */
 .hotsale-arrow {
     position: absolute;
-    top: 50%;
+    top: 42%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.9);
-    border: 1.5px solid rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: rgba(255,255,255,0.92);
+    border: 1.5px solid rgba(0,0,0,0.08);
+    display: flex; align-items: center; justify-content: center;
     color: #374151;
     cursor: pointer;
     z-index: 10;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
 }
 .dark .hotsale-arrow {
     background: rgba(30,35,45,0.92);
@@ -401,89 +450,188 @@
     color: #e5e7eb;
 }
 .hotsale-arrow:hover {
-    background: #ea951d;
-    border-color: #ea951d;
-    color: #fff;
+    background: #ea951d; border-color: #ea951d; color: #fff;
     box-shadow: 0 4px 16px rgba(234,149,29,0.4);
     transform: translateY(-50%) scale(1.08);
 }
-.hotsale-arrow--left  { left: -18px; }
-.hotsale-arrow--right { right: -18px; }
+.hotsale-arrow--left  { left: -6px; }
+.hotsale-arrow--right { right: -6px; }
 @media(max-width:640px) {
-    .hotsale-arrow--left  { left: 4px; }
-    .hotsale-arrow--right { right: 4px; }
-    .hotsale-arrow { width: 34px; height: 34px; }
+    /* Di mobile sembunyikan arrow, cukup swipe */
+    .hotsale-arrow { display: none !important; }
 }
 
+/* ── Dots ── */
 .hotsale-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d1d5db;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    padding: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #d1d5db; border: none; cursor: pointer;
+    transition: all 0.25s ease; padding: 0;
+    flex-shrink: 0;
 }
 .dark .hotsale-dot { background: #4b5563; }
 .hotsale-dot--active {
-    width: 24px;
-    border-radius: 50px;
+    width: 24px; border-radius: 50px;
     background: linear-gradient(90deg, #ea951d, #c97a10);
     box-shadow: 0 2px 8px rgba(234,149,29,0.45);
 }
 .hotsale-dot:hover:not(.hotsale-dot--active) {
-    background: #ea951d;
-    transform: scale(1.2);
+    background: #ea951d; transform: scale(1.2);
+}
+
+/* ── Mobile swipe hint ── */
+@media(max-width:639px) {
+    #hotsale-carousel { padding-left: 0; padding-right: 0; }
+    .hotsale-slide .prop-card {
+        /* sedikit shadow tambahan di mobile agar terasa kartu tunggal */
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
 }
 </style>
 
 <script>
-(function() {
-    var track = document.getElementById('hotsale-track');
-    var dots  = document.querySelectorAll('.hotsale-dot');
-    var prev  = document.getElementById('hotsale-prev');
-    var next  = document.getElementById('hotsale-next');
-    if (!track) return;
+(function () {
+    var pool    = document.getElementById('hotsale-pool');
+    var track   = document.getElementById('hotsale-track');
+    var dotsEl  = document.getElementById('hotsale-dots');
+    var prevBtn = document.getElementById('hotsale-prev');
+    var nextBtn = document.getElementById('hotsale-next');
+    if (!pool || !track) return;
 
-    var total   = dots.length;
-    var current = 0;
-    var animating = false;
+    /* Ambil semua item kartu dari pool */
+    var items = Array.from(pool.querySelectorAll('.hotsale-item'));
+    if (items.length === 0) return;
 
+    var current  = 0;
+    var total    = 0;
+    var autoTimer = null;
+
+    /* ── Tentukan berapa kartu per slide berdasarkan lebar layar ── */
+    function getPerPage() {
+        var w = window.innerWidth;
+        if (w < 640)  return 2;   /* HP       : 2 kartu, swipe */
+        if (w < 1024) return 4;   /* Tablet   : 4 kartu (2×2) */
+        return 3;                  /* Desktop  : 3 kartu */
+    }
+
+    /* ── Bangun grid class sesuai perPage ── */
+    function gridClass(pp) {
+        if (pp === 1) return 'grid-cols-1';
+        if (pp === 2) return 'grid-cols-2 gap-3 sm:gap-5';
+        if (pp === 4) return 'grid-cols-2 gap-3 sm:gap-5';
+        return 'grid-cols-3 gap-5';
+    }
+
+    /* ── Bangun ulang seluruh carousel ── */
+    function build() {
+        var pp     = getPerPage();
+        var chunks = [];
+        for (var i = 0; i < items.length; i += pp) {
+            chunks.push(items.slice(i, i + pp));
+        }
+        total = chunks.length;
+
+        /* Bersihkan */
+        track.innerHTML  = '';
+        dotsEl.innerHTML = '';
+
+        /* Buat slide per chunk
+         * PERF: Gunakan innerHTML (string) bukan cloneNode(true) pada elemen kompleks.
+         * cloneNode(true) pada elemen dengan banyak SVG dan child nodes = mahal di main thread. */
+        chunks.forEach(function (chunk, idx) {
+            var slide = document.createElement('div');
+            slide.className = 'hotsale-slide w-full flex-shrink-0';
+            slide.style.minWidth = '100%';
+
+            var grid = document.createElement('div');
+            grid.className = 'grid ' + gridClass(pp);
+
+            chunk.forEach(function (item) {
+                /* innerHTML jauh lebih cepat daripada deep DOM clone */
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = item.innerHTML;
+                grid.appendChild(wrapper);
+            });
+
+            slide.appendChild(grid);
+            track.appendChild(slide);
+
+            /* Dot per slide */
+            if (total > 1) {
+                var dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'hotsale-dot' + (idx === 0 ? ' hotsale-dot--active' : '');
+                dot.dataset.index = idx;
+                dot.setAttribute('aria-label', 'Slide ' + (idx + 1));
+                dot.addEventListener('click', function () { goTo(+this.dataset.index); });
+                dotsEl.appendChild(dot);
+            }
+        });
+
+        /* Tambahkan card-visible ke SEMUA kartu di carousel.
+         * Kartu carousel sudah ada di viewport saat build() — tidak perlu
+         * menunggu IntersectionObserver, langsung tampilkan. */
+        track.querySelectorAll('.prop-card').forEach(function(card) {
+            card.classList.add('card-visible');
+        });
+
+        /* Tampilkan / sembunyikan arrow */
+        if (total > 1) {
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+
+        /* Reset posisi */
+        if (current >= total) current = 0;
+        goTo(current, true);
+        startAuto();
+    }
+
+    /* ── Pindah ke slide idx ── */
     function goTo(idx, instant) {
-        if (idx < 0) idx = total - 1;
+        if (idx < 0)      idx = total - 1;
         if (idx >= total) idx = 0;
         current = idx;
 
-        // Smooth CSS transition
-        if (instant) {
-            track.style.transition = 'none';
-        } else {
-            track.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
-        }
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.4,0,0.2,1)';
+        track.style.transform  = 'translateX(-' + (current * 100) + '%)';
 
-        // Update dots
-        dots.forEach(function(d, i) {
+        dotsEl.querySelectorAll('.hotsale-dot').forEach(function (d, i) {
             d.classList.toggle('hotsale-dot--active', i === current);
         });
     }
 
-    // Init: set width so flex works
-    var slides = track.querySelectorAll('.hotsale-slide');
-    slides.forEach(function(s) { s.style.minWidth = '100%'; });
-    goTo(0, true);
-
-    if (prev) prev.addEventListener('click', function() { goTo(current - 1); });
-    if (next) next.addEventListener('click', function() { goTo(current + 1); });
-    dots.forEach(function(d) {
-        d.addEventListener('click', function() { goTo(parseInt(d.dataset.index)); });
-    });
-
-    // Auto-advance every 5s
-    if (total > 1) {
-        setInterval(function() { goTo(current + 1); }, 5000);
+    /* ── Auto-advance ── */
+    function startAuto() {
+        if (autoTimer) clearInterval(autoTimer);
+        if (total > 1) autoTimer = setInterval(function () { goTo(current + 1); }, 5000);
     }
+
+    /* ── Touch / swipe support (mobile) ── */
+    var tsX = 0;
+    track.addEventListener('touchstart', function (e) {
+        tsX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+        var diff = tsX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    /* ── Arrow buttons ── */
+    prevBtn.addEventListener('click', function () { goTo(current - 1); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+    /* ── Build pertama kali ── */
+    build();
+
+    /* ── Rebuild saat resize (debounced) ── */
+    var rTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(rTimer);
+        rTimer = setTimeout(build, 200);
+    });
 })();
 </script>
 <?php endif; ?>
@@ -545,7 +693,7 @@
 
         
         <?php if($properties->count() > 0): ?>
-            <div id="props-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 props-grid-anim">
+            <div id="props-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 props-grid-anim">
                 <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php echo $__env->make('components.property-card', ['property' => $property], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -624,7 +772,7 @@
                 else if (om && !nm)   { om.remove(); }
                 else if (!om && nm && pagEl) { pagEl.insertAdjacentHTML('beforebegin', nm.outerHTML); }
 
-                /* Fade in */
+                /* Fade in + re-observe kartu baru untuk animasi reveal */
                 gridEl = document.getElementById('props-grid');
                 if (gridEl) {
                     gridEl.style.opacity   = '0';
@@ -633,6 +781,10 @@
                     gridEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
                     gridEl.style.opacity    = '1';
                     gridEl.style.transform  = 'translateY(0)';
+                    /* Trigger IntersectionObserver untuk kartu baru */
+                    if (typeof window.reObserveCards === 'function') {
+                        setTimeout(window.reObserveCards, 50);
+                    }
                 }
 
                 /* Update URL */
@@ -705,7 +857,7 @@
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             
-            <div data-aos="fade-right">
+            <div data-reveal="left">
                 <p class="section-label mb-2">Keunggulan Kami</p>
                 <h2 class="text-2xl lg:text-3xl font-serif font-bold text-gray-900 dark:text-white mb-4 leading-snug">
                     Mengapa Memilih<br>Bintaro Land Property?
@@ -724,7 +876,7 @@
                         ];
                     ?>
                     <?php $__currentLoopData = $reasons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <li class="flex gap-4" data-aos="fade-up" data-aos-delay="<?php echo e($loop->iteration * 100); ?>">
+                        <li class="flex gap-4" data-reveal data-reveal-delay="<?php echo e($loop->iteration); ?>">
                             <div class="flex-shrink-0 w-9 h-9 rounded-md bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center mt-0.5">
                                 <svg class="w-4.5 h-4.5 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="<?php echo e($r['icon']); ?>"/>
@@ -740,16 +892,16 @@
             </div>
 
             
-            <div class="grid grid-cols-2 gap-3" data-aos="fade-left">
+            <div class="grid grid-cols-2 gap-3" data-reveal="right">
                 <div class="rounded-lg overflow-hidden aspect-[3/4]">
-                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&q=80" alt="Interior" class="w-full h-full object-cover">
+                    <img src="<?php echo e(asset('unsplash_image/HalamanHome/Interior.webp')); ?>" alt="Interior" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="rounded-lg overflow-hidden aspect-video">
-                        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&q=80" alt="Ruang tamu" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Ruang_tamu.webp')); ?>" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover">
                     </div>
                     <div class="rounded-lg overflow-hidden flex-1">
-                        <img src="https://images.unsplash.com/photo-1560184897-ae75f418493e?w=400&q=80" alt="Eksterior" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Exterior.webp')); ?>" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -762,18 +914,29 @@
 
 <section id="kontak" class="relative py-16 lg:py-20 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=70" alt="" class="w-full h-full object-cover">
+        
+        <picture>
+            <source
+                srcset="<?php echo e(asset('unsplash_image/HalamanHome/WhatsApp_CTA.webp')); ?>"
+                type="image/webp">
+            <img src="<?php echo e(asset('unsplash_image/HalamanHome/WhatsApp_CTA.webp')); ?>"
+                 alt=""
+                 loading="lazy"
+                 decoding="async"
+                 sizes="100vw"
+                 class="w-full h-full object-cover">
+        </picture>
         <div class="absolute inset-0 bg-charcoal-950 bg-opacity-75"></div>
     </div>
     <div class="relative z-10 container-main text-center">
-        <p class="section-label text-brand-400 mb-3" data-aos="fade-up">Mulai Hari Ini</p>
-        <h2 class="font-serif text-3xl lg:text-4xl font-bold text-white mb-4 max-w-xl mx-auto leading-snug" data-aos="fade-up" data-aos-delay="100">
+        <p class="section-label text-brand-400 mb-3" data-reveal>Mulai Hari Ini</p>
+        <h2 class="font-serif text-3xl lg:text-4xl font-bold text-white mb-4 max-w-xl mx-auto leading-snug" data-reveal data-reveal-delay="1">
             Siap Temukan Properti Ideal Anda?
         </h2>
-        <p class="text-gray-400 text-sm max-w-md mx-auto mb-8 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+        <p class="text-gray-400 text-sm max-w-md mx-auto mb-8 leading-relaxed" data-reveal data-reveal-delay="2">
             Konsultasi langsung dengan agen kami via WhatsApp.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3" data-reveal data-reveal-delay="3">
             <a href="https://wa.me/<?php echo e(env('WHATSAPP_NUMBER', '6281234567890')); ?>?text=<?php echo e(urlencode('Halo Bintaro Land Property, saya ingin konsultasi properti.')); ?>"
                target="_blank" rel="noopener noreferrer"
                class="btn-wa px-8 py-3 text-base">

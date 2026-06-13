@@ -69,6 +69,19 @@ endif;
 unset($__errorArgs, $__bag); ?>
                 </div>
 
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mulai Tayang (Opsional)</label>
+                        <input type="datetime-local" name="start_date" 
+                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:border-amber-500 focus:ring-amber-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Berakhir Tayang (Opsional)</label>
+                        <input type="datetime-local" name="end_date" 
+                               class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:border-amber-500 focus:ring-amber-500 text-sm">
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-3 py-2">
                     <input type="checkbox" id="is_active" name="is_active" value="1" checked 
                            class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500 dark:bg-gray-800 dark:border-gray-700">
@@ -96,7 +109,7 @@ unset($__errorArgs, $__bag); ?>
                 </div>
             <?php endif; ?>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto w-full">
                 <table class="w-full text-left text-sm whitespace-nowrap">
                     <thead class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
                         <tr>
@@ -111,7 +124,10 @@ unset($__errorArgs, $__bag); ?>
                         <?php $__empty_1 = true; $__currentLoopData = $kprPromos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $promo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <span class="font-medium text-gray-900 dark:text-white"><?php echo e($promo->nama); ?></span>
+                                    <p class="font-medium text-gray-900 dark:text-white"><?php echo e($promo->nama); ?></p>
+                                    <?php if($promo->start_date || $promo->end_date): ?>
+                                        <p class="text-[10px] text-amber-600 dark:text-amber-400 mt-1">Jadwal: <?php echo e($promo->start_date ? $promo->start_date->format('d M Y H:i') : 'Sekarang'); ?> - <?php echo e($promo->end_date ? $promo->end_date->format('d M Y H:i') : 'Seterusnya'); ?></p>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo e($promo->bunga_fix); ?>% untuk <?php echo e($promo->masa_fix); ?> Tahun

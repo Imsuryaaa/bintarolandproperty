@@ -1,4 +1,4 @@
-<footer class="bg-charcoal-950 dark:bg-black border-t border-charcoal-800 text-gray-300" data-aos="fade-up" data-aos-offset="0">
+<footer class="bg-charcoal-950 dark:bg-black border-t border-charcoal-800 text-gray-300" data-reveal>
     <div class="container-main py-12 lg:py-14">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-10">
 
@@ -66,7 +66,7 @@
                         <svg class="w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        Ruko BTC Jl. Jend. Sudirman No.10 Blok D2, Pd. Jaya, Kec. Pd. Aren, Kota Tangerang Selatan, Banten 15220
+                        Ruko BTC Jl. Jend. Sudirman Blok B2 No.8, Pd. Jaya, Kec. Pd. Aren, Kota Tangerang Selatan, Banten 15220
                     </li>
                     <li>
                         <a href="https://wa.me/<?php echo e(env('WHATSAPP_NUMBER', '6281234567890')); ?>"
