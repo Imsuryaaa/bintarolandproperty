@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +39,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
 </head>
-<body class="min-h-screen pb-16 xl:pb-0">
+<body class="min-h-screen pb-16 xl:pb-0 overflow-x-hidden w-full">
 
     @include('partials.navbar')
 
