@@ -66,6 +66,108 @@
         </div>
 
         
+        <div class="mt-24 mb-24">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-reveal>
+                <h2 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">Visi, Misi & Nilai-Nilai Utama</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Komitmen kami dalam memberikan layanan properti terbaik untuk Anda.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-12 lg:mb-16">
+                
+                <div class="bg-gray-50 dark:bg-charcoal-900 rounded-3xl p-10 md:p-14 border border-gray-100 dark:border-charcoal-800 relative overflow-hidden h-full" data-reveal>
+                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-brand-500 text-white rounded-2xl inline-flex items-center justify-center mb-6 shadow-lg shadow-brand-500/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">Visi Kami</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                            Menjadi mitra dan agen properti paling terpercaya, profesional, dan terdepan di wilayah Bintaro serta sekitarnya, yang senantiasa memberikan solusi terbaik bagi kebutuhan hunian dan investasi properti Anda.
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="bg-gray-50 dark:bg-charcoal-900 rounded-3xl p-10 md:p-14 border border-gray-100 dark:border-charcoal-800 h-full" data-reveal data-reveal-delay="1">
+                    <div class="w-12 h-12 bg-charcoal-800 dark:bg-charcoal-700 text-white rounded-2xl inline-flex items-center justify-center mb-6 shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-6">Nilai-Nilai Utama</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <div>
+                                <strong class="text-gray-900 dark:text-white">Kepercayaan:</strong> <span class="text-gray-600 dark:text-gray-400">Komitmen utama kami, dibangun di atas kejujuran dan tanggung jawab penuh.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <div>
+                                <strong class="text-gray-900 dark:text-white">Profesionalisme:</strong> <span class="text-gray-600 dark:text-gray-400">Bekerja dengan disiplin, pengetahuan yang memadai, dan etika bisnis yang tinggi.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <div>
+                                <strong class="text-gray-900 dark:text-white">Integritas:</strong> <span class="text-gray-600 dark:text-gray-400">Selalu konsisten bersikap jujur, adil, dan terbuka dalam setiap situasi.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <div>
+                                <strong class="text-gray-900 dark:text-white">Kepedulian:</strong> <span class="text-gray-600 dark:text-gray-400">Mengutamakan kepentingan dan kenyamanan klien di atas segalanya.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <div>
+                                <strong class="text-gray-900 dark:text-white">Keahlian:</strong> <span class="text-gray-600 dark:text-gray-400">Terus mengikuti perkembangan pasar properti untuk memberikan layanan terbaik.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            
+            <div class="bg-white dark:bg-charcoal-900 rounded-3xl p-10 md:p-14 border border-gray-100 dark:border-charcoal-800 shadow-xl shadow-gray-200/50 dark:shadow-none" data-reveal>
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 shrink-0 bg-brand-500 text-white rounded-2xl inline-flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-gray-900 dark:text-white">Misi Kami</h3>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-4">
+                    <div class="space-y-3">
+                        <div class="text-brand-500 font-bold text-2xl">01.</div>
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white leading-snug">Mengedepankan Kepercayaan & Transparansi</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Memberikan informasi yang jujur, akurat, dan jelas mengenai setiap properti, serta proses transaksi yang aman dan terpercaya.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="text-brand-500 font-bold text-2xl">02.</div>
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white leading-snug">Memberikan Pelayanan Prima & Personal</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Mendengarkan dan memahami kebutuhan klien, serta mendampingi dari awal pencarian hingga transaksi selesai dengan penuh tanggung jawab.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="text-brand-500 font-bold text-2xl">03.</div>
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white leading-snug">Menyediakan Pilihan Properti Berkualitas & Strategis</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Menghadirkan daftar properti terverifikasi, berlokasi strategis, dan sesuai dengan kemampuan serta tujuan klien.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="text-brand-500 font-bold text-2xl">04.</div>
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white leading-snug">Menjadi Mitra Investasi yang Handal</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Memberikan panduan dan wawasan pasar yang tepat guna membantu klien mengambil keputusan yang cerdas dan menguntungkan.</p>
+                    </div>
+                    <div class="space-y-3 md:col-span-2 lg:col-span-1">
+                        <div class="text-brand-500 font-bold text-2xl">05.</div>
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white leading-snug">Menjalin Hubungan Jangka Panjang</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Membangun hubungan baik yang saling menguntungkan dengan klien, pengembang, dan mitra bisnis berdasarkan rasa saling percaya.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
         <div class="grid lg:grid-cols-12 gap-12 items-start">
             <div class="lg:col-span-5 order-2 lg:order-1 space-y-6">
                 <div class="p-8 bg-gray-50 dark:bg-charcoal-900 rounded-2xl border border-gray-100 dark:border-charcoal-800" data-reveal data-reveal-delay="1">

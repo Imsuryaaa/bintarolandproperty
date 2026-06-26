@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', isset($category)
     ? "Jual Properti {$category->name} di Bintaro & Sekitarnya | Bintaro Land Property"
     : 'Jual Rumah di Bintaro & Sekitarnya - Harga Terbaik | Bintaro Land Property'); ?>
@@ -894,14 +896,14 @@
             
             <div class="grid grid-cols-2 gap-3" data-reveal="right">
                 <div class="rounded-lg overflow-hidden aspect-[3/4]">
-                    <img src="<?php echo e(asset('unsplash_image/HalamanHome/Interior.webp')); ?>" alt="Interior" loading="lazy" class="w-full h-full object-cover">
+                    <img src="<?php echo e(asset('unsplash_image/HalamanHome/Interior2.webp')); ?>" alt="Interior" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="rounded-lg overflow-hidden aspect-video">
-                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Ruang_tamu.webp')); ?>" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Ruang_tamu2.webp')); ?>" alt="Ruang tamu" loading="lazy" class="w-full h-full object-cover scale-[1.35]">
                     </div>
                     <div class="rounded-lg overflow-hidden flex-1">
-                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Exterior.webp')); ?>" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
+                        <img src="<?php echo e(asset('unsplash_image/HalamanHome/Exterior2.webp')); ?>" alt="Eksterior" loading="lazy" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>

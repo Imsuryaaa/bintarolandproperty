@@ -39,7 +39,7 @@
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo $__env->yieldContent('head'); ?>
 </head>
-<body class="min-h-screen pb-16 xl:pb-0">
+<body class="min-h-screen pb-16 xl:pb-0 overflow-x-hidden w-full">
 
     <?php echo $__env->make('partials.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
