@@ -67,7 +67,12 @@
             </div>
         </div>
 
-        {{-- Section 3: Visi, Misi, & Nilai Utama --}}
+        <!-- {{-- =========================================================== --}}
+        {{-- Section 3: Visi, Misi, & Nilai Utama (DISEMBUNYIKAN SEMENTARA) --}}
+        {{-- Hapus tag comment ini untuk menampilkan kembali section ini   --}}
+        {{-- =========================================================== --}}
+
+        {{--
         <div class="mt-24 mb-24">
             <div class="text-center max-w-3xl mx-auto mb-16" data-reveal>
                 <h2 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">Visi, Misi & Nilai-Nilai Utama</h2>
@@ -168,6 +173,7 @@
                 </div>
             </div>
         </div>
+        --}} -->
 
         {{-- Section 4: Closing --}}
         <div class="grid lg:grid-cols-12 gap-12 items-start">

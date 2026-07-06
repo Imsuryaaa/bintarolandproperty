@@ -102,6 +102,7 @@
                             <a href="{{ route('category.show', 'ciputat-pamulang') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-charcoal-200 whitespace-nowrap hover:bg-brand-50 dark:hover:bg-charcoal-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-md transition-colors">Ciputat &amp; Pamulang</a>
                             <a href="{{ route('category.show', 'jakarta-selatan') }}"  class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-charcoal-200 whitespace-nowrap hover:bg-brand-50 dark:hover:bg-charcoal-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-md transition-colors">Jakarta Selatan</a>
                             <a href="{{ route('category.show', 'serpong-bsd') }}"      class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-charcoal-200 whitespace-nowrap hover:bg-brand-50 dark:hover:bg-charcoal-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-md transition-colors">Serpong &amp; BSD</a>
+                            <a href="{{ route('category.show', 'lainnya') }}"          class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-charcoal-200 whitespace-nowrap hover:bg-brand-50 dark:hover:bg-charcoal-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-md transition-colors">Lainnya</a>
                         </div>
                     </div>
                 </div>
@@ -277,10 +278,12 @@
                             <a href="{{ route('category.show', 'ciputat-pamulang') }}" class="block py-2.5 text-sm text-gray-600 dark:text-charcoal-300 hover:text-brand-600 dark:hover:text-brand-400">Ciputat &amp; Pamulang</a>
                             <a href="{{ route('category.show', 'jakarta-selatan') }}"  class="block py-2.5 text-sm text-gray-600 dark:text-charcoal-300 hover:text-brand-600 dark:hover:text-brand-400">Jakarta Selatan</a>
                             <a href="{{ route('category.show', 'serpong-bsd') }}"      class="block py-2.5 text-sm text-gray-600 dark:text-charcoal-300 hover:text-brand-600 dark:hover:text-brand-400">Serpong &amp; BSD</a>
+                            <a href="{{ route('category.show', 'lainnya') }}"           class="block py-2.5 text-sm text-gray-600 dark:text-charcoal-300 hover:text-brand-600 dark:hover:text-brand-400">Lainnya</a>
                         </div>
                     </div>
                 </div>
             </div>
+
             
             <a href="{{ route('properties.all') }}" class="flex items-center justify-between w-full p-4 mt-4 bg-brand-50 dark:bg-brand-900/20 rounded-xl font-bold text-brand-600 dark:text-brand-400 active:scale-[0.98] transition-transform">
                 <span>Lihat Semua Properti</span>

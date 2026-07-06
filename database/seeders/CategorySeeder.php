@@ -26,6 +26,9 @@ class CategorySeeder extends Seeder
             ['name' => 'Secondary Diluar Bintaro Jaya', 'group_type' => 'luar_bintaro', 'parent_id' => null]
         );
 
+        // Hapus parent Lainnya yang salah dibuat sebelumnya (jika ada)
+        Category::where('slug', 'lainnya')->where('parent_id', null)->where('group_type', 'lainnya')->delete();
+
         // 2. Define Dataset from Image
         $primaryData = [
             'Dharmawangsa Home', 'Nivara - Dharmawangsa', 'Naraya - Dharmawangsa',
@@ -43,8 +46,9 @@ class CategorySeeder extends Seeder
             'Sektor 3 - 4', 'Sektor 5 - 6', 'Sektor 8', 'Sektor 9'
         ];
 
+        // Diluar Bintaro termasuk sub-kategori Lainnya
         $luarBintaroData = [
-            'Pondok Aren', 'Ciputat & Pamulang', 'Jakarta Selatan', 'Serpong & BSD'
+            'Pondok Aren', 'Ciputat & Pamulang', 'Jakarta Selatan', 'Serpong & BSD', 'Lainnya'
         ];
 
         // 3. Insert and Update Categories

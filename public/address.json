@@ -1,33 +1,674 @@
 [
-  { "label": "Bintaro Sektor 1", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Pesanggrahan" },
-  { "label": "Bintaro Sektor 2", "city": "Tangerang Selatan", "province": "Banten", "district": "Ciputat Timur" },
-  { "label": "Bintaro Sektor 3", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 3A", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 4", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 5", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 6", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 7", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 8", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Bintaro Sektor 9", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Emerald Bintaro", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Discovery Bintaro", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Kebayoran Residences", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Graha Raya Bintaro", "city": "Tangerang Selatan", "province": "Banten", "district": "Serpong Utara" },
-  { "label": "Graha Bintaro", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "BSD City (Bumi Serpong Damai)", "city": "Tangerang Selatan", "province": "Banten", "district": "Serpong" },
-  { "label": "BSD Duta Bintaro", "city": "Tangerang", "province": "Banten", "district": "Pinang" },
-  { "label": "Alam Sutera", "city": "Tangerang Selatan", "province": "Banten", "district": "Serpong Utara" },
-  { "label": "Gading Serpong", "city": "Tangerang", "province": "Banten", "district": "Kelapa Dua" },
-  { "label": "Ciputat", "city": "Tangerang Selatan", "province": "Banten", "district": "Ciputat" },
-  { "label": "Ciputat Timur", "city": "Tangerang Selatan", "province": "Banten", "district": "Ciputat Timur" },
-  { "label": "Pamulang", "city": "Tangerang Selatan", "province": "Banten", "district": "Pamulang" },
-  { "label": "Pondok Aren", "city": "Tangerang Selatan", "province": "Banten", "district": "Pondok Aren" },
-  { "label": "Pesanggrahan", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Pesanggrahan" },
-  { "label": "Kebayoran Lama", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Kebayoran Lama" },
-  { "label": "Kebayoran Baru", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Kebayoran Baru" },
-  { "label": "Rempoa", "city": "Tangerang Selatan", "province": "Banten", "district": "Ciputat Timur" },
-  { "label": "Cirendeu", "city": "Tangerang Selatan", "province": "Banten", "district": "Ciputat Timur" },
-  { "label": "Pondok Indah", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Kebayoran Lama" },
-  { "label": "Ciledug", "city": "Tangerang", "province": "Banten", "district": "Ciledug" },
-  { "label": "Bintaro Permai", "city": "Jakarta Selatan", "province": "DKI Jakarta", "district": "Pesanggrahan" }
+  {
+    "label": "Bintaro Sektor 1",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Pesanggrahan"
+  },
+  {
+    "label": "Bintaro Sektor 2",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat Timur"
+  },
+  {
+    "label": "Bintaro Sektor 3",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 3A",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 4",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 5",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 6",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 7",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 8",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Bintaro Sektor 9",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Emerald Bintaro",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Discovery Bintaro",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Kebayoran Residences",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Graha Raya Bintaro",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong Utara"
+  },
+  {
+    "label": "Graha Bintaro",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "BSD City (Bumi Serpong Damai)",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "BSD Duta Bintaro",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Pinang"
+  },
+  {
+    "label": "Alam Sutera",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong Utara"
+  },
+  {
+    "label": "Gading Serpong",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Kelapa Dua"
+  },
+  {
+    "label": "Ciputat",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat"
+  },
+  {
+    "label": "Ciputat Timur",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat Timur"
+  },
+  {
+    "label": "Pamulang",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pamulang"
+  },
+  {
+    "label": "Pondok Aren",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Pesanggrahan",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Pesanggrahan"
+  },
+  {
+    "label": "Kebayoran Lama",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Kebayoran Lama"
+  },
+  {
+    "label": "Kebayoran Baru",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Kebayoran Baru"
+  },
+  {
+    "label": "Rempoa",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat Timur"
+  },
+  {
+    "label": "Cirendeu",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat Timur"
+  },
+  {
+    "label": "Pondok Indah",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Kebayoran Lama"
+  },
+  {
+    "label": "Ciledug",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Ciledug"
+  },
+  {
+    "label": "Bintaro Permai",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Pesanggrahan"
+  },
+  {
+    "label": "Setu",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Setu"
+  },
+  {
+    "label": "Jombang",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Ciputat"
+  },
+  {
+    "label": "Ciater",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "Karawaci",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Karawaci"
+  },
+  {
+    "label": "Cikokol",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Tangerang"
+  },
+  {
+    "label": "Cilandak",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Cilandak"
+  },
+  {
+    "label": "Pasar Minggu",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Pasar Minggu"
+  },
+  {
+    "label": "Jagakarsa",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Jagakarsa"
+  },
+  {
+    "label": "Tebet",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Tebet"
+  },
+  {
+    "label": "Mampang Prapatan",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Mampang Prapatan"
+  },
+  {
+    "label": "Kemang",
+    "city": "Jakarta Selatan",
+    "province": "DKI Jakarta",
+    "district": "Mampang Prapatan"
+  },
+  {
+    "label": "Kembangan",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Kembangan"
+  },
+  {
+    "label": "Kebon Jeruk",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Kebon Jeruk"
+  },
+  {
+    "label": "Puri Indah",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Kembangan"
+  },
+  {
+    "label": "Palmerah",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Palmerah"
+  },
+  {
+    "label": "Cibubur",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Ciracas"
+  },
+  {
+    "label": "Jatinegara",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Jatinegara"
+  },
+  {
+    "label": "Duren Sawit",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Duren Sawit"
+  },
+  {
+    "label": "Kramat Jati",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Kramat Jati"
+  },
+  {
+    "label": "Rawamangun",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Pulo Gadung"
+  },
+  {
+    "label": "Kelapa Gading",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Kelapa Gading"
+  },
+  {
+    "label": "Pluit",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Penjaringan"
+  },
+  {
+    "label": "Sunter",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Tanjung Priok"
+  },
+  {
+    "label": "Pantai Indah Kapuk (PIK)",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Penjaringan"
+  },
+  {
+    "label": "Menteng",
+    "city": "Jakarta Pusat",
+    "province": "DKI Jakarta",
+    "district": "Menteng"
+  },
+  {
+    "label": "Tanah Abang",
+    "city": "Jakarta Pusat",
+    "province": "DKI Jakarta",
+    "district": "Tanah Abang"
+  },
+  {
+    "label": "Senayan",
+    "city": "Jakarta Pusat",
+    "province": "DKI Jakarta",
+    "district": "Tanah Abang"
+  },
+  {
+    "label": "Kemayoran",
+    "city": "Jakarta Pusat",
+    "province": "DKI Jakarta",
+    "district": "Kemayoran"
+  },
+  {
+    "label": "Cinere",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Cinere"
+  },
+  {
+    "label": "Limo",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Limo"
+  },
+  {
+    "label": "Sawangan",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Sawangan"
+  },
+  {
+    "label": "Margonda",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Pancoran Mas"
+  },
+  {
+    "label": "Beji",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Beji"
+  },
+  {
+    "label": "Cimanggis",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Cimanggis"
+  },
+  {
+    "label": "Bogor Kota",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Bogor Tengah"
+  },
+  {
+    "label": "Sentul City",
+    "city": "Kabupaten Bogor",
+    "province": "Jawa Barat",
+    "district": "Babakan Madang"
+  },
+  {
+    "label": "Cibinong",
+    "city": "Kabupaten Bogor",
+    "province": "Jawa Barat",
+    "district": "Cibinong"
+  },
+  {
+    "label": "Baranangsiang",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Bogor Timur"
+  },
+  {
+    "label": "Bekasi Barat",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Bekasi Barat"
+  },
+  {
+    "label": "Bekasi Selatan",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Bekasi Selatan"
+  },
+  {
+    "label": "Summarecon Bekasi",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Bekasi Utara"
+  },
+  {
+    "label": "Legenda Wisata Cibubur",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Ciracas"
+  },
+  {
+    "label": "Kota Wisata Cibubur",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Ciracas"
+  },
+  {
+    "label": "Living World Alam Sutera",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Serpong Utara"
+  },
+  {
+    "label": "Aeon Mall BSD City",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "Supermal Karawaci",
+    "city": "Tangerang",
+    "province": "Banten",
+    "district": "Karawaci"
+  },
+  {
+    "label": "Living Plaza Bintaro",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "BSD Xchange Mall",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "Pamulang Square",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pamulang"
+  },
+  {
+    "label": "Plaza Bintaro Jaya",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  },
+  {
+    "label": "Ciwalk (Cihampelas Walk)",
+    "city": "Bandung",
+    "province": "Jawa Barat",
+    "district": "Coblong"
+  },
+  {
+    "label": "Paris Van Java",
+    "city": "Bandung",
+    "province": "Jawa Barat",
+    "district": "Cicendo"
+  },
+  {
+    "label": "Trans Studio Mall",
+    "city": "Bandung",
+    "province": "Jawa Barat",
+    "district": "Batununggal"
+  },
+  {
+    "label": "Galeria Mall Jogja",
+    "city": "Yogyakarta",
+    "province": "DI Yogyakarta",
+    "district": "Sleman"
+  },
+  {
+    "label": "Plaza Ambarrukmo",
+    "city": "Yogyakarta",
+    "province": "DI Yogyakarta",
+    "district": "Sleman"
+  },
+  {
+    "label": "Mall Ciputra Jakarta",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Grogol Petamburan"
+  },
+  {
+    "label": "Central Park Jakarta",
+    "city": "Jakarta Barat",
+    "province": "DKI Jakarta",
+    "district": "Grogol Petamburan"
+  },
+  {
+    "label": "Pondok Cabe",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pamulang"
+  },
+  {
+    "label": "Villa Pamulang Mas",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pamulang"
+  },
+  {
+    "label": "Grand Cinere",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Cinere"
+  },
+  {
+    "label": "Cinere Bellevue Mall",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Cinere"
+  },
+  {
+    "label": "Villa Duta",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Bogor Selatan"
+  },
+  {
+    "label": "Taman Yasmin Sektor 5",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Bogor Barat"
+  },
+  {
+    "label": "Jababeka Cikarang",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Cikarang Utara"
+  },
+  {
+    "label": "Grand Wisata Bekasi",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Tambun Selatan"
+  },
+  {
+    "label": "Harvest City Cibubur",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Cibubur"
+  },
+  {
+    "label": "Grand Depok City (GDC)",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Cisalak Pasar"
+  },
+  {
+    "label": "Pesona Khayangan",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Mekarsari"
+  },
+  {
+    "label": "Permata Depok",
+    "city": "Depok",
+    "province": "Jawa Barat",
+    "district": "Tapos"
+  },
+  {
+    "label": "Gading Griya Lestari",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Kelapa Gading"
+  },
+  {
+    "label": "Boulevard Residence Jakarta",
+    "city": "Jakarta Utara",
+    "province": "DKI Jakarta",
+    "district": "Kelapa Gading"
+  },
+  {
+    "label": "Taman Modern Cakung",
+    "city": "Jakarta Timur",
+    "province": "DKI Jakarta",
+    "district": "Cakung"
+  },
+  {
+    "label": "Metropolitan City Bekasi",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Bekasi Utara"
+  },
+  {
+    "label": "Primavera Garden Serpong",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong Utara"
+  },
+  {
+    "label": "Taman Monaco Residence",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "Cluster Griya Loka BSD",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Serpong"
+  },
+  {
+    "label": "Vila Nusa Indah 2",
+    "city": "Bekasi",
+    "province": "Jawa Barat",
+    "district": "Jatiasih"
+  },
+  {
+    "label": "Puri Persada Mas",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Cileungsi"
+  },
+  {
+    "label": "Citra Indah City",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Cileungsi"
+  },
+  {
+    "label": "Cibubur Country",
+    "city": "Bogor",
+    "province": "Jawa Barat",
+    "district": "Cibubur"
+  },
+  {
+    "label": "Cluster Alamanda",
+    "city": "Tangerang Selatan",
+    "province": "Banten",
+    "district": "Pondok Aren"
+  }
 ]

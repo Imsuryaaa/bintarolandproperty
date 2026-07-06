@@ -65,15 +65,12 @@
             </div>
         </div>
 
+        <!-- 
         
-        <div class="mt-24 mb-24">
-            <div class="text-center max-w-3xl mx-auto mb-16" data-reveal>
-                <h2 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">Visi, Misi & Nilai-Nilai Utama</h2>
-                <p class="text-gray-600 dark:text-gray-400 text-lg">Komitmen kami dalam memberikan layanan properti terbaik untuk Anda.</p>
-            </div>
+        
+        
 
-            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-12 lg:mb-16">
-                
+        
                 <div class="bg-gray-50 dark:bg-charcoal-900 rounded-3xl p-10 md:p-14 border border-gray-100 dark:border-charcoal-800 relative overflow-hidden h-full" data-reveal>
                     <div class="absolute -right-6 -top-6 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl"></div>
                     <div class="relative z-10">
@@ -166,6 +163,7 @@
                 </div>
             </div>
         </div>
+        --}} -->
 
         
         <div class="grid lg:grid-cols-12 gap-12 items-start">
