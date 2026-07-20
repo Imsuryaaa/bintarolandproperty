@@ -51,6 +51,17 @@ unset($__defined_vars); ?>
         
         <div class="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-wrap items-center gap-1 sm:gap-1.5 z-20 max-w-[90%]">
             
+            <?php if(($property->listing_type ?? 'dijual') === 'disewa'): ?>
+                <span class="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[8px] sm:text-[10px] uppercase tracking-wider font-bold text-white rounded backdrop-blur-sm shadow-sm" style="background-color:rgba(234,88,12,0.95);">
+                    🔑 Sewa
+                </span>
+            <?php else: ?>
+                <span class="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[8px] sm:text-[10px] uppercase tracking-wider font-bold text-white rounded backdrop-blur-sm shadow-sm" style="background-color:rgba(6,182,212,0.95);">
+                    🏷️ Jual
+                </span>
+            <?php endif; ?>
+
+            
             <?php if($property->property_condition): ?>
                 <?php
                     $condColors = [
@@ -88,6 +99,17 @@ unset($__defined_vars); ?>
             <p class="text-xs sm:text-base font-bold text-white leading-tight drop-shadow">
                 <?php echo e($property->formatted_price); ?>
 
+                <?php if(($property->listing_type ?? 'dijual') === 'disewa' && !empty($property->rent_period)): ?>
+                    <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ <?php echo e(ucfirst($property->rent_period)); ?></span>
+                <?php elseif($property->property_type === 'tanah'): ?>
+                    <?php if(($property->price_type ?? 'total') === 'per_m2'): ?>
+                        <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ m²</span>
+                    <?php else: ?>
+                        <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">(Total)</span>
+                    <?php endif; ?>
+                <?php elseif($property->property_type === 'ruko' && ($property->price_type ?? 'total') === 'per_m2'): ?>
+                    <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ m²</span>
+                <?php endif; ?>
             </p>
         </div>
     </div>

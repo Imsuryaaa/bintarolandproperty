@@ -22,6 +22,17 @@
 
         {{-- Badges Container top-left --}}
         <div class="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-wrap items-center gap-1 sm:gap-1.5 z-20 max-w-[90%]">
+            {{-- listing type badge --}}
+            @if(($property->listing_type ?? 'dijual') === 'disewa')
+                <span class="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[8px] sm:text-[10px] uppercase tracking-wider font-bold text-white rounded backdrop-blur-sm shadow-sm" style="background-color:rgba(234,88,12,0.95);">
+                    🔑 Sewa
+                </span>
+            @else
+                <span class="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[8px] sm:text-[10px] uppercase tracking-wider font-bold text-white rounded backdrop-blur-sm shadow-sm" style="background-color:rgba(6,182,212,0.95);">
+                    🏷️ Jual
+                </span>
+            @endif
+
             {{-- condition badge --}}
             @if($property->property_condition)
                 @php
@@ -58,6 +69,17 @@
         <div class="absolute bottom-0 left-0 right-0 px-2 py-1.5 sm:px-4 sm:py-3">
             <p class="text-xs sm:text-base font-bold text-white leading-tight drop-shadow">
                 {{ $property->formatted_price }}
+                @if(($property->listing_type ?? 'dijual') === 'disewa' && !empty($property->rent_period))
+                    <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ {{ ucfirst($property->rent_period) }}</span>
+                @elseif($property->property_type === 'tanah')
+                    @if(($property->price_type ?? 'total') === 'per_m2')
+                        <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ m²</span>
+                    @else
+                        <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">(Total)</span>
+                    @endif
+                @elseif($property->property_type === 'ruko' && ($property->price_type ?? 'total') === 'per_m2')
+                    <span class="text-[9px] sm:text-[11px] font-normal text-gray-200">/ m²</span>
+                @endif
             </p>
         </div>
     </div>

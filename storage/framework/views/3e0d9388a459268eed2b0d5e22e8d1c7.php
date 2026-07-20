@@ -45,6 +45,7 @@
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">Kode Agen</th>
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[250px]">Properti</th>
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">Harga</th>
+                    <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">Tipe Iklan</th>
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">Spesifikasi</th>
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[130px]">Kategori</th>
                     <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">Status</th>
@@ -72,6 +73,17 @@
                     </td>
                     <td class="px-5 py-4 whitespace-nowrap">
                         <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm"><?php echo e($property->formatted_price); ?></span>
+                    </td>
+                    <td class="px-5 py-4 whitespace-nowrap">
+                        <?php if(($property->listing_type ?? 'dijual') === 'disewa'): ?>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white rounded-md" style="background-color:#ea580c;">
+                                🔑 Sewa
+                            </span>
+                        <?php else: ?>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white rounded-md" style="background-color:#0891b2;">
+                                🏷️ Jual
+                            </span>
+                        <?php endif; ?>
                     </td>
                     <td class="px-5 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400 text-xs space-y-0.5">
                         <div><?php echo e($property->bedrooms); ?> KT · <?php echo e($property->bathrooms); ?> KM</div>

@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'Jual ' . $property->title . ($property->district ? ' di ' . $property->district : ' di Bintaro') . ' | Bintaro Land Property'); ?>
 <?php $__env->startSection('meta_description', 'Dijual ' . $property->title . '. ' . Str::limit(strip_tags($property->description), 120)); ?>
 
@@ -10,6 +12,18 @@
 ?>
 
 <?php $__env->startSection('head'); ?>
+
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="<?php echo e(url()->current()); ?>">
+<meta property="og:title"       content="<?php echo e($property->title); ?> | Bintaro Land Property">
+<meta property="og:description" content="<?php echo e(Str::limit(strip_tags($property->description), 155)); ?>">
+<meta property="og:image"       content="<?php echo e($allPhotos[0] ?? asset('images/logo.jpg')); ?>">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name"   content="Bintaro Land Property">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:image"      content="<?php echo e($allPhotos[0] ?? asset('images/logo.jpg')); ?>">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -67,11 +81,16 @@
                                  class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-500">
                             
                             <div class="absolute top-3 left-3 flex gap-1.5">
+                                <?php if(($property->listing_type ?? 'dijual') === 'disewa'): ?>
+                                    <span class="badge text-white backdrop-blur-sm" style="background-color:rgba(234,88,12,0.95);">🔑 Disewakan</span>
+                                <?php else: ?>
+                                    <span class="badge text-white backdrop-blur-sm" style="background-color:rgba(6,182,212,0.95);">🏷️ Dijual</span>
+                                <?php endif; ?>
                                 <?php $__currentLoopData = $property->conditions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cond): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <span class="<?php echo e($cond->slug === 'baru' ? 'badge-new' : 'badge-second'); ?>"><?php echo e($cond->name); ?></span>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($property->is_featured): ?>
-                                    <span class="badge bg-brand-500/90 text-white backdrop-blur-sm">★ Unggulan</span>
+                                    <span class="badge bg-red-600/90 text-white backdrop-blur-sm">🔥 Hotsale</span>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -120,6 +139,17 @@
                     
                     <div class="border border-gray-200 dark:border-charcoal-800 rounded-lg p-5 lg:p-6">
                         <div class="flex flex-wrap gap-1.5 mb-3">
+                            
+                            <?php if(($property->listing_type ?? 'dijual') === 'disewa'): ?>
+                                <span class="px-2.5 py-0.5 text-[11px] uppercase tracking-wider font-bold rounded-md border" style="background-color:rgba(234,88,12,0.1); color:#ea580c; border-color:rgba(234,88,12,0.3);">
+                                    🔑 Disewakan
+                                </span>
+                            <?php else: ?>
+                                <span class="px-2.5 py-0.5 text-[11px] uppercase tracking-wider font-bold rounded-md border" style="background-color:rgba(6,182,212,0.1); color:#0891b2; border-color:rgba(6,182,212,0.35);">
+                                    🏷️ Dijual
+                                </span>
+                            <?php endif; ?>
+
                             <?php if($property->categories->count()): ?>
                                 <?php $__currentLoopData = $property->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <a href="<?php echo e(route('category.show', $cat->slug)); ?>" class="badge-gold hover:opacity-80 transition-opacity"><?php echo e($cat->name); ?></a>
@@ -169,6 +199,17 @@
                             <p class="text-2xl sm:text-3xl font-bold text-brand-600 dark:text-brand-400">
                                 <?php echo e($property->formatted_price); ?>
 
+                                <?php if(($property->listing_type ?? 'dijual') === 'disewa' && !empty($property->rent_period)): ?>
+                                    <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ <?php echo e(ucfirst($property->rent_period)); ?></span>
+                                <?php elseif($property->property_type === 'tanah'): ?>
+                                    <?php if(($property->price_type ?? 'total') === 'per_m2'): ?>
+                                        <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ m²</span>
+                                    <?php else: ?>
+                                        <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">(Total)</span>
+                                    <?php endif; ?>
+                                <?php elseif($property->property_type === 'ruko' && ($property->price_type ?? 'total') === 'per_m2'): ?>
+                                    <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ m²</span>
+                                <?php endif; ?>
                             </p>
                         </div>
                     </div>

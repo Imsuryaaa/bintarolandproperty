@@ -79,8 +79,13 @@
                             <img src="{{ $allPhotos[0] }}"
                                  alt="{{ $property->title }}"
                                  class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-500">
-                            {{-- Badges --}}
+                            {{-- listing type badge --}}
                             <div class="absolute top-3 left-3 flex gap-1.5">
+                                @if(($property->listing_type ?? 'dijual') === 'disewa')
+                                    <span class="badge text-white backdrop-blur-sm" style="background-color:rgba(234,88,12,0.95);">🔑 Disewakan</span>
+                                @else
+                                    <span class="badge text-white backdrop-blur-sm" style="background-color:rgba(6,182,212,0.95);">🏷️ Dijual</span>
+                                @endif
                                 @foreach($property->conditions as $cond)
                                     <span class="{{ $cond->slug === 'baru' ? 'badge-new' : 'badge-second' }}">{{ $cond->name }}</span>
                                 @endforeach
@@ -134,6 +139,17 @@
                     {{-- ── Title & Price ─────────────────── --}}
                     <div class="border border-gray-200 dark:border-charcoal-800 rounded-lg p-5 lg:p-6">
                         <div class="flex flex-wrap gap-1.5 mb-3">
+                            {{-- listing type badge --}}
+                            @if(($property->listing_type ?? 'dijual') === 'disewa')
+                                <span class="px-2.5 py-0.5 text-[11px] uppercase tracking-wider font-bold rounded-md border" style="background-color:rgba(234,88,12,0.1); color:#ea580c; border-color:rgba(234,88,12,0.3);">
+                                    🔑 Disewakan
+                                </span>
+                            @else
+                                <span class="px-2.5 py-0.5 text-[11px] uppercase tracking-wider font-bold rounded-md border" style="background-color:rgba(6,182,212,0.1); color:#0891b2; border-color:rgba(6,182,212,0.35);">
+                                    🏷️ Dijual
+                                </span>
+                            @endif
+
                             @if($property->categories->count())
                                 @foreach($property->categories as $cat)
                                     <a href="{{ route('category.show', $cat->slug) }}" class="badge-gold hover:opacity-80 transition-opacity">{{ $cat->name }}</a>
@@ -179,6 +195,17 @@
                             <p class="text-xs text-gray-400 dark:text-charcoal-500">Harga</p>
                             <p class="text-2xl sm:text-3xl font-bold text-brand-600 dark:text-brand-400">
                                 {{ $property->formatted_price }}
+                                @if(($property->listing_type ?? 'dijual') === 'disewa' && !empty($property->rent_period))
+                                    <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ {{ ucfirst($property->rent_period) }}</span>
+                                @elseif($property->property_type === 'tanah')
+                                    @if(($property->price_type ?? 'total') === 'per_m2')
+                                        <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ m²</span>
+                                    @else
+                                        <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">(Total)</span>
+                                    @endif
+                                @elseif($property->property_type === 'ruko' && ($property->price_type ?? 'total') === 'per_m2')
+                                    <span class="text-sm font-normal text-gray-500 dark:text-charcoal-400">/ m²</span>
+                                @endif
                             </p>
                         </div>
                     </div>

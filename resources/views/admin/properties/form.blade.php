@@ -149,11 +149,30 @@
 
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label for="property_code" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Kode Agen / Properti <span class="text-red-500">*</span></label>
-                    <input type="text" id="property_code" name="property_code" value="{{ old('property_code', $property->property_code ?? '') }}"
-                           class="w-full px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent uppercase"
-                           placeholder="SP1009" required>
+                @php
+                    $oldCode = old('property_code', $property->property_code ?? '');
+                    $oldPrefix = 'SP';
+                    $oldNumber = '';
+                    if (preg_match('/^(SPL|SPJ|SP)\s*(.*)$/i', $oldCode, $matches)) {
+                        $oldPrefix = strtoupper($matches[1]);
+                        $oldNumber = $matches[2];
+                    } else {
+                        $oldNumber = $oldCode;
+                    }
+                @endphp
+                <div x-data="{ prefix: '{{ $oldPrefix }}', number: '{{ $oldNumber }}' }">
+                    <label for="property_code" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Kode Listing <span class="text-red-500">*</span></label>
+                    <div class="flex">
+                        <select x-model="prefix" class="px-3 py-2.5 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent cursor-pointer font-medium border-r-0" style="min-width: 80px;">
+                            <option value="SP">SP</option>
+                            <option value="SPL">SPL</option>
+                            <option value="SPJ">SPJ</option>
+                        </select>
+                        <input type="text" x-model="number"
+                               class="w-full px-3 py-2.5 rounded-r-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent uppercase"
+                               placeholder="Contoh: 1009" required>
+                        <input type="hidden" name="property_code" :value="prefix + number">
+                    </div>
                 </div>
                 <div class="sm:col-span-2">
                     <label for="title" class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Nama Properti <span class="text-red-500">*</span></label>
@@ -187,12 +206,11 @@
                     </div>
 
                     {{-- Price Type (Tanah/Ruko) --}}
-                    <div x-show="propertyType === 'tanah' || propertyType === 'ruko'" style="display: none;" class="mb-2">
-                        <input type="hidden" name="price_type" :value="priceType">
-                        <select @change="priceType = $event.target.value"
-                                class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
-                            <option value="total" :selected="priceType === 'total'">Harga Total</option>
-                            <option value="per_m2" :selected="priceType === 'per_m2'">Harga Per m²</option>
+                    <div x-show="propertyType === 'tanah' || propertyType === 'ruko'" style="display: none;" class="mb-2 w-fit">
+                        <select name="price_type" x-model="priceType"
+                                class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-gray-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium cursor-pointer">
+                            <option value="total">Harga Total</option>
+                            <option value="per_m2">Harga Per m²</option>
                         </select>
                     </div>
 

@@ -32,16 +32,23 @@ class PropertyAdminController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Check duplicate property code
-        $existing = Property::with('photos')->where('property_code', $request->property_code)->first();
+        // 1. Normalize property code: uppercase + hapus semua spasi
+        //    Contoh: "sp 001" → "SP001", "Spl0300" → "SPL0300"
+        $normalizedCode = strtoupper(preg_replace('/\s+/', '', trim($request->property_code ?? '')));
+        $request->merge(['property_code' => $normalizedCode]);
+
+        // 2. Check duplicate — bandingkan secara case-insensitive & tanpa spasi
+        $existing = Property::with('photos')
+            ->whereRaw('UPPER(REPLACE(property_code, " ", "")) = ?', [$normalizedCode])
+            ->first();
         if ($existing) {
             return back()->withInput()->with([
-                'duplicate_error' => true,
+                'duplicate_error'    => true,
                 'duplicate_property' => $existing
             ]);
         }
 
-        // 2. Parse price (convert comma to dot, multiply by unit)
+        // 3. Parse price (convert comma to dot, multiply by unit)
         $priceVal = (float) str_replace(',', '.', $request->price_value);
         $multiplier = 1;
         switch ($request->price_unit) {
@@ -53,8 +60,11 @@ class PropertyAdminController extends Controller
         $request->merge(['price' => $priceVal * $multiplier]);
 
         $validated = $request->validate([
-            'property_code'     => 'required|string|max:50|unique:properties,property_code',
+            'property_code'     => 'required|string|max:50',
             'property_type'     => 'required|string|in:' . implode(',', array_keys(\App\Models\Property::TYPES)),
+            'listing_type'      => 'nullable|string|in:dijual,disewa',
+            'rent_period'       => 'nullable|string|in:tahun,bulan,hari',
+            'price_type'        => 'nullable|string|in:total,per_m2',
             'property_condition'=> 'required|string|in:' . implode(',', array_keys(\App\Models\Property::CONDITIONS)),
             'title'             => 'required|string|max:255',
             'description'  => 'required|string',
@@ -78,8 +88,11 @@ class PropertyAdminController extends Controller
         ]);
 
         $property = Property::create([
-            'property_code'      => $validated['property_code'],
+            'property_code'      => $normalizedCode,
             'property_type'      => $validated['property_type'],
+            'listing_type'       => $validated['listing_type'] ?? 'dijual',
+            'rent_period'        => $validated['listing_type'] === 'disewa' ? ($validated['rent_period'] ?? 'tahun') : null,
+            'price_type'         => in_array($validated['property_type'], ['tanah', 'ruko']) ? ($validated['price_type'] ?? 'total') : 'total',
             'property_condition' => $validated['property_condition'],
             'title'              => $validated['title'],
             'slug'               => $this->generateUniqueSlug($validated['title']),
@@ -123,11 +136,18 @@ class PropertyAdminController extends Controller
 
     public function update(Request $request, Property $property)
     {
-        // 1. Check duplicate property code
-        $existing = Property::with('photos')->where('property_code', $request->property_code)->first();
-        if ($existing && $existing->id !== $property->id) {
+        // 1. Normalize property code: uppercase + hapus semua spasi
+        $normalizedCode = strtoupper(preg_replace('/\s+/', '', trim($request->property_code ?? '')));
+        $request->merge(['property_code' => $normalizedCode]);
+
+        // 2. Check duplicate — case-insensitive & tanpa spasi, kecuali diri sendiri
+        $existing = Property::with('photos')
+            ->whereRaw('UPPER(REPLACE(property_code, " ", "")) = ?', [$normalizedCode])
+            ->where('id', '!=', $property->id)
+            ->first();
+        if ($existing) {
             return back()->withInput()->with([
-                'duplicate_error' => true,
+                'duplicate_error'    => true,
                 'duplicate_property' => $existing
             ]);
         }
@@ -144,8 +164,11 @@ class PropertyAdminController extends Controller
         $request->merge(['price' => $priceVal * $multiplier]);
 
         $validated = $request->validate([
-            'property_code'     => 'required|string|max:50|unique:properties,property_code,' . $property->id,
+            'property_code'     => 'required|string|max:50',
             'property_type'     => 'required|string|in:' . implode(',', array_keys(\App\Models\Property::TYPES)),
+            'listing_type'      => 'nullable|string|in:dijual,disewa',
+            'rent_period'       => 'nullable|string|in:tahun,bulan,hari',
+            'price_type'        => 'nullable|string|in:total,per_m2',
             'property_condition'=> 'required|string|in:' . implode(',', array_keys(\App\Models\Property::CONDITIONS)),
             'title'             => 'required|string|max:255',
             'description'  => 'required|string',
@@ -219,8 +242,11 @@ class PropertyAdminController extends Controller
             : $property->slug;
 
         $property->update([
-            'property_code'      => $validated['property_code'],
+            'property_code'      => $normalizedCode,
             'property_type'      => $validated['property_type'],
+            'listing_type'       => $validated['listing_type'] ?? 'dijual',
+            'rent_period'        => $validated['listing_type'] === 'disewa' ? ($validated['rent_period'] ?? 'tahun') : null,
+            'price_type'         => in_array($validated['property_type'], ['tanah', 'ruko']) ? ($validated['price_type'] ?? 'total') : 'total',
             'property_condition' => $validated['property_condition'],
             'title'              => $validated['title'],
             'slug'        => $slug,
